@@ -9,6 +9,7 @@ var gulp = require('gulp'),
         less = require('gulp-less'),
         rename = require('gulp-rename'),
         minifyHTML = require('gulp-htmlmin');
+        sourcemaps = require('gulp-sourcemaps');
 
 var paths = {
     scripts: 'src/client/js/**/*.*',
@@ -16,7 +17,7 @@ var paths = {
     images: 'src/client/img/**/*.*',
     templates: 'src/client/templates/**/*.html',
     index: 'src/client/index.html',
-    bower_fonts: 'src/client/components/**/*.{ttf,woff,eof,svg}',
+    bower_fonts: 'src/client/components/**/*.{ttf,woff,woff2,eof,svg}',
 };
 
 /**
@@ -56,8 +57,10 @@ gulp.task('custom-images', function () {
 
 gulp.task('custom-js', function () {
     return gulp.src(paths.scripts)
+            .pipe(sourcemaps.init())
             .pipe(minifyJs())
             .pipe(concat('dashboard.min.js'))
+            .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest('dist/js'));
 });
 
