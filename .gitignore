@@ -49,3 +49,6 @@ Icon
 
 # JetBrains
 .idea
+
+# config file
+/src/server/config/connection.js
