@@ -1,38 +1,39 @@
 {
-    "name": "student-management",
-    "version": "0.0.1",
-    "description": "Ung dung quan ly hoc sinh Trung Hoc",
-    "homepage": "https://github.com/hdthuc93/student_management",
-    "authors": [
-        "Nguyen Thanh Phong <1642050@student.hcmus.edu.vn>",
-                    "Nguyen Quoc Thai <1642063@student.hcmus.edu.vn>",
-                    "Huynh Duy Thuc <1642076@student.hcmus.edu.vn>"
-    ],
-    "contributors": [
-        "Nguyen Thanh Phong <1642050@student.hcmus.edu.vn>",
-        "Nguyen Quoc Thai <1642063@student.hcmus.edu.vn>",
-        "Huynh Duy Thuc <1642076@student.hcmus.edu.vn>"
-    ],
-    "main": "index.html",
-    "license": "MIT",
-    "ignore": [
-        "**/.*",
-        "node_modules",
-        "bower_components",
-        "test",
-        "tests"
-    ],
-    "dependencies": {
-        "rdash-ui": "1.0.*",
-        "angular": "~1.5.0",
-        "angular-cookies": "~1.5.0",
-        "angular-bootstrap": "~1.0.3",
-        "angular-ui-router": "^0.2.15",
-        "bootstrap": "~3.3.6",
-        "font-awesome": "~4.5.0"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/rdash/rdash-angular"
-    }
+  "name": "student-management",
+  "version": "0.0.1",
+  "description": "Ung dung quan ly hoc sinh Trung Hoc",
+  "homepage": "https://github.com/hdthuc93/student_management",
+  "authors": [
+    "Nguyen Thanh Phong <1642050@student.hcmus.edu.vn>",
+    "Nguyen Quoc Thai <1642063@student.hcmus.edu.vn>",
+    "Huynh Duy Thuc <1642076@student.hcmus.edu.vn>"
+  ],
+  "contributors": [
+    "Nguyen Thanh Phong <1642050@student.hcmus.edu.vn>",
+    "Nguyen Quoc Thai <1642063@student.hcmus.edu.vn>",
+    "Huynh Duy Thuc <1642076@student.hcmus.edu.vn>"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "rdash-ui": "1.0.*",
+    "angular": "~1.5.0",
+    "angular-cookies": "~1.5.0",
+    "angular-bootstrap": "~1.0.3",
+    "angular-ui-router": "^0.2.15",
+    "bootstrap": "~3.3.6",
+    "font-awesome": "~4.5.0",
+    "angular-ui-grid": "^4.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rdash/rdash-angular"
+  }
 }
