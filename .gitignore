@@ -51,4 +51,4 @@ Icon
 .idea
 
 # config file
-/src/server/config/connection.js
+src/server/config/connection.js
