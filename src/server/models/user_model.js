@@ -24,6 +24,4 @@ User.beforeCreate((user, options, callback) => {
     })
 });
 
-// User.sync();
-
 export default User;

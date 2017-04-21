@@ -1,0 +1,12 @@
+ body {
+      background: #f3f3f3;
+      font-family: arial;
+      color: #333!important;
+    }
+    
+    button.btn-primary {
+      height: 30px !important;
+      min-width: 70px;
+      font-weight: 600;
+      text-align: left;
+    }
