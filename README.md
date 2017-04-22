@@ -9,7 +9,7 @@
 2. Install the NodeJS dependencies: `npm install`.
 3. Install the Bower dependencies: `bower install`.
 4. Run project: `npm run dev`.
-[http://localhost:1642](http://localhost:1642).
+[http://localhost:3000](http://localhost:3000).
 
 Ensure your preferred web server points towards the `dist` directory.
 
