@@ -45,7 +45,7 @@ function login(req, res) {
                     message: "Failed to authenticate user"
                 });
             } 
-            console.log(config.secretKey);
+
             if(isMatch) {
                 jwt.sign({ username: user.username }, config.secretKey, { algorithm: 'HS256' }, (err, token) => {
                     if(err) {
