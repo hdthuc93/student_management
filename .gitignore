@@ -51,7 +51,7 @@ Icon
 .idea
 
 # config file
-/src/server/config/connection.js
+/src/server/configs/connection.js
 
 # log file 
 npm-debug.log
