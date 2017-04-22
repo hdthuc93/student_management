@@ -52,3 +52,6 @@ Icon
 
 # config file
 src/server/config/connection.js
+
+# log file 
+npm-debug.log
