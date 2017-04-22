@@ -16,7 +16,7 @@ User.beforeCreate((user, options, callback) => {
     bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(user.password, salt, (err, hash) => {
             if(err) 
-                callback(err, options);
+                return callback(err, options);
 
             user.password = hash;
             callback(null, options);

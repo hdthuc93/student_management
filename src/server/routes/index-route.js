@@ -1,5 +1,5 @@
-import userCtrl from '../controllers/user_controller';
 import express from 'express';
+import userRoutes from './user-route';
 
 const router = express.Router();
 
@@ -7,6 +7,6 @@ router.route('/').get((req, res) => {
     res.json({ success: true, mes: 'route' });
 });
 
-router.route('/register').post(userCtrl.register);
+router.use('/user', userRoutes);
 
 export default router;
