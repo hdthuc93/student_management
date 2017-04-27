@@ -2,12 +2,20 @@ import bcrypt from 'bcrypt';
 import { sequelize, Sequelize } from './index';
 
 const User = sequelize.define('M_USER', {
+    user_pkey: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        field: 'USER_PKEY'
+    },
     username: {
         type: Sequelize.STRING,
+        notNull: true,
         field: 'USER_NAME'
     },
     password: {
         type: Sequelize.STRING,
+        notNull: true,
         field: 'PASSWORD'
     }
 });
