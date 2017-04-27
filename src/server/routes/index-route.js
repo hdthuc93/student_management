@@ -1,5 +1,6 @@
 import express from 'express';
 import userRoutes from './user-route';
+import studentRoutes from './student-route';
 import auth from '../middlewares/authentication';
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.route('/')
     });
 
 router.use('/user', userRoutes);
+router.use('/student', studentRoutes);
 
 export default router;
