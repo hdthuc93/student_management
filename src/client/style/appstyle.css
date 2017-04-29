@@ -10,3 +10,6 @@
       font-weight: 600;
       text-align: left;
     }
+    button, textarea, input, select{
+      outline: none!important;
+    }
