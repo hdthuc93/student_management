@@ -30,6 +30,10 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
             .state('rule', {
                 url: '/rule',
                 templateUrl: 'templates/rule.html'
+            })
+            .state('schoolyear', {
+                url: '/schoolyear',
+                templateUrl: 'templates/school_year.html'
             });
     }
 ]);
