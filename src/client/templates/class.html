@@ -1,0 +1,62 @@
+<div class="row" ng-controller="ClassCtrl">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong><span class="glyphicon glyphicon-th"></span> Lớp học</strong>
+      </div>
+      <div class="panel-body notification-area">
+        <div class="container-fluid">
+          <form role="form" name="class_management" id="class_management">
+            <div class="row form-horizontal">
+               <div class="col-md-3">
+                <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-2 input-sm">Khối</label>
+
+                  <div class="col-md-8 col-sm-10">
+                    <select class="form-control input-sm" name="Username">
+                        <option class="placeholder-option" value="">Tất cả</option>
+                        <option value="1" selected>10</option>
+                        <option value="0">11</option>   
+                          <option value="1">12</option>                                              
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-2 input-sm">Lớp</label>
+
+                  <div class="col-md-8 col-sm-10">
+                    <select class="form-control input-sm" name="Username">
+                        <option class="placeholder-option" value="">Tất cả</option>
+                        <option value="1" selected>10A1</option>
+                        <option value="0">10A2</option>   
+                          <option value="1">11A1</option>
+                        <option value="0">11A2</option>    
+                          <option value="1">12A1</option>
+                        <option value="0">12A2</option>                                                 
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="row form-horizontal">
+            <div class="col-md-12">
+              <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm Học Sinh</button>
+                <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá Khỏi Lớp</button>
+                <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-file-text-o"></i> Nhập Điểm</button>
+                <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-file-text"></i> Nhận Điểm</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="grid1" ui-grid="studentList" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
