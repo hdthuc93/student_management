@@ -4,7 +4,7 @@ function getDateNow() {
     const now =  new Date();
     const month = now.getUTCMonth() + 1;
     const year = now.getUTCFullYear();
-    const date = now.getUTCDate() + 1;
+    const date = now.getUTCDate();
 
     let result = year.toString();
 

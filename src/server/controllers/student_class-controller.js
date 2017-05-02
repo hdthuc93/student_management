@@ -21,4 +21,47 @@ function addInClass(req, res) {
     });
 }
 
-export default { addInClass };
+function delInClass(req, res) {
+    HocSinh_LopHoc.findOne({ where: {
+        maHocSinh: req.body.studentID,
+        maLopHoc: req.body.classID,
+        ngayThamGia: req.body.joinDate
+    }})
+    .then((result) => {
+        if(result) {
+            HocSinh_LopHoc.destroy({ 
+                where: {
+                    maHocSinh: result.maHocSinh,
+                    maLopHoc: result.maLopHoc,
+                    ngayThamGia: result.ngayThamGia
+                }
+            })
+            .then((rows) => {
+                if(rows > 0) {
+                    return res.status(200).json({
+                        success: true,
+                        message: "Delete student in class successfully"
+                    });
+                } else {
+                    return res.status(200).json({
+                        success: false,
+                        message: "No student in class is deleted"
+                    });
+                }
+            });
+        } else {
+            return res.status(200).json({
+                success: false,
+                message: "No student found to delete"
+            });
+        }
+    })
+    .catch((err) => {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to delete student into class"
+        });
+    });
+}
+
+export default { addInClass, delInClass };

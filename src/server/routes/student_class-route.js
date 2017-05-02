@@ -10,5 +10,10 @@ router.route('/addStu')
         student_classCtrl.addInClass
     );
 
+router.route('/delStu')
+    .delete(
+        student_classCtrl.delInClass
+    );
+
 
 export default router;

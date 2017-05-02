@@ -17,7 +17,7 @@ const HocSinh_LopHoc = sequelize.define('HOCSINH_LOPHOC', {
         field: 'MA_LOP_HOC'
     },
     ngayThamGia: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         primaryKey: true,
         notNull: true,
         field: 'NGAY_THAM_GIA',
