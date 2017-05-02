@@ -7,16 +7,18 @@ const Khoi = sequelize.define('M_KHOI', {
         primaryKey: true,
         autoIncrement: true,
         notNull: true,
-        field: ''
+        field: 'MA_KHOI_PKEY'
     },
     maKhoi: {
         type: Sequelize.STRING,
         notNull: true,
-        unique: true
+        unique: true,
+         field: 'MA_KHOI'
     },
     tenKhoi: {
         type: Sequelize.STRING,
-        notNull: true
+        notNull: true,
+        field: 'TEN_KHOI'
     }
 });
 

@@ -32,10 +32,10 @@ const LopHoc = sequelize.define('M_LOP_HOC', {
     }
 });
 
-Khoi.hasMany(Lophoc, { foreignKey: 'maKhoi', sourceKey: 'maKhoi' });
-LopHoc.belongsTo(Khoi, { foreignKey: 'maKhoi', targetKey: 'maKhoi' });
+Khoi.hasMany(LopHoc, { foreignKey: 'maKhoi', sourceKey: 'maKhoi_pkey' });
+LopHoc.belongsTo(Khoi, { foreignKey: 'maKhoi', targetKey: 'maKhoi_pkey' });
 
-NamHoc.hasMany(LopHoc, { foreignKey: 'maNamHoc', sourceKey: 'maNamHoc' });
-LopHoc.belongsTo(Khoi, { foreignKey: 'maKhoi', sourceKey: 'maKhoi' });
+NamHoc.hasMany(LopHoc, { foreignKey: 'maNamHoc', sourceKey: 'namHoc_pkey' });
+LopHoc.belongsTo(Khoi, { foreignKey: 'maNamHoc', sourceKey: 'namHoc_pkey' });
 
 export default LopHoc;

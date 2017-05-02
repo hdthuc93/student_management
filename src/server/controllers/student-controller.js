@@ -13,11 +13,13 @@ function create(req, res) {
     })
     .then((student) => {
         res.status(200).json({
+            success: true,
             message: "Created student successfully"
         })
     })
     .catch((err) => {
         res.status(500).json({
+            success: false,
             message: "Failed to create student"
         })
     });
