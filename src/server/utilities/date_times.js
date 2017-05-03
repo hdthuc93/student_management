@@ -9,15 +9,15 @@ function getDateNow() {
     let result = year.toString();
 
     if(month < 10) {
-        result += '/0' + month.toString();   
+        result += '-0' + month.toString();   
     } else {
-        result += '/' + month.toString();
+        result += '-' + month.toString();
     }
 
     if(date < 10) {
-        result += '/0' + date.toString();   
+        result += '-0' + date.toString();   
     } else {
-        result += '/' + date.toString();
+        result += '-' + date.toString();
     }
 
     return result;
