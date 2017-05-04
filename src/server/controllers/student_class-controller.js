@@ -5,7 +5,7 @@ function addInClass(req, res) {
     HocSinh_LopHoc.create({
         maHocSinh: req.body.studentID,
         maLopHoc: req.body.classID,
-        ngayThamGia: getDateNow()
+        maNamHoc: req.body.schoolYearID
     })
     .then((result) => {
         return res.status(200).json({
@@ -24,16 +24,14 @@ function addInClass(req, res) {
 function delInClass(req, res) {
     HocSinh_LopHoc.findOne({ where: {
         maHocSinh: req.body.studentID,
-        maLopHoc: req.body.classID,
-        ngayThamGia: req.body.joinDate
+        maNamHoc: req.body.schoolYearID
     }})
     .then((result) => {
         if(result) {
             HocSinh_LopHoc.destroy({ 
                 where: {
                     maHocSinh: result.maHocSinh,
-                    maLopHoc: result.maLopHoc,
-                    ngayThamGia: result.ngayThamGia
+                    maNamHoc: result.schoolYearID
                 }
             })
             .then((rows) => {

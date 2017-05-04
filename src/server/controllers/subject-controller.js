@@ -6,9 +6,9 @@ function addScores(req, res) {
     for(let i = 0; i < len; ++i) {
         console.log('--------------before: ', i);
         DiemMH.upsert({
-            maLopHoc: req.body.classID,
             maMonHoc: req.body.subjectID,
             maHocKy: req.body.semesterID,
+            maNamHoc: req.body.schoolYearID,
             maHocSinh: req.body.listScores[i].studentID,
             diem_15phut: req.body.listScores[i].score1 || 15,
             diem_1tiet: req.body.listScores[i].score2 || 15,

@@ -1,6 +1,5 @@
 import { sequelize, Sequelize } from './index';
-import HocSinh from './hocsinh-model';
-import LopHoc from './lophoc-model';
+import HocSinh_LopHoc from './hocsinh_lophoc-model';
 import MonHoc from './monhoc-model';
 import HocKy from './hocky-model';
 
@@ -11,11 +10,11 @@ const DiemMH = sequelize.define('AE_DIEM_MON_HOC', {
         notNull: true,
         field: 'MA_HOC_SINH'
     },
-    maLopHoc: {
+    maNamHoc: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         notNull: true,
-        field: 'MA_LOP_HOC'
+        field: 'MA_NAM_HOC'
     },
     maMonHoc: {
         type: Sequelize.INTEGER,
@@ -46,11 +45,11 @@ const DiemMH = sequelize.define('AE_DIEM_MON_HOC', {
     }
 });
 
-HocSinh.hasMany(DiemMH, { foreignKey: 'maHocSinh', sourceKey: 'hocSinh_pkey' });
-DiemMH.belongsTo(HocSinh, { foreignKey: 'maHocSinh', targetKey: 'hocSinh_pkey' });
+HocSinh_LopHoc.hasMany(DiemMH, { foreignKey: 'maHocSinh', sourceKey: 'maHocSinh' });
+DiemMH.belongsTo(HocSinh_LopHoc, { foreignKey: 'maHocSinh', targetKey: 'maHocSinh' });
 
-LopHoc.hasMany(DiemMH, { foreignKey: 'maLopHoc', sourceKey: 'maLop_pkey' });
-DiemMH.belongsTo(LopHoc, { foreignKey: 'maLopHoc', targetKey: 'maLop_pkey' });
+HocSinh_LopHoc.hasMany(DiemMH, { foreignKey: 'maNamHoc', sourceKey: 'maNamHoc' });
+DiemMH.belongsTo(HocSinh_LopHoc, { foreignKey: 'maNamHoc', targetKey: 'maNamHoc' });
 
 MonHoc.hasMany(DiemMH, { foreignKey: 'maMonHoc', sourceKey: 'monHoc_pkey' });
 DiemMH.belongsTo(MonHoc, { foreignKey: 'maMonHoc', targetKey: 'monHoc_pkey' });
