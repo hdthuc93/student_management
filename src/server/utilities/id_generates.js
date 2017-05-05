@@ -23,16 +23,22 @@ function generateSchoolYear() {
 function generateStudentID() {
     let id = generateSchoolYear();
 
-    HocSinh.findAll({
-        attributes: [[ sequelize.fn('COUNT', sequelize.col('HOC_SINH_PKEY')), 'quantity' ]]
-    })
-    .then((result) => {
-        id += result.quantity.toString();
-        return id;
-    })
-    .catch((err) => {
-        return new Error("An error occured while generating the student id");
-    });
+    return HocSinh.count()
+        .then((quantity) => {
+            if(quantity < 10)
+                id += '000' + quantity.toString();
+            else if(quantity < 100)
+                id += '00' + quantity.toString();
+            else if(quantity < 1000)
+                id += '0' + quantity.toString();
+            else 
+                id += '0' + quantity.toString();
+                
+            return id;
+        })
+        .catch((err) => {
+            return new Error("An error occured while generating the student id");
+        });
 }
 
 export { generateSchoolYear, generateStudentID }

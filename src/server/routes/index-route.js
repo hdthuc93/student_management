@@ -4,12 +4,20 @@ import studentRoutes from './student-route';
 import student_classRoutes from './student_class-route';
 import subjectRoutes from './subject-route';
 import auth from '../middlewares/authentication';
+import { generateStudentID } from '../utilities/id_generates';
 
 const router = express.Router();
 
 router.route('/')
     .get((req, res) => {
-        res.status(200).json({ success: true, mes: 'route' });
+        generateStudentID()
+        .then((result) => {
+             res.status(200).json({ 
+                success: true,
+                mes: 'route', 
+                quantity: result 
+            });
+        });
     })
     .post(auth.authenToken, (req, res) => {
         res.status(200).json({

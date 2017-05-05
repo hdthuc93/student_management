@@ -29,6 +29,9 @@ const HocSinh = sequelize.define('AE_HOC_SINH', {
         type: Sequelize.ENUM,
         values: ['0', '1'],
         notNull: true,
+        validate: {
+            isIn: [[ '0', '1' ]]
+        },
         field: 'GIOI_TINH'
     },
     diaChi: {

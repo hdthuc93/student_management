@@ -1,5 +1,4 @@
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
-import { getDateNow } from '../utilities/date_times';
 
 function addInClass(req, res) {
     HocSinh_LopHoc.create({

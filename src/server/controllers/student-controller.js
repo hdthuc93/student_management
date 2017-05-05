@@ -1,15 +1,18 @@
 import HocSinh from '../models/hocsinh-model';
-
+import { generateStudentID } from '../utilities/id_generates';
 
 function create(req, res) {
-    HocSinh.create({
-        maHocSinh: 'abc123',
-        hoTen: req.body.name,
-        ngaySinh: req.body.birthday,
-        gioiTinh: req.body.gender,
-        diaChi: req.body.address,
-        email: req.body.email,
-        namNhapHoc: 1
+    generateStudentID()
+    .then((studentID) => {
+        return HocSinh.create({
+                maHocSinh: studentID,
+                hoTen: req.body.name,
+                ngaySinh: req.body.birthday,
+                gioiTinh: req.body.gender,
+                diaChi: req.body.address,
+                email: req.body.email,
+                namNhapHoc: 1
+            });
     })
     .then((student) => {
         res.status(200).json({
