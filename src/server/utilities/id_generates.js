@@ -1,5 +1,4 @@
 import HocSinh from '../models/hocsinh-model';
-import { sequelize } from '../models/index';
 
 function generateSchoolYear() {
     const today = new Date();
