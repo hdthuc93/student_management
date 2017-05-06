@@ -9,6 +9,9 @@ router.route('/')
     .post(
         studentCtrl.createStu
     )
+    .put(
+        studentCtrl.updateStu
+    )
     .delete(
         studentCtrl.deleteStu
     );
