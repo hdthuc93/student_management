@@ -1,8 +1,8 @@
 import HocSinh from '../models/hocsinh-model';
 import { generateStudentID } from '../utilities/id_generates';
 
-function getReqObj(req, sign) {
-    let reqObj = {
+function getObjReq(req, sign) {
+    let objReq = {
         hoTen: req.body.name,
         ngaySinh: req.body.birthday,
         gioiTinh: req.body.gender,
@@ -12,7 +12,7 @@ function getReqObj(req, sign) {
     };
 
     if(sign === 'get') {
-        reqObj = {
+        objReq = {
             hoTen: req.query.name,
             ngaySinh: req.query.birthday,
             gioiTinh: req.query.gender,
@@ -25,11 +25,11 @@ function getReqObj(req, sign) {
     const objKeys = ['hoTen', 'ngaySinh', 'gioiTinh', 'diaChi', 'email', 'namNhapHoc'];
 
     for(let i = 0; i < objKeys.length; ++i) {
-        if(!reqObj[objKeys[i]]) 
-            delete reqObj[objKeys[i]];
+        if(!objReq[objKeys[i]]) 
+            delete objReq[objKeys[i]];
     }
 
-    return reqObj;
+    return objReq;
 }
 
 function createStu(req, res) {
@@ -114,9 +114,9 @@ function updateStu(req, res) {
     })
     .then((result) => {
         if(result) {
-            let reqObj = getReqObj(req);
+            let objReq = getobjReq(req);
 
-            HocSinh.update(reqObj, {
+            HocSinh.update(objReq, {
                 where: {
                     hocSinh_pkey: result.hocSinh_pkey
                 }
@@ -153,33 +153,48 @@ function updateStu(req, res) {
 }
 
 function findStus(req, res) {
-    let reqObj = getReqObj(req, 'get');
+    let objReq = getObjReq(req, 'get');
 
-    reqObj.delete_flag = '0';
+    objReq.delete_flag = '0';
 
     if(req.query.studentID)
-        reqObj.hocSinh_pkey = req.query.studentID;
+        objReq.hocSinh_pkey = req.query.studentID;
 
     if(req.query.studentCode)
-        reqObj.maHocSinh = req.query.studentCode;
+        objReq.maHocSinh = req.query.studentCode;
 
-    if(reqObj.hoTen)
-        reqObj.hoTen = { $like: '%' + reqObj.hoTen + '%' }
+    if(objReq.hoTen)
+        objReq.hoTen = { $like: '%' + objReq.hoTen + '%' }
 
-    if(reqObj.diaChi)
-        reqObj.diaChi = { $like: '%' + reqObj.diaChi + '%' }
+    if(objReq.diaChi)
+        objReq.diaChi = { $like: '%' + objReq.diaChi + '%' }
 
-    console.log(reqObj);
+    console.log(objReq);
     HocSinh.findAll({
-        where: reqObj
+        where: objReq
     })
     .then((result) => {
         // console.log(result);
         if(result.length > 0) {
+            let objReturning = [];
+
+            for(let i = 0; i < result.length; ++i) {
+                objReturning[objReturning.length] = { 
+                    studentID: result[i].hocSinh_pkey,
+                    studentCode: result[i].maHocSinh,
+                    name: result[i].hoTen,
+                    birthday: result[i].ngaySinh,
+                    gender: result[i].gioiTinh,
+                    address: result[i].diaChi,
+                    email: result[i].email,
+                    schoolYearID: result[i].namNhapHoc
+                }
+            }
+
             return res.status(200).json({
                 success: true,
                 message: "Get students successfully",
-                datas: result
+                datas: objReturning
             });
         } else {
             return res.status(200).json({
