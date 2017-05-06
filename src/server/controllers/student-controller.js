@@ -1,6 +1,37 @@
 import HocSinh from '../models/hocsinh-model';
 import { generateStudentID } from '../utilities/id_generates';
 
+function getReqObj(req, sign) {
+    let reqObj = {
+        hoTen: req.body.name,
+        ngaySinh: req.body.birthday,
+        gioiTinh: req.body.gender,
+        diaChi: req.body.address,
+        email: req.body.email,
+        namNhapHoc: req.body.schoolYearID
+    };
+
+    if(sign === 'get') {
+        reqObj = {
+            hoTen: req.query.name,
+            ngaySinh: req.query.birthday,
+            gioiTinh: req.query.gender,
+            diaChi: req.query.address,
+            email: req.query.email,
+            namNhapHoc: req.query.schoolYearID
+        };
+    }
+
+    const objKeys = ['hoTen', 'ngaySinh', 'gioiTinh', 'diaChi', 'email', 'namNhapHoc'];
+
+    for(let i = 0; i < objKeys.length; ++i) {
+        if(!reqObj[objKeys[i]]) 
+            delete reqObj[objKeys[i]];
+    }
+
+    return reqObj;
+}
+
 function createStu(req, res) {
     generateStudentID()
     .then((studentID) => {
@@ -83,21 +114,7 @@ function updateStu(req, res) {
     })
     .then((result) => {
         if(result) {
-            let reqObj = {
-                hoTen: req.body.name,
-                ngaySinh: req.body.birthday,
-                gioiTinh: req.body.gender,
-                diaChi: req.body.address,
-                email: req.body.email,
-                namNhapHoc: req.body.schoolYearID
-            };
-
-            const objKeys = ['hoTen', 'ngaySinh', 'gioiTinh', 'diaChi', 'email', 'namNhapHoc'];
-
-            for(let i = 0; i < objKeys.length; ++i) {
-                if(!reqObj[objKeys[i]]) 
-                    delete reqObj[objKeys[i]];
-            }
+            let reqObj = getReqObj(req);
 
             HocSinh.update(reqObj, {
                 where: {
@@ -135,4 +152,48 @@ function updateStu(req, res) {
     });
 }
 
-export default { createStu, deleteStu, updateStu };
+function findStus(req, res) {
+    let reqObj = getReqObj(req, 'get');
+
+    reqObj.delete_flag = '0';
+
+    if(req.query.studentID)
+        reqObj.hocSinh_pkey = req.query.studentID;
+
+    if(req.query.studentCode)
+        reqObj.maHocSinh = req.query.studentCode;
+
+    if(reqObj.hoTen)
+        reqObj.hoTen = { $like: '%' + reqObj.hoTen + '%' }
+
+    if(reqObj.diaChi)
+        reqObj.diaChi = { $like: '%' + reqObj.diaChi + '%' }
+
+    console.log(reqObj);
+    HocSinh.findAll({
+        where: reqObj
+    })
+    .then((result) => {
+        // console.log(result);
+        if(result.length > 0) {
+            return res.status(200).json({
+                success: true,
+                message: "Get students successfully",
+                datas: result
+            });
+        } else {
+            return res.status(200).json({
+                success: false,
+                message: "No student found"
+            });
+        }
+    })
+    .catch((err) => {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get students"
+        });
+    })
+}
+
+export default { createStu, deleteStu, updateStu, findStus };

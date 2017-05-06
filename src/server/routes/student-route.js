@@ -6,6 +6,9 @@ import validation from '../middlewares/validation'
 const router = express.Router();
 
 router.route('/')
+    .get(
+        studentCtrl.findStus
+    )
     .post(
         studentCtrl.createStu
     )
