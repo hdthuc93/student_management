@@ -5,10 +5,14 @@ import validation from '../middlewares/validation'
 
 const router = express.Router();
 
-router.route('/create')
+router.route('/')
     .post(
-        studentCtrl.create
+        studentCtrl.createStu
+    )
+    .delete(
+        studentCtrl.deleteStu
     );
+    
 
 
 export default router;
