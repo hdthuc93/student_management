@@ -14,7 +14,6 @@ function getObjReq(req, sign) {
     if(sign === 'get') {
         objReq = {
             hoTen: req.query.name,
-            ngaySinh: req.query.birthday,
             gioiTinh: req.query.gender,
             diaChi: req.query.address,
             email: req.query.email,
@@ -169,6 +168,12 @@ function findStus(req, res) {
 
     if(objReq.diaChi)
         objReq.diaChi = { $like: '%' + objReq.diaChi + '%' }
+
+    if(req.query.dateFrom)
+        objReq.ngaySinh = { $gte: req.query.dateFrom }
+
+    if(req.query.dateTo)
+        objReq.ngaySinh = Object.assign({}, objReq.ngaySinh, { $lte: req.query.dateTo });
 
     console.log(objReq);
     HocSinh.findAll({
