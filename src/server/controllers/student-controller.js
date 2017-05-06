@@ -169,11 +169,11 @@ function findStus(req, res) {
     if(objReq.diaChi)
         objReq.diaChi = { $like: '%' + objReq.diaChi + '%' }
 
-    if(req.query.dateFrom)
-        objReq.ngaySinh = { $gte: req.query.dateFrom }
+    if(req.query.birthdayFrom)
+        objReq.ngaySinh = { $gte: req.query.birthdayFrom }
 
-    if(req.query.dateTo)
-        objReq.ngaySinh = Object.assign({}, objReq.ngaySinh, { $lte: req.query.dateTo });
+    if(req.query.birthdayTo)
+        objReq.ngaySinh = Object.assign({}, objReq.ngaySinh, { $lte: req.query.birthdayTo });
 
     console.log(objReq);
     HocSinh.findAll({
