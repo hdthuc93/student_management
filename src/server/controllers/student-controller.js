@@ -114,7 +114,7 @@ function updateStu(req, res) {
     })
     .then((result) => {
         if(result) {
-            let objReq = getobjReq(req);
+            let objReq = getObjReq(req);
 
             HocSinh.update(objReq, {
                 where: {
