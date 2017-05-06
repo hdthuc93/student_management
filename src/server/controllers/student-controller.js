@@ -11,7 +11,7 @@ function create(req, res) {
                 gioiTinh: req.body.gender,
                 diaChi: req.body.address,
                 email: req.body.email,
-                namNhapHoc: 1
+                namNhapHoc: req.body.schoolYearID
             });
     })
     .then((student) => {
