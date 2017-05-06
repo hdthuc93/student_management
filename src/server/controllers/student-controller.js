@@ -52,6 +52,7 @@ function createStu(req, res) {
         })
     })
     .catch((err) => {
+        console.log(err);
         res.status(500).json({
             success: false,
             message: "Failed to create student"
