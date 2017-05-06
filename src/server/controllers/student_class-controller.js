@@ -1,6 +1,8 @@
+import { Sequelize } from '../models/index';
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
+import HocSinh from '../models/hocsinh-model';
 
-function addInClass(req, res) {
+function addStuInClass(req, res) {
     HocSinh_LopHoc.create({
         maHocSinh: req.body.studentID,
         maLopHoc: req.body.classID,
@@ -20,7 +22,7 @@ function addInClass(req, res) {
     });
 }
 
-function delInClass(req, res) {
+function delStuInClass(req, res) {
     HocSinh_LopHoc.findOne({ where: {
         maHocSinh: req.body.studentID,
         maNamHoc: req.body.schoolYearID
@@ -61,4 +63,54 @@ function delInClass(req, res) {
     });
 }
 
-export default { addInClass, delInClass };
+function getStuInClass(req, res) {
+    HocSinh_LopHoc.findAll({
+        where: {
+            maLopHoc: req.query.classID
+        },
+        include: [{
+            model: HocSinh,
+            where: {
+                maHocSinh: Sequelize.col('HOCSINH_LOPHOC.MA_HOC_SINH'),
+                delete_flag: '0'
+            }
+        }]
+    })
+    .then((result) => {
+        let objReturning = [];
+        const len = result.length;
+        if(len > 0) {
+            for(let i = 0; i < len; ++i) {
+                objReturning[objReturning.length] = {
+                    studentID: result[i]['AE_HOC_SINH'].hocSinh_pkey,
+                    studentCode: result[i]['AE_HOC_SINH'].maHocSinh,
+                    name: result[i]['AE_HOC_SINH'].hoTen,
+                    birthday: result[i]['AE_HOC_SINH'].ngaySinh,
+                    gender: result[i]['AE_HOC_SINH'].gioiTinh,
+                    address: result[i]['AE_HOC_SINH'].diaChi,
+                    email: result[i]['AE_HOC_SINH'].email,
+                    schoolYearID: result[i]['AE_HOC_SINH'].namNhapHoc,
+                }
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Get student(s) in class successfully",
+                datas: objReturning
+            });
+        } else {
+            return res.status(200).json({
+                success: false,
+                message: "No class found"
+            });
+        }
+    })
+    .catch((err) => {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get student(s) in class"
+        });
+    });
+}
+
+export default { addStuInClass, delStuInClass, getStuInClass };

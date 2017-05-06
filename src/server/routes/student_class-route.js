@@ -5,15 +5,17 @@ import validation from '../middlewares/validation'
 
 const router = express.Router();
 
-router.route('/addStu')
+router.route('/')
+    .get(
+        student_classCtrl.getStuInClass
+    )
     .post(
-        student_classCtrl.addInClass
-    );
-
-router.route('/delStu')
+        student_classCtrl.addStuInClass
+    )
     .delete(
-        student_classCtrl.delInClass
+        student_classCtrl.delStuInClass
     );
+    
 
 
 export default router;
