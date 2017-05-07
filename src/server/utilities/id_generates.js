@@ -25,7 +25,9 @@ function generateStudentID() {
 
     return HocSinh.max('hocSinh_pkey')
     .then((quantity) => {
-        if(quantity < 10)
+        if(isNaN(quantity))
+            id += '0001';
+        else if(quantity < 10)
             id += '000' + quantity.toString();
         else if(quantity < 100)
             id += '00' + quantity.toString();

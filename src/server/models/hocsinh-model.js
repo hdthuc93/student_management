@@ -52,6 +52,11 @@ const HocSinh = sequelize.define('AE_HOC_SINH', {
         values: ['0', '1'],
         defaultValue: '0',
         field: 'DELETE_FLAG'
+    },
+    inClass: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        field: 'IN_CLASS'
     }
 });
 
