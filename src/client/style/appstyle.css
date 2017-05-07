@@ -9,7 +9,23 @@
       min-width: 70px;
       font-weight: 600;
       text-align: left;
+      padding: 1px 5px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
     }
     button, textarea, input, select{
       outline: none!important;
     }
+
+    /*ui-grid - START*/
+    .ui-grid-column-menu-button{
+      display: none;
+      visibility:  hidden;
+    }
+    .grid .grid-status{
+      position: absolute;
+      top: 50px;
+      left: 40%;
+    }
+    /*ui-grid - END*/

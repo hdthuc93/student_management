@@ -40,6 +40,9 @@ gulp.task('build-assets', ['copy-bower_fonts']);
 gulp.task('copy-bower_fonts', function () {
     return gulp.src(paths.bower_fonts)
             .pipe(rename({
+                dirname: '/css'
+            }))
+            .pipe(rename({
                 dirname: '/fonts'
             }))
             .pipe(gulp.dest('dist/lib'));

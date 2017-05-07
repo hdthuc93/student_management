@@ -1,0 +1,51 @@
+<div ng-controller="StudentEditCtrl">
+  <div class="row form-horizontal">
+    <h4 ng-bind="title"></h4>
+  </div>
+  <div class="row form-horizontal">
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label class="control-label col-md-4 col-sm-2 input-sm">Họ Tên:</label>
+        <div class="col-md-8 col-sm-10">
+          <input ng-disabled="studentData.action == 'view'" ng-model="data.name" type="text" class="form-control input-sm">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-4 col-sm-2 input-sm">Giới Tính</label>
+        <div class="col-md-8 col-sm-10">
+          <select ng-disabled="studentData.action == 'view'" ng-model="data.gender" class="form-control input-sm">
+                        <option value="">Chọn</option>
+                        <option value="1">Nam</option>
+                        <option value="0">Nữ</option>                                                
+                    </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-4 col-sm-2 input-sm">Ngày Sinh:</label>
+        <div class="col-md-8 col-sm-10">
+          <input ng-disabled="studentData.action == 'view'" ng-model="data.birthday" placeholder="yyyy-mm-dd" type="text" class="form-control input-sm">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <div class="form-group">
+        <label class="control-label col-md-4 col-sm-2 input-sm">Email</label>
+        <div class="col-md-8 col-sm-10">
+          <input ng-disabled="studentData.action == 'view'" ng-model="data.email" type="text" class="form-control input-sm">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-md-4 col-sm-2 input-sm">Địa chỉ</label>
+        <div class="col-md-8 col-sm-10">
+          <input ng-disabled="studentData.action == 'view'" ng-model="data.address" type="text" class="form-control input-sm">
+        </div>
+      </div>
+      <div ng-show="studentData.action != 'view'" class="form-group">
+        <div class="col-xs-12 text-right">
+          <button type="submit" class="btn btn-primary btn-xs" ng-click="save()"><i class="fa fa-floppy-o"></i> Lưu</button>
+          <button type="button" class="btn btn-primary btn-xs" ng-click="reset()"><i class="fa fa-reply"></i> Làm lại</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
