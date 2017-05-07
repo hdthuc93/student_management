@@ -63,7 +63,7 @@ function createStu(req, res) {
 function deleteStu(req, res) {
     HocSinh.findOne({
         where: {
-            hocSinh_pkey: req.body.studentID,
+            hocSinh_pkey: req.body.studentID || req.query.studentID,
         }
     })
     .then((result) => {

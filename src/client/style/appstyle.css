@@ -9,7 +9,34 @@
       min-width: 70px;
       font-weight: 600;
       text-align: left;
+      padding: 1px 5px;
+      font-size: 12px;
+      line-height: 1.5;
+      border-radius: 3px;
     }
     button, textarea, input, select{
       outline: none!important;
     }
+  .loading {
+      width: 40px;
+      height: 40px;
+      position: fixed;
+      margin: 100px auto;
+      z-index: 9999;
+      top: 29%;
+      left: 49%;
+  }
+  .loading i{
+    color: #da9a32;
+  }
+    /*ui-grid - START*/
+    .ui-grid-column-menu-button{
+      display: none;
+      visibility:  hidden;
+    }
+    .grid .grid-status{
+      position: absolute;
+      top: 50px;
+      left: 40%;
+    }
+    /*ui-grid - END*/
