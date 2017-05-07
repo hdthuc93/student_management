@@ -9,7 +9,7 @@ function addScores(req, res) {
         upsertArr[i] = {
             maMonHoc: req.body.subjectID,
             maHocKy: req.body.semesterID,
-            maNamHoc: req.body.schoolYearID,
+            maLopHoc: req.body.classID,
             maHocSinh: req.body.listScores[i].studentID,
             diem_15phut: req.body.listScores[i].score1 || 15,
             diem_1tiet: req.body.listScores[i].score2 || 15,
@@ -40,15 +40,14 @@ function getScores(req, res) {
         where: {
             maMonHoc: req.query.subjectID,
             maHocKy: req.query.semesterID,
-            maNamHoc: req.query.schoolYearID
+            maLopHoc: req.query.classID
         },
         include:[{
             model: HocSinh_LopHoc,
             attributes: [],
             where: {
-                maLopHoc: req.query.classID,
                 maHocSinh: Sequelize.col('AE_DIEM_MON_HOC.MA_HOC_SINH'),
-                maNamHoc: Sequelize.col('AE_DIEM_MON_HOC.MA_NAM_HOC')
+                maLopHoc: Sequelize.col('AE_DIEM_MON_HOC.MA_LOP_HOC')
             }
         }]
     })
@@ -66,7 +65,6 @@ function getScores(req, res) {
             objReturning[objReturning.length] = {
                 subjectID: result[i].maMonHoc,
                 semesterID: result[i].maHocKy,
-                schoolYearID: result[i].maNamHoc,
                 classID: classID,
                 studentID: result[i].maHocSinh,
                 score1: result[i].diem_15phut,

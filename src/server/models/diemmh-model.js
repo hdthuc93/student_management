@@ -10,11 +10,11 @@ const DiemMH = sequelize.define('AE_DIEM_MON_HOC', {
         notNull: true,
         field: 'MA_HOC_SINH'
     },
-    maNamHoc: {
+    maLopHoc: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         notNull: true,
-        field: 'MA_NAM_HOC'
+        field: 'MA_LOP_HOC'
     },
     maMonHoc: {
         type: Sequelize.INTEGER,
@@ -48,8 +48,8 @@ const DiemMH = sequelize.define('AE_DIEM_MON_HOC', {
 HocSinh_LopHoc.hasMany(DiemMH, { foreignKey: 'maHocSinh', sourceKey: 'maHocSinh' });
 DiemMH.belongsTo(HocSinh_LopHoc, { foreignKey: 'maHocSinh', targetKey: 'maHocSinh' });
 
-HocSinh_LopHoc.hasMany(DiemMH, { foreignKey: 'maNamHoc', sourceKey: 'maNamHoc' });
-DiemMH.belongsTo(HocSinh_LopHoc, { foreignKey: 'maNamHoc', targetKey: 'maNamHoc' });
+HocSinh_LopHoc.hasMany(DiemMH, { foreignKey: 'maLopHoc', sourceKey: 'maLopHoc' });
+DiemMH.belongsTo(HocSinh_LopHoc, { foreignKey: 'maLopHoc', targetKey: 'maLopHoc' });
 
 MonHoc.hasMany(DiemMH, { foreignKey: 'maMonHoc', sourceKey: 'monHoc_pkey' });
 DiemMH.belongsTo(MonHoc, { foreignKey: 'maMonHoc', targetKey: 'monHoc_pkey' });

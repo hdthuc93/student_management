@@ -1,20 +1,72 @@
 import { Sequelize } from '../models/index';
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
 import HocSinh from '../models/hocsinh-model';
+import LopHoc from '../models/lophoc-model';
+import { changeToDDMMYYYY } from '../utilities/date_times';
 
-function addStuInClass(req, res) {
-    HocSinh_LopHoc.create({
-        maHocSinh: req.body.studentID,
-        maLopHoc: req.body.classID,
-        maNamHoc: req.body.schoolYearID
+function canAdd(studentID, classID) {
+    let resultStudent;
+    return HocSinh_LopHoc.findAll({
+        where: {
+            maHocSinh: studentID
+        },
+        include: [{
+            model: LopHoc,
+            where: {
+                maLop_pkey: Sequelize.col('HOCSINH_LOPHOC.MA_LOP_HOC')
+            }
+        }]
     })
     .then((result) => {
-        return res.status(200).json({
-            success: true,
-            message: "Insert student in class successfully"
-        });
+        resultStudent = result;
+        return LopHoc.findOne({
+            where: { maLop_pkey: classID }
+        })
+        
+    })
+    .then((resultClass) => {
+        if(resultStudent.length > 0)
+            for(let i = 0; i < resultStudent.length; ++i) {
+                if(resultClass.maNamHoc === resultStudent[i]['M_LOP_HOC'].maNamHoc)
+                    return false;
+            }
+        return true;
+    });
+}
+
+function addStuInClass(req, res) {
+    const studentID = req.body.studentID;
+    const classID = req.body.classID;
+
+    canAdd(studentID, classID).then((result) => {
+        if(result) {
+            return HocSinh_LopHoc.create({
+                maHocSinh: studentID,
+                maLopHoc: classID
+            })
+        } else {
+            return res.status(200).json({
+                success: false,
+                message: "A student exist in another class"
+            });
+        }
+    })
+    .then((result) => {
+        if(result.maHocSinh) { 
+            HocSinh.update({
+                inClass: true
+            }, {
+                where: { hocSinh_pkey: result.maHocSinh }
+            });
+
+            return res.status(200).json({
+                    success: true,
+                    message: "Insert student in class successfully"
+                });
+        }
     })
     .catch((err) => {
+        console.log(err);
         return res.status(500).json({
             success: false,
             message: "Failed to insert student into class"
@@ -24,19 +76,25 @@ function addStuInClass(req, res) {
 
 function delStuInClass(req, res) {
     HocSinh_LopHoc.findOne({ where: {
-        maHocSinh: req.body.studentID,
-        maNamHoc: req.body.schoolYearID
+        maHocSinh: req.body.studentID || req.body.studentID,
+        maLopHoc: req.body.classID || req.body.classID
     }})
     .then((result) => {
         if(result) {
             HocSinh_LopHoc.destroy({ 
                 where: {
                     maHocSinh: result.maHocSinh,
-                    maNamHoc: result.schoolYearID
+                    maLopHoc: result.maLopHoc
                 }
             })
             .then((rows) => {
                 if(rows > 0) {
+                    HocSinh.update({
+                        inClass: false
+                    }, {
+                        where: { hocSinh_pkey: result.maHocSinh }
+                    });
+
                     return res.status(200).json({
                         success: true,
                         message: "Delete student in class successfully"
@@ -71,7 +129,7 @@ function getStuInClass(req, res) {
         include: [{
             model: HocSinh,
             where: {
-                maHocSinh: Sequelize.col('HOCSINH_LOPHOC.MA_HOC_SINH'),
+                hocSinh_pkey: Sequelize.col('HOCSINH_LOPHOC.MA_HOC_SINH'),
                 delete_flag: '0'
             }
         }]
@@ -85,11 +143,12 @@ function getStuInClass(req, res) {
                     studentID: result[i]['AE_HOC_SINH'].hocSinh_pkey,
                     studentCode: result[i]['AE_HOC_SINH'].maHocSinh,
                     name: result[i]['AE_HOC_SINH'].hoTen,
-                    birthday: result[i]['AE_HOC_SINH'].ngaySinh,
+                    birthday: changeToDDMMYYYY(result[i]['AE_HOC_SINH'].ngaySinh),
                     gender: result[i]['AE_HOC_SINH'].gioiTinh,
                     address: result[i]['AE_HOC_SINH'].diaChi,
                     email: result[i]['AE_HOC_SINH'].email,
                     schoolYearID: result[i]['AE_HOC_SINH'].namNhapHoc,
+                    inClass: result[i]['AE_HOC_SINH'].inClass
                 }
             }
 
@@ -101,7 +160,7 @@ function getStuInClass(req, res) {
         } else {
             return res.status(200).json({
                 success: false,
-                message: "No class found"
+                message: "No student found"
             });
         }
     })

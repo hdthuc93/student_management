@@ -182,7 +182,6 @@ function findStus(req, res) {
         objReq.ngaySinh = Object.assign({}, objReq.ngaySinh, { $lte: temp });
     }
 
-    console.log(objReq);
     HocSinh.findAll({
         where: objReq
     })
@@ -200,7 +199,8 @@ function findStus(req, res) {
                     gender: result[i].gioiTinh,
                     address: result[i].diaChi,
                     email: result[i].email,
-                    schoolYearID: result[i].namNhapHoc
+                    schoolYearID: result[i].namNhapHoc,
+                    inClass: result[i].inClass
                 }
             }
 

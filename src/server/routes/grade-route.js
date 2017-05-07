@@ -1,5 +1,5 @@
 import express from 'express';
-import classCtrl from '../controllers/class-controller';
+import gradeCtrl from '../controllers/grade-controller';
 import validation from '../middlewares/validation'
 
 
@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.route('/')
     .get(
-        classCtrl.getClass
+        gradeCtrl.getGrade
     )
 
 export default router;
