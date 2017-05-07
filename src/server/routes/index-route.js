@@ -1,6 +1,7 @@
 import express from 'express';
 import userRoutes from './user-route';
 import studentRoutes from './student-route';
+import classRoutes from './class-route';
 import student_classRoutes from './student_class-route';
 import subjectRoutes from './subject-route';
 import schoolYearRoutes from './school_year-route';
@@ -29,6 +30,7 @@ router.route('/')
 
 router.use('/user', userRoutes);
 router.use('/student', studentRoutes);
+router.use('/class', classRoutes);
 router.use('/student_class', student_classRoutes);
 router.use('/subject', subjectRoutes);
 router.use('/school_year', schoolYearRoutes);

@@ -5,4 +5,9 @@ import validation from '../middlewares/validation'
 
 const router = express.Router();
 
-// export default router;
+router.route('/')
+    .get(
+        classCtrl.getClass
+    )
+
+export default router;

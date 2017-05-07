@@ -66,7 +66,8 @@ function delStuInClass(req, res) {
 function getStuInClass(req, res) {
     HocSinh_LopHoc.findAll({
         where: {
-            maLopHoc: req.query.classID
+            maLopHoc: req.query.classID,
+            maNamHoc: req.query.schoolYearID
         },
         include: [{
             model: HocSinh,
@@ -101,7 +102,7 @@ function getStuInClass(req, res) {
         } else {
             return res.status(200).json({
                 success: false,
-                message: "No class found"
+                message: "No student found"
             });
         }
     })
