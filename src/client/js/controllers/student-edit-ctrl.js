@@ -14,12 +14,14 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             //UPDATE
             console.log("UPDATE");
             $scope.title = "Cập nhật học sinh";
+            $scope.data ={};
             angular.extend($scope.data, $scope.studentData.data); 
         }
         if (newValue !== oldValue && Object.keys(newValue.data).length > 0 && newValue.action =="view") {
             //VIEW
             console.log("VIEW");
             $scope.title = "Thông tin học sinh";
+            $scope.data ={};            
             angular.extend($scope.data, $scope.studentData.data); 
         }
         if(newValue.action == "create"){
