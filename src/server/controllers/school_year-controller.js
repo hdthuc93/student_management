@@ -4,7 +4,7 @@ function getSchoolYear(req, res) {
     NamHoc.findAll().then((result) => {
         const len = result.length;
         if(len > 0) {
-            const objReturning = {};
+            let objReturning = [];
             for(let i = 0; i < len; ++i) {
                 objReturning[objReturning.length] = {
                     schoolYearID: result[i].namHoc_pkey,
