@@ -1,10 +1,11 @@
 import HocSinh from '../models/hocsinh-model';
 import { generateStudentID } from '../utilities/id_generates';
+import { changeToYYYYMMDD, changeToDDMMYYYY } from '../utilities/date_times';
 
 function getObjReq(req, sign) {
     let objReq = {
         hoTen: req.body.name,
-        ngaySinh: req.body.birthday,
+        ngaySinh: changeToYYYYMMDD(req.body.birthday),
         gioiTinh: req.body.gender,
         diaChi: req.body.address,
         email: req.body.email,
@@ -37,7 +38,7 @@ function createStu(req, res) {
         return HocSinh.create({
                 maHocSinh: studentID,
                 hoTen: req.body.name,
-                ngaySinh: req.body.birthday,
+                ngaySinh: changeToYYYYMMDD(req.body.birthday),
                 gioiTinh: req.body.gender,
                 diaChi: req.body.address,
                 email: req.body.email,
@@ -169,11 +170,17 @@ function findStus(req, res) {
     if(objReq.diaChi)
         objReq.diaChi = { $like: '%' + objReq.diaChi + '%' }
 
-    if(req.query.birthdayFrom)
-        objReq.ngaySinh = { $gte: req.query.birthdayFrom }
+    if(req.query.birthdayFrom) {
+        console.log(req.query.birthdayFrom);
+        const temp = changeToYYYYMMDD(req.query.birthdayFrom);
+        objReq.ngaySinh = { $gte: temp }
+    }
+        
 
-    if(req.query.birthdayTo)
-        objReq.ngaySinh = Object.assign({}, objReq.ngaySinh, { $lte: req.query.birthdayTo });
+    if(req.query.birthdayTo) {
+        const temp = changeToYYYYMMDD(req.query.birthdayTo);
+        objReq.ngaySinh = Object.assign({}, objReq.ngaySinh, { $lte: temp });
+    }
 
     console.log(objReq);
     HocSinh.findAll({
@@ -189,7 +196,7 @@ function findStus(req, res) {
                     studentID: result[i].hocSinh_pkey,
                     studentCode: result[i].maHocSinh,
                     name: result[i].hoTen,
-                    birthday: result[i].ngaySinh,
+                    birthday: changeToDDMMYYYY(result[i].ngaySinh),
                     gender: result[i].gioiTinh,
                     address: result[i].diaChi,
                     email: result[i].email,
