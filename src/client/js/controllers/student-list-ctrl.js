@@ -74,7 +74,7 @@ function StudentListCtrl($scope, helper, $http) {
             // { field: 'firstname', displayName: 'Họ' },
             { field: 'name', displayName: 'Họ Tên' },
             { field: 'gender', displayName: 'Giới', cellFilter: 'GenderText'},
-            { field: 'birthday', displayName: 'Ngày Sinh', cellFilter: 'formatDDMMYYYY' },
+            { field: 'birthday', displayName: 'Ngày Sinh'},
             // { field: 'class', displayName: 'Lớp' },
             { field: 'email', displayName: 'Email' },
             { field: 'address', displayName: 'Địa chỉ' }
@@ -161,12 +161,22 @@ function StudentListCtrl($scope, helper, $http) {
             title:"Xoá học sinh",
             message:"Bạn có thưc sự muốn xoá học sinh này?",
             ok: function(){
-                //action xoa
-                console.log("Request xoaaaa");
+                $http.delete('/api/student', {params: {studentID: $scope.selectedRow.studentID}}).then(function successCallBack(res){
+                    console.log(8888,res)
+                    helper.popup.info({
+                        title:"Thông báo",
+                        message:res.data.success?"Xoá học sinh thành công.":"Xoá thất bại. Hãy thử lại",
+                        close:function(){
+                            $scope.reset();                                               
+                            return;
+                        }
+                    });
+                }, function errorCallback(){
+                    //console.log("000000000000")
+                });
             },
             cancel:function(){
                 //Do nothing
-                console.log("do nothinggggg");
                 return;
             }
         })        
