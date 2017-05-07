@@ -44,14 +44,14 @@
 
           <div class="row form-horizontal">
             <div class="btn-group">
-              <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm Học Sinh</button>
+              <button type="button" class="btn btn-primary btn-xs" ng-click="addStudentToClass()"><i class="fa fa-plus-circle"></i> Thêm Học Sinh</button>
               <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá Khỏi Lớp</button>
               <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-file-text-o"></i> Nhập Điểm</button>
               <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-file-text"></i> Nhận Điểm</button>
             </div>
           </div>
 
-          <div id="grid1" ui-grid="studentList" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
+          <div id="listStudent" ui-grid-selection ui-grid-resize-columns ui-grid="studentList" class="grid"><span ng-show="studentList.data.length==0" class="grid-status">{{studentListStatus}}</span></div>
         </div>
       </div>
 

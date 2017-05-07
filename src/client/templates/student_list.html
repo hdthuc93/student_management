@@ -10,7 +10,7 @@
             <div class="row form-horizontal">
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="control-label col-md-4 col-sm-2 input-sm">Mã Học Sinh:</label>
+                  <label class="control-label col-md-4 col-sm-2 input-sm">Mã HS:</label>
                   <div class="col-md-8 col-sm-10">
                     <input ng-model="options.studentCode" type="text" class="form-control input-sm">
                   </div>
@@ -43,13 +43,13 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <label class="control-label col-md-4 col-sm-2 input-sm">Ngày Sinh từ:</label>
+                  <label class="control-label col-md-4 col-sm-2 input-sm">Ng.S Từ:</label>
                   <div class="col-md-8 col-sm-10">
                     <input ng-model="options.birthdayFrom" type="text" class="form-control input-sm">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="control-label col-md-4 col-sm-2 input-sm">Ngày Sinh Đến:</label>
+                  <label class="control-label col-md-4 col-sm-2 input-sm">Ng.S Đến:</label>
                   <div class="col-md-8 col-sm-10">
                     <input ng-model="options.birthdayTo" type="text" class="form-control input-sm">
                   </div>
@@ -80,7 +80,7 @@
               <button type="button" class="btn btn-primary btn-xs" ng-click="removeStudent()" ng-disabled="!selectedRow"><i class="fa fa-times"></i> Xoá</button>
             </div>
           </div>
-          <div id="studentList" ui-grid-selection ui-grid="studentList" class="grid"><span ng-show="studentList.data.length==0" class="grid-status">{{studentListStatus}}</span></div>
+          <div id="studentList" ui-grid-selection ui-grid-resize-columns ui-grid="studentList" class="grid"><span ng-show="studentList.data.length==0" class="grid-status">{{studentListStatus}}</span></div>
           <div id="handle-student-area" ng-show="showHandleArea">
             <div data-student-handle="studentData"></div>
           </div>

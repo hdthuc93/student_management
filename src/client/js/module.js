@@ -4,4 +4,5 @@ angular.module('RDash', [
 'ngCookies', 
 'ui.grid', 
 'ui.grid.selection', 
+'ui.grid.resizeColumns',
 'mod.helper']);
