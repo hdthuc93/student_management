@@ -1,3 +1,7 @@
+/**
+ * Student Controller
+ * Implement: Phong Nguyen
+ */
 angular.module('RDash')
     .controller('StudentEditCtrl', ['$scope','helper','$http','$rootScope', StudentEditCtrl]);
 
@@ -62,7 +66,7 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                     }
                 });
             }, function errorCallback(){
-                console.log("000000000000")
+                //console.log("000000000000")
             });
         }
         if($scope.studentData.action == "edit"){

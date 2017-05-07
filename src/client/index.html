@@ -27,14 +27,10 @@
   <!-- endbuild -->
   <!-- Custom Scripts -->
   <script type="text/javascript" src="js/dashboard.min.js"></script>
-  <style>
-   
-  </style>
 </head>
 
 <body ng-controller="MasterCtrl">
   <div id="page-wrapper" ng-class="{'open': toggle}" class="open" ng-cloak>
-
     <!-- Sidebar -->
     <div id="sidebar-wrapper">
       <ul class="sidebar">
@@ -49,19 +45,19 @@
           <a href="#">Dashboard <span class="menu-icon fa fa-tachometer"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/studentlist">Học Sinh <span class="menu-icon fa fa-table"></span></a>
+          <a href="#/studentlist">Học Sinh <span class="menu-icon fa fa-id-card"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/class">Lớp Học<span class="menu-icon fa fa-table"></span></a>
+          <a href="#/class">Lớp Học<span class="menu-icon fa fa-users"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/report">Báo cáo<span class="menu-icon fa fa-table"></span></a>
+          <a href="#/report">Báo cáo<span class="menu-icon fa fa-file-text-o"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/rule">Quy định<span class="menu-icon fa fa-table"></span></a>
+          <a href="#/rule">Quy định<span class="menu-icon fa fa-cogs"></span></a>
         </li>
         <li class="sidebar-list">
-          <a href="#/schoolyear">Tạo năm học<span class="menu-icon fa fa-table"></span></a>
+          <a href="#/schoolyear">Tạo năm học<span class="menu-icon fa fa-plus-circle"></span></a>
         </li>
       </ul>
       <div class="sidebar-footer">
@@ -142,11 +138,8 @@
               <div class="page">
                 <label style="width:85px; margin-top:2px;" class="col-lg-2 col-md-3 col-sm-4">Năm học</label>
                 <div style="min-width: 100px;" class="col-sm-4 col-md-2 col-lg-1">
-                  <select class="form-control input-sm" name="year">
-                      <option class="placeholder-option" value="">Tất cả</option>
-                      <option value="2016">2016</option>
-                      <option value="2017" selected>2017</option>   
-                        <option value="2018">2018</option>                                              
+                  <select ng-change="changeSchoolYear()" class="form-control input-sm" ng-model="selectedSchoolYear" name="year">
+                      <option ng-selected="selectedSchoolYear==data.schooYearID" ng-repeat="data in schoolYear" value="{{data.schooYearID}}">{{data.schoolYearName}}</option>                                           
                   </select>
                 </div>
               </div>

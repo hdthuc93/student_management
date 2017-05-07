@@ -1,5 +1,6 @@
 /**
  * Student List Controller
+ * Implement: Phong Nguyen
  */
 var module = angular.module('RDash');
 module.filter('GenderText', function () {
@@ -16,31 +17,10 @@ module.filter('GenderText', function () {
         }
     };
 });
-module.filter('formatDDMMYYYY', function () {
-    return function (input) {
-        console.log(77777,input)
-        if (!input) {
-            return "";
-        }
-        var d = new Date(input);
-        var dd = d.getDate();
-        var mm = d.getMonth()+1; //January is 0!
-        var yyyy = d.getFullYear();
-
-        if(dd<10){
-            dd='0'+dd;
-        } 
-        if(mm<10){
-            mm='0'+mm;
-        } 
-        return dd+'/'+mm+'/'+yyyy;
-    };
-});
 
 module.controller('StudentListCtrl', ['$scope','helper','$http', StudentListCtrl]);
 
 function StudentListCtrl($scope, helper, $http) {
-    console.log("TESTING!!!Phong Nguyen");
     $scope.showHandleArea = false; //Hien vung xu ly Them/Sua
     $scope.studentData = {};
     $scope.action = "";
@@ -67,17 +47,16 @@ function StudentListCtrl($scope, helper, $http) {
         enableSorting: false,
         enableRowSelection: true,
         multiSelect:false,
+        enableColumnResizing: true,
         selectionRowHeaderWidth: 35,
         columnDefs: [
-            { field: 'no', displayName: 'STT', width: 70 },
-            { field: 'studentCode', displayName: 'Mã học sinh' },
-            // { field: 'firstname', displayName: 'Họ' },
-            { field: 'name', displayName: 'Họ Tên' },
-            { field: 'gender', displayName: 'Giới', cellFilter: 'GenderText'},
-            { field: 'birthday', displayName: 'Ngày Sinh'},
-            // { field: 'class', displayName: 'Lớp' },
-            { field: 'email', displayName: 'Email' },
-            { field: 'address', displayName: 'Địa chỉ' }
+            { field: 'no', displayName: 'STT', width: 50 },
+            { field: 'studentCode', displayName: 'Mã Học Sinh', width: 110 },
+            { field: 'name', displayName: 'Họ Tên' , width: 230},
+            { field: 'gender', displayName: 'Giới', cellFilter: 'GenderText', width: 50},
+            { field: 'birthday', displayName: 'Ngày Sinh', width: 100},
+            { field: 'email', displayName: 'Email', width: 200 },
+            { field: 'address', displayName: 'Địa Chỉ', width: 350 }
         ],
         onRegisterApi: function(gridApi) {
             $scope.gridApi = gridApi;
@@ -162,7 +141,6 @@ function StudentListCtrl($scope, helper, $http) {
             message:"Bạn có thưc sự muốn xoá học sinh này?",
             ok: function(){
                 $http.delete('/api/student', {params: {studentID: $scope.selectedRow.studentID}}).then(function successCallBack(res){
-                    console.log(8888,res)
                     helper.popup.info({
                         title:"Thông báo",
                         message:res.data.success?"Xoá học sinh thành công.":"Xoá thất bại. Hãy thử lại",
@@ -172,18 +150,15 @@ function StudentListCtrl($scope, helper, $http) {
                         }
                     });
                 }, function errorCallback(){
-                    //console.log("000000000000")
                 });
             },
             cancel:function(){
-                //Do nothing
                 return;
             }
         })        
     }
 
     $scope.$on('reset-student-list', function(event, mass) { 
-        console.log(123123123)
         $scope.reset();
     });
 }
