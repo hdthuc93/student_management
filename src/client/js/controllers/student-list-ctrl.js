@@ -18,9 +18,9 @@ module.filter('GenderText', function () {
     };
 });
 
-module.controller('StudentListCtrl', ['$scope', 'helper', '$http', StudentListCtrl]);
+module.controller('StudentListCtrl', ['$scope', 'helper', '$http', '$rootScope', StudentListCtrl]);
 
-function StudentListCtrl($scope, helper, $http) {
+function StudentListCtrl($scope, helper, $http, $rootScope) {
     $scope.showHandleArea = false; //Hien vung xu ly Them/Sua
     $scope.studentData = {};
     $scope.action = "";
@@ -33,7 +33,8 @@ function StudentListCtrl($scope, helper, $http) {
             email: "",
             address: "",
             birthdayFrom: "",
-            birthdayTo: ""
+            birthdayTo: "",
+            schoolYearNow: $rootScope.schoolYear?$rootScope.schoolYear.schoolYearID:""
         }
     }
     initOptions();
@@ -159,6 +160,9 @@ function StudentListCtrl($scope, helper, $http) {
     }
 
     $scope.$on('reset-student-list', function (event, mass) {
+        $scope.reset();
+    });
+    $scope.$on('change-school-year', function (event, mass) {
         $scope.reset();
     });
 }

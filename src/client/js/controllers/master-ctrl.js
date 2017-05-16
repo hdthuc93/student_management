@@ -4,9 +4,9 @@
  */
 
 angular.module('RDash')
-    .controller('MasterCtrl', ['$scope', '$cookieStore','$http','$rootScope', MasterCtrl]);
+    .controller('MasterCtrl', ['$scope', '$cookieStore','$http','$rootScope','$timeout', MasterCtrl]);
 
-function MasterCtrl($scope, $cookieStore, $http, $rootScope) {
+function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
     /**
      * Sidebar Toggle & Cookie Control
      */
@@ -26,7 +26,17 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope) {
         } else {
             $scope.toggle = false;
         }
+    });
 
+    $scope.selectedSchoolYear = "";
+    $scope.schoolYear = [];
+    $scope.$watch("selectedSchoolYear",function(year){
+        if(!$scope.schoolYear.length){
+            return;
+        }
+        $rootScope.schoolYear = angular.fromJson(year);
+        console.log("current school year ",$rootScope.schoolYear)
+        $rootScope.$broadcast('change-school-year');
     });
 
     $scope.toggleSidebar = function() {
@@ -46,20 +56,12 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope) {
         }).then(function successCallback(response) {
             if(response.data.success){
                 $scope.schoolYear = response.data.data
-                setTimeout(function(){
-                    $scope.selectedSchoolYear = $scope.schoolYear[0];
-                    $rootScope.schoolYear = $scope.selectedSchoolYear;
-                    console.log(299999,$scope.selectedSchoolYear,$rootScope.schoolYear);    
-                },1000) 
+                $scope.selectedSchoolYear = $scope.schoolYear[$scope.schoolYear.length-1];
             }else{
             }
         });
     }
     getSchoolYear();
-
-    $scope.changeSchoolYear = function(){
-        $rootScope.schoolYear = $scope.selectedSchoolYear;
-        console.log(19999999,$scope.selectedSchoolYear,$rootScope.schoolYear);                
-    }
+     
      
 }
