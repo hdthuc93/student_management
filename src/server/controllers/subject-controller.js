@@ -57,24 +57,24 @@ function getScores(req, res) {
         }]
     })
     .then((result) => {
-        const classID = Number(req.query.classID);
+        
         const len = result.length;
         let prevStudentID = -1;
         let objReturning = {};
 
         objReturning = {
-            subjectID: result[i].maMonHoc,
-            semesterID: result[i].maHocKy,
-            classID: classID,
+            subjectID: Number(reqParams.maMonHoc),
+            semesterID: Number(reqParams.maHocKy),
+            classID: Number(reqParams.maLopHoc),
             listScores: []
         }
-       
-        for(let i = 0; i < result.length; ++i) {
+
+        for(let i = 0; i < len; ++i) {
             if(result[i].maHocSinh === prevStudentID) {
                 continue;
             }
 
-            objReturning.listScores[listScores.length] = {
+            objReturning.listScores[objReturning.listScores.length] = {
                 studentID: result[i].maHocSinh,
                 score1: result[i].diem_15phut,
                 score2: result[i].diem_1tiet,
@@ -84,7 +84,6 @@ function getScores(req, res) {
             prevStudentID = result[i].maHocSinh;
         }
 
-        
         return res.status(200).json({
             success: true,
             message: "Get score(s) successfully",
