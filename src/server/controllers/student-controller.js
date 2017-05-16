@@ -1,8 +1,11 @@
 import HocSinh from '../models/hocsinh-model';
+import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
+import LopHoc from '../models/lophoc-model';
+import { Sequelize } from '../models/index';
 import { generateStudentID } from '../utilities/id_generates';
 import { changeToYYYYMMDD, changeToDDMMYYYY } from '../utilities/date_times';
 
-function getObjReq(req, sign) {
+function getObjReq(req) {
     let objReq = {
         hoTen: req.body.name,
         ngaySinh: changeToYYYYMMDD(req.body.birthday),
@@ -12,21 +15,50 @@ function getObjReq(req, sign) {
         namNhapHoc: req.body.schoolYearID
     };
 
-    if(sign === 'get') {
-        objReq = {
-            hoTen: req.query.name,
-            gioiTinh: req.query.gender,
-            diaChi: req.query.address,
-            email: req.query.email,
-            namNhapHoc: req.query.schoolYearID
-        };
-    }
-
     const objKeys = ['hoTen', 'ngaySinh', 'gioiTinh', 'diaChi', 'email', 'namNhapHoc'];
 
     for(let i = 0; i < objKeys.length; ++i) {
         if(!objReq[objKeys[i]]) 
             delete objReq[objKeys[i]];
+    }
+
+    return objReq;
+}
+
+function getReqOptionParams(req) {
+    let objReq = {};
+
+    objReq.delete_flag = '0';
+
+    if(req.query.studentID)
+        objReq.hocSinh_pkey = req.query.studentID;
+
+    if(req.query.studentCode)
+        objReq.maHocSinh = req.query.studentCode;
+
+    if(req.query.yearAdmission)
+        objReq.namNhapHoc = req.query.yearAdmission;
+
+    if(req.query.email)
+        objReq.email = req.query.email;
+
+    if(req.query.gender)
+        obj.gioiTinh = req.query.gender;
+
+    if(req.query.name)
+        objReq.hoTen = { $like: '%' + req.query.name + '%' }
+
+    if(req.query.address)
+        objReq.diaChi = { $like: '%' + req.query.address + '%' }
+
+    if(req.query.birthdayFrom) {
+        const temp = changeToYYYYMMDD(req.query.birthdayFrom);
+        objReq.ngaySinh = { $gte: temp }
+    }
+        
+    if(req.query.birthdayTo) {
+        const temp = changeToYYYYMMDD(req.query.birthdayTo);
+        objReq.ngaySinh = Object.assign({}, objReq.ngaySinh, { $lte: temp });
     }
 
     return objReq;
@@ -154,43 +186,40 @@ function updateStu(req, res) {
 }
 
 function findStus(req, res) {
-    let objReq = getObjReq(req, 'get');
-
-    objReq.delete_flag = '0';
-
-    if(req.query.studentID)
-        objReq.hocSinh_pkey = req.query.studentID;
-
-    if(req.query.studentCode)
-        objReq.maHocSinh = req.query.studentCode;
-
-    if(objReq.hoTen)
-        objReq.hoTen = { $like: '%' + objReq.hoTen + '%' }
-
-    if(objReq.diaChi)
-        objReq.diaChi = { $like: '%' + objReq.diaChi + '%' }
-
-    if(req.query.birthdayFrom) {
-        console.log(req.query.birthdayFrom);
-        const temp = changeToYYYYMMDD(req.query.birthdayFrom);
-        objReq.ngaySinh = { $gte: temp }
-    }
-        
-
-    if(req.query.birthdayTo) {
-        const temp = changeToYYYYMMDD(req.query.birthdayTo);
-        objReq.ngaySinh = Object.assign({}, objReq.ngaySinh, { $lte: temp });
-    }
+    let objReq = getReqOptionParams(req);
+    let objReturning = [];
 
     HocSinh.findAll({
-        where: objReq
+        where: objReq,
+        include: [{
+            model: HocSinh_LopHoc,
+            // where: {
+            //     maHocSinh: Sequelize.col('AE_HOC_SINH.HOC_SINH_PKEY')
+            // },
+            include: [{
+                    model: LopHoc,
+                    where: {
+                        //maLop_pkey: Sequelize.col('HOCSINH_LOPHOC.MA_LOP_HOC'),
+                        maNamHoc: req.query.schoolYearNow
+                    },
+                    required: false
+                }
+            ],
+        }]
     })
     .then((result) => {
         // console.log(result);
         if(result.length > 0) {
-            let objReturning = [];
 
             for(let i = 0; i < result.length; ++i) {
+                let classID = '';
+                let className = '';
+
+                if(result[i]['HOCSINH_LOPHOCs'].length > 0) {
+                    classID = result[i]['HOCSINH_LOPHOCs'][0].maLopHoc;
+                    className = result[i]['HOCSINH_LOPHOCs'][0]['M_LOP_HOC'].tenLop;
+                }
+                    
                 objReturning[objReturning.length] = { 
                     studentID: result[i].hocSinh_pkey,
                     studentCode: result[i].maHocSinh,
@@ -199,8 +228,10 @@ function findStus(req, res) {
                     gender: result[i].gioiTinh,
                     address: result[i].diaChi,
                     email: result[i].email,
-                    schoolYearID: result[i].namNhapHoc,
-                    inClass: result[i].inClass
+                    yearAdmission: result[i].namNhapHoc,
+                    inClass: result[i].inClass,
+                    classID:  classID,
+                    className:  className
                 }
             }
 
@@ -217,6 +248,7 @@ function findStus(req, res) {
         }
     })
     .catch((err) => {
+        console.log(err);
         return res.status(500).json({
             success: false,
             message: "Failed to get students"
