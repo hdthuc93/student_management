@@ -14,13 +14,13 @@ function ClassCtrl($scope,$uibModal) {
         enableColumnResizing: true,
         selectionRowHeaderWidth: 35,
         columnDefs: [
-            { field: 'no', displayName: 'STT', width: 50 },
-            { field: 'studentID', displayName: 'Mã học sinh', width: 100 },
-            { field: 'name', displayName: 'Họ Tên', width: 230 },
-            { field: 'gender', displayName: 'Giới', width: 50 },
-            { field: 'birthday', displayName: 'Ngày Sinh' , width: 100},
-            { field: 'email', displayName: 'Email', width: 200 },
-            { field: 'address', displayName: 'Địa chỉ', width: 350 }
+            { field: 'no', displayName: 'STT', minWidth: 50, maxWidth: 70 },
+            { field: 'studentID', displayName: 'Mã học sinh', minWidth: 110, maxWidth: 140  },
+            { field: 'name', displayName: 'Họ Tên', minWidth: 250 },
+            { field: 'gender', displayName: 'Giới', minWidth: 50, maxWidth: 70 },
+            { field: 'birthday', displayName: 'Ngày Sinh', minWidth: 110, maxWidth: 120},
+            { field: 'email', displayName: 'Email', minWidth: 220 },
+            { field: 'address', displayName: 'Địa chỉ', minWidth: 350}
         ]
     };
 

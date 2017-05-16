@@ -27,7 +27,7 @@ gulp.task('usemin', function () {
     return gulp.src(paths.index)
             .pipe(usemin({
                 js: [minifyJs(), 'concat'],
-                css: [minifyCss({keepSpecialComments: 0}), 'concat'],
+                css: [],
             }))
             .pipe(gulp.dest('dist/'));
 });
@@ -35,15 +35,19 @@ gulp.task('usemin', function () {
 /**
  * Copy assets
  */
-gulp.task('build-assets', ['copy-bower_fonts']);
+gulp.task('build-assets', ['copy-bower_fonts','copy-bower_fonts-to-css']);
 
 gulp.task('copy-bower_fonts', function () {
     return gulp.src(paths.bower_fonts)
             .pipe(rename({
-                dirname: '/css'
-            }))
-            .pipe(rename({
                 dirname: '/fonts'
+            }))
+            .pipe(gulp.dest('dist/lib'));
+});
+gulp.task('copy-bower_fonts-to-css', function () {
+    return gulp.src(paths.bower_fonts)
+            .pipe(rename({
+                dirname: '/css'
             }))
             .pipe(gulp.dest('dist/lib'));
 });
