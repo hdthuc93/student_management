@@ -9,5 +9,8 @@ router.route('/')
     .get(
         schoolYearCtrl.getSchoolYear
     )
+    .post(
+        schoolYearCtrl.addNewSchoolYear
+    )
 
 export default router;

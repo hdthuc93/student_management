@@ -33,4 +33,21 @@ function getSchoolYear(req, res) {
     });
 }
 
-export default { getSchoolYear }
+function addNewSchoolYear(req, res) {
+    NamHoc.create({
+        maNamHoc: req.body.year,
+        tenNamHoc: req.body.year
+    }).then((result) => {
+        return res.status(200).json({
+            success: true,
+            message: "Create new school year successfully"
+        });
+    }).catch((err) => {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to create school year"
+        });
+    });
+}
+
+export default { getSchoolYear, addNewSchoolYear }
