@@ -13,7 +13,7 @@ var gulp = require('gulp'),
 
 var paths = {
     scripts: 'src/client/js/**/*.*',
-    styles: 'src/client/less/**/*.*',
+    styles: 'src/client/style/**/*.*',
     images: 'src/client/img/**/*.*',
     templates: 'src/client/templates/**/*.html',
     index: 'src/client/index.html',
