@@ -36,12 +36,17 @@ function addScores(req, res) {
 }
 
 function getScores(req, res) {
+    const reqParams = {
+        maMonHoc: req.query.subjectID,
+        maHocKy: req.query.semesterID,
+        maLopHoc: req.query.classID
+    }
+
+    if(req.query.studentID)
+        reqParams.maHocSinh = req.query.studentID;
+
     DiemMH.findAll({
-        where: {
-            maMonHoc: req.query.subjectID,
-            maHocKy: req.query.semesterID,
-            maLopHoc: req.query.classID
-        },
+        where: reqParams,
         include:[{
             model: HocSinh_LopHoc,
             attributes: [],
@@ -55,17 +60,21 @@ function getScores(req, res) {
         const classID = Number(req.query.classID);
         const len = result.length;
         let prevStudentID = -1;
-        let objReturning = [];
+        let objReturning = {};
+
+        objReturning = {
+            subjectID: result[i].maMonHoc,
+            semesterID: result[i].maHocKy,
+            classID: classID,
+            listScores: []
+        }
        
         for(let i = 0; i < result.length; ++i) {
             if(result[i].maHocSinh === prevStudentID) {
                 continue;
             }
 
-            objReturning[objReturning.length] = {
-                subjectID: result[i].maMonHoc,
-                semesterID: result[i].maHocKy,
-                classID: classID,
+            objReturning.listScores[listScores.length] = {
                 studentID: result[i].maHocSinh,
                 score1: result[i].diem_15phut,
                 score2: result[i].diem_1tiet,
