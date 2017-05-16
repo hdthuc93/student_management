@@ -96,7 +96,7 @@ function StudentListCtrl($scope, helper, $http) {
                 title: "Lỗi",
                 message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
                 close: function () {
-                    $scope.getStudentList();
+                    //$scope.getStudentList();
                     return;
                 }
             })
