@@ -188,38 +188,37 @@ function updateStu(req, res) {
 function findStus(req, res) {
     let objReq = getReqOptionParams(req);
     let objReturning = [];
+    const reqSchoolYearNow = req.query.schoolYearNow;
 
     HocSinh.findAll({
         where: objReq,
         include: [{
             model: HocSinh_LopHoc,
-            // where: {
-            //     maHocSinh: Sequelize.col('AE_HOC_SINH.HOC_SINH_PKEY')
-            // },
             include: [{
                     model: LopHoc,
                     where: {
-                        //maLop_pkey: Sequelize.col('HOCSINH_LOPHOC.MA_LOP_HOC'),
-                        maNamHoc: req.query.schoolYearNow
+                        maNamHoc: reqSchoolYearNow //|| Sequelize.col('M_LOP_HOC.MA_NAM_HOC')
                     },
                     required: false
                 }
             ],
+            required: false
         }]
     })
     .then((result) => {
-        // console.log(result);
         if(result.length > 0) {
 
             for(let i = 0; i < result.length; ++i) {
-                let classID = '';
+                let classID = -1;
                 let className = '';
-
-                if(result[i]['HOCSINH_LOPHOCs'].length > 0) {
-                    classID = result[i]['HOCSINH_LOPHOCs'][0].maLopHoc;
+                let schoolYearNow = -1;
+                
+                if(result[i]['HOCSINH_LOPHOCs'][0] && result[i]['HOCSINH_LOPHOCs'][0]['M_LOP_HOC']) {
+                    classID = Number(result[i]['HOCSINH_LOPHOCs'][0].maLopHoc);
                     className = result[i]['HOCSINH_LOPHOCs'][0]['M_LOP_HOC'].tenLop;
+                    schoolYearNow = Number(result[i]['HOCSINH_LOPHOCs'][0]['M_LOP_HOC'].maNamHoc);
                 }
-                    
+
                 objReturning[objReturning.length] = { 
                     studentID: result[i].hocSinh_pkey,
                     studentCode: result[i].maHocSinh,
@@ -231,15 +230,30 @@ function findStus(req, res) {
                     yearAdmission: result[i].namNhapHoc,
                     inClass: result[i].inClass,
                     classID:  classID,
-                    className:  className
+                    className:  className,
+                    schoolYearNow: schoolYearNow
                 }
             }
 
-            return res.status(200).json({
-                success: true,
-                message: "Get students successfully",
-                datas: objReturning
-            });
+            if(reqSchoolYearNow)
+                for(let i = 0; i < objReturning.length; ++i) {
+                    if(objReturning[i].schoolYearNow !== Number(reqSchoolYearNow)) {
+                        objReturning.splice(i, 1);
+                        --i;
+                    }
+                }
+
+            if(objReturning.length > 0)
+                return res.status(200).json({
+                    success: true,
+                    message: "Get students successfully",
+                    datas: objReturning
+                });
+            else 
+                return res.status(200).json({
+                    success: false,
+                    message: "No student found"
+                });
         } else {
             return res.status(200).json({
                 success: false,
