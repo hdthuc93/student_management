@@ -185,4 +185,8 @@ ul.sidebar .sidebar-list a:hover {
 }
 /*Modal - END*/
 
-
+@media (max-width: 767px){
+     .container-fluid{
+        padding: 5px;
+    }
+}

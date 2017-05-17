@@ -2,17 +2,17 @@
   <div class="col-lg-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <strong><span class="glyphicon glyphicon-th"></span> Quy Định</strong>
+        <strong><span class="fa fa-cogs"></span> Quy Định</strong>
       </div>
       <div class="panel-body notification-area">
         <div class="container-fluid">
           <form role="form" name="rule" id="rule">
             <div class="row form-horizontal">
-               <div class="col-md-3">
+              <div class="col-md-3 col-sm-6">
                 <div class="form-group">
-                  <label class="control-label col-md-4 col-sm-2 input-sm">Năm học</label>
+                  <label class="control-label input-sm col-xs-5">Năm học:</label>
 
-                  <div class="col-md-8 col-sm-10">
+                  <div class=" col-xs-7">
                     <select class="form-control input-sm" name="Username">
                                                 <option class="placeholder-option" value="" selected>2017</option>
                                                 <option value="10">2018</option>
@@ -22,27 +22,27 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-3 col-sm-6">
                 <div class="form-group">
-                  <label class="control-label col-md-4 col-sm-2 input-sm">Điểm chuẩn</label>
+                  <label class="control-label col-xs-5 input-sm col-sm-5">Điểm chuẩn:</label>
 
-                  <div class="col-md-8 col-sm-10">
+                  <div class="col-xs-7 col-sm-7">
                     <input type="text" class="form-control input-sm">
                   </div>
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-3 col-sm-6">
                 <div class="form-group">
-                  <label class="control-label col-md-4 col-sm-2 input-sm">Tuổi MIN</label>
-                  <div class="col-md-8 col-sm-10">
+                  <label class="control-label col-xs-5 input-sm">Tuổi MIN:</label>
+                  <div class="col-xs-7">
                     <input type="text" class="form-control input-sm">
                   </div>
                 </div>
               </div>
-              <div class="col-md-3">
+              <div class="col-md-3 col-sm-6">
                 <div class="form-group">
-                  <label class="control-label col-md-4 col-sm-2 input-sm">Tuổi MAX</label>
-                  <div class="col-md-8 col-sm-10">
+                  <label class="control-label col-xs-5 input-sm">Tuổi MAX:</label>
+                  <div class="col-xs-7">
                     <input type="text" class="form-control input-sm">
                   </div>
                 </div>
@@ -50,49 +50,49 @@
             </div>
             <div class="row form-horizontal">
               <h4> Khối 10 ({{ruleNameAndMaxStudentClass10.data.length}} lớp)</h4>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                   <div class="btn-group">
                     <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm lớp</button>
                     <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá</button>
                   </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                   <div id="grid1" ui-grid="ruleNameAndMaxStudentClass10" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
                 </div>
             </div>
             <div class="row form-horizontal">
               <h4> Khối 11 ({{ruleNameAndMaxStudentClass11.data.length}} lớp)</h4>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                   <div class="btn-group">
                     <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm lớp</button>
                     <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá</button>
                   </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                   <div id="grid1" ui-grid="ruleNameAndMaxStudentClass11" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
                 </div>
             </div>
             <div class="row form-horizontal">
               <h4> Khối 12 ({{ruleNameAndMaxStudentClass12.data.length}} lớp)</h4>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                   <div class="btn-group">
                     <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm lớp</button>
                     <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá</button>
                   </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                   <div id="grid1" ui-grid="ruleNameAndMaxStudentClass12" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
                 </div>
             </div>
             <div class="row form-horizontal">
               <h4> Môn học</h4>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                   <div class="btn-group">
                     <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm Môn Học</button>
                     <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá</button>
                   </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-xs-12">
                   <div id="grid1" ui-grid="ruleCourses" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
                 </div>
             </div>
