@@ -27,7 +27,7 @@
                   <label class="control-label col-md-4 col-sm-2 input-sm">Giới Tính</label>
                   <div class="col-md-8 col-sm-10">
                     <select ng-model="options.gender" class="form-control input-sm">
-                        <option value="">Tất cả</option>
+                        <option value="" selected>Tất cả</option>
                         <option value="1">Nam</option>
                         <option value="0">Nữ</option>                                                
                     </select>
@@ -60,6 +60,15 @@
                   <label class="control-label col-md-4 col-sm-2 input-sm">Địa chỉ</label>
                   <div class="col-md-8 col-sm-10">
                     <input ng-model="options.address" type="text" class="form-control input-sm">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-md-4 col-sm-2 input-sm">Năm nhập học</label>
+                  <div class="col-md-8 col-sm-10">
+                    <select ng-model="options.yearAdmission" class="form-control input-sm">
+                        <option value="" selected>Tất cả</option>
+                        <option ng-repeat="data in masterSchoolYear" value="{{data.schoolYearID}}">{{data.schoolYearName}}</option>
+                    </select>
                   </div>
                 </div>
                 <div class="form-group">

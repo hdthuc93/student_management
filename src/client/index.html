@@ -140,10 +140,10 @@
             </div>-->
             <div class="meta">
               <div class="page">
-                <label style="width:85px; margin-top:2px;" class="col-lg-2 col-md-3 col-sm-4">Năm học: </label>
-                <div style="min-width: 100px;" class="col-sm-4 col-md-2 col-lg-1">
-                  <select class="form-control input-sm" ng-model="selectedSchoolYear">
-                      <option ng-repeat="data in schoolYear" value="{{data}}" ng-selected="selectedSchoolYear.schoolYearID == data.schoolYearID">{{data.schoolYearName}}</option>
+                <label style="width:85px; margin-top:2px;" class="col-lg-2 col-md-3 col-sm-4 col-xs-6">Năm học: </label>
+                <div class="col-xs-6 col-sm-4 col-md-2 col-lg-1">
+                  <select class="form-control input-sm" ng-model="selectedSchoolYear" style="max-width: 100px;">
+                      <option ng-repeat="data in masterSchoolYear" value="{{data}}" ng-selected="selectedSchoolYear.schoolYearID == data.schoolYearID">{{data.schoolYearName}}</option>
                   </select>
                   </div>
               </div>

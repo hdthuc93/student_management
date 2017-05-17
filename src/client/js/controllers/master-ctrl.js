@@ -17,25 +17,25 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
     };
 
     $scope.$watch($scope.getWidth, function(newValue, oldValue) {
+        console.log(888888888,newValue);
         if (newValue >= mobileView) {
             if (angular.isDefined($cookieStore.get('toggle'))) {
                 $scope.toggle = ! $cookieStore.get('toggle') ? false : true;
             } else {
-                $scope.toggle = true;
+                $scope.toggle = true;                
             }
         } else {
             $scope.toggle = false;
+            $("#page-wrapper").removeClass('open');
         }
     });
 
-    $scope.selectedSchoolYear = "";
-    $scope.schoolYear = [];
+    $scope.selectedSchoolYear = {};
+    $rootScope.masterSchoolYear = [];
     $scope.$watch("selectedSchoolYear",function(year){
-        if(!$scope.schoolYear.length){
-            return;
-        }
-        $rootScope.schoolYear = angular.fromJson(year);
-        console.log("current school year ",$rootScope.schoolYear)
+        console.log(8989,year);
+        $rootScope.masterSelectedschoolYear = angular.fromJson(year);
+        console.log("current school year ",$rootScope.masterSelectedschoolYear)
         $rootScope.$broadcast('change-school-year');
     });
 
@@ -55,8 +55,8 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
             url: '/api/school_year',
         }).then(function successCallback(response) {
             if(response.data.success){
-                $scope.schoolYear = response.data.data
-                $scope.selectedSchoolYear = $scope.schoolYear[$scope.schoolYear.length-1];
+                $rootScope.masterSchoolYear = response.data.data
+                $scope.selectedSchoolYear = $rootScope.masterSchoolYear[$scope.masterSchoolYear.length-1];
             }else{
             }
         });

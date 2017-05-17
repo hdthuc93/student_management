@@ -34,7 +34,7 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
             address: "",
             birthdayFrom: "",
             birthdayTo: "",
-            schoolYearNow: $rootScope.schoolYear?$rootScope.schoolYear.schoolYearID:""
+            yearAdmission: ""
         }
     }
     initOptions();
@@ -160,9 +160,6 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
     }
 
     $scope.$on('reset-student-list', function (event, mass) {
-        $scope.reset();
-    });
-    $scope.$on('change-school-year', function (event, mass) {
         $scope.reset();
     });
 }

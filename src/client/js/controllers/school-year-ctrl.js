@@ -31,7 +31,7 @@ function SchoolYearCtrl($scope,$rootScope,$http,helper) {
                 title:"Thông báo",
                 message:"Tạo thành công năm học mới.",
                 close:function(){
-                    createNewSchoolYearVariable();
+                    location.reload();
                     return;
                 }
             });
