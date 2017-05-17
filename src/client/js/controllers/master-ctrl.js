@@ -58,6 +58,7 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
                 $rootScope.masterSchoolYear = response.data.data
                 $scope.selectedSchoolYear = $rootScope.masterSchoolYear[$scope.masterSchoolYear.length-1];
             }else{
+                helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
             }
         });
     }

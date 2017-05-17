@@ -93,14 +93,7 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
             }
 
         }, function errorCallback(response) {
-            helper.popup.info({
-                title: "Lỗi",
-                message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
-                close: function () {
-                    //$scope.getStudentList();
-                    return;
-                }
-            })
+            helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
         });
     }
     $scope.getStudentList();
@@ -144,13 +137,14 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
                 $http.delete('/api/student', { params: { studentID: $scope.selectedRow.studentID } }).then(function successCallBack(res) {
                     helper.popup.info({
                         title: "Thông báo",
-                        message: res.data.success ? "Xoá học sinh thành công." : "Xoá thất bại. Hãy thử lại",
+                        message: res.data.success ? "Xoá học sinh thành công." : "Xoá thất bại. Vui lòng thử lại",
                         close: function () {
                             $scope.reset();
                             return;
                         }
                     });
                 }, function errorCallback() {
+                    helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
                 });
             },
             cancel: function () {

@@ -26,17 +26,17 @@ function SchoolYearCtrl($scope,$rootScope,$http,helper) {
 
     $scope.createSchoolYear = function(){
         var _year = $scope.newSchoolYear
-        $http.post('/api/school_year', {year:_year}).then(function successCallBack(){
+        $http.post('/api/school_year', {year:_year}).then(function successCallBack(res){
             helper.popup.info({
                 title:"Thông báo",
-                message:"Tạo thành công năm học mới.",
+                message:res.data.success?"Tạo thành công năm học mới.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
                 close:function(){
                     location.reload();
                     return;
                 }
             });
         }, function errorCallback(){
-            ////console.log("000000000000")
+            helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
         });
     }
 

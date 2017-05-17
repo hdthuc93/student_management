@@ -55,10 +55,10 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                 schoolYearID: $scope.data.yearAdmission || $rootScope.masterSelectedschoolYear.schoolYearID
             }
             console.log("save create", dataSave);
-            $http.post('/api/student', dataSave, {}).then(function successCallBack() {
+            $http.post('/api/student', dataSave, {}).then(function successCallBack(res) {
                 helper.popup.info({
                     title: "Thông báo",
-                    message: "Tạo mới học sinh thành công.",
+                    message:res.data.success? "Tạo mới học sinh thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
                     close: function () {
                         $scope.data = {};
                         $rootScope.$broadcast('reset-student-list');
@@ -66,7 +66,7 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                     }
                 });
             }, function errorCallback() {
-                //console.log("000000000000")
+                helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
             });
         }
         if ($scope.studentData.action == "edit") {
@@ -81,10 +81,10 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                 studentID: $scope.data.studentID || ""
             }
             console.log("save edit", dataSave);
-            $http.put('/api/student', dataSave, {}).then(function successCallBack() {
+            $http.put('/api/student', dataSave, {}).then(function successCallBack(res) {
                 helper.popup.info({
                     title: "Thông báo",
-                    message: "Cập nhật thành công.",
+                    message: res.data.success?"Cập nhật thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
                     close: function () {
                         $scope.data = {};
                         $rootScope.$broadcast('reset-student-list');
@@ -92,7 +92,7 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                     }
                 });
             }, function errorCallback() {
-                ////console.log("000000000000")
+                helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
             });
         }
     }
