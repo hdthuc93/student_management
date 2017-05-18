@@ -45,6 +45,7 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
     }
 
     $scope.studentList = {
+        minRowsToShow: 50,
         enableSorting: false,
         enableRowSelection: true,
         multiSelect: false,
@@ -156,4 +157,42 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
     $scope.$on('reset-student-list', function (event, mass) {
         $scope.reset();
     });
+    $( function() {
+        var dateFormat = "dd-mm-yy",
+        from = $( "#from" )
+            .datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,
+            numberOfMonths: 1,
+            dateFormat: dateFormat,
+            showOn: "button", buttonImage: "img/dp-icon.png", buttonImageOnly: true
+            })
+            .on( "change", function() {
+            to.datepicker( "option",{minDate: getDate( this )});
+            }),
+        to = $( "#to" ).datepicker({
+            defaultDate: "+1w",
+            changeMonth: true,
+            changeYear: true,            
+            numberOfMonths: 1,
+            dateFormat: dateFormat,
+            showOn: "button", buttonImage: "img/dp-icon.png", buttonImageOnly: true
+        })
+        .on( "change", function() {
+            from.datepicker( "option",{maxDate: getDate( this )});
+        });
+    
+        function getDate( element ) {
+        var date;
+        try {
+            date = $.datepicker.parseDate( dateFormat, element.value );
+            //element.datepicker({ dateFormat: 'dd-mm-yy'}); 
+            console.log(121212,date)
+        } catch( error ) {
+            date = null;
+        }
+        return date;
+        }
+    } );
 }

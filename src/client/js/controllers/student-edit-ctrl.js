@@ -13,13 +13,20 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
     }
 
     function init(newValue, oldValue) {
-        console.log(newValue, oldValue, "======");
         if (newValue !== oldValue && Object.keys(newValue.data).length > 0 && newValue.action == "edit") {
             //UPDATE
             console.log("UPDATE");
             $scope.title = "Cập nhật học sinh";
+            $scope.masterSchoolYear = $rootScope.masterSchoolYear;
             $scope.data = {};
             angular.extend($scope.data, $scope.studentData.data);
+            for(var i in $rootScope.masterSchoolYear){
+                if($scope.data.yearAdmission&&$rootScope.masterSchoolYear[i]&&
+                  $scope.data.yearAdmission==$rootScope.masterSchoolYear[i].schoolYearID){
+                    $scope.data.yearAdmission = $rootScope.masterSchoolYear[i].schoolYearName;
+                    break;
+                }
+            }
         }
         if (newValue !== oldValue && Object.keys(newValue.data).length > 0 && newValue.action == "view") {
             //VIEW
@@ -27,12 +34,27 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             $scope.title = "Thông tin học sinh";
             $scope.data = {};
             angular.extend($scope.data, $scope.studentData.data);
+            for(var i in $rootScope.masterSchoolYear){
+                if($scope.data.yearAdmission&&$rootScope.masterSchoolYear[i]&&
+                  $scope.data.yearAdmission==$rootScope.masterSchoolYear[i].schoolYearID){
+                    $scope.data.yearAdmission = $rootScope.masterSchoolYear[i].schoolYearName;
+                    break;
+                }
+            }
         }
         if (newValue.action == "create") {
             //CREATE NEW
             console.log("CREATE");
             $scope.title = "Tiếp nhận học sinh";
-            $scope.data = {};
+            $scope.data = {
+                yearAdmission: $rootScope.masterSelectedschoolYear.schoolYearName,
+                className: "Chưa có"
+            };
+            $scope.$on('change-school-year',function(){
+                if(newValue.action == "create"){
+                    $scope.data.yearAdmission = $rootScope.masterSelectedschoolYear.schoolYearName;
+                }
+            });
         }
     }
 
@@ -52,7 +74,7 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                 email: $scope.data.email,
                 gender: $scope.data.gender,
                 name: $scope.data.name,
-                schoolYearID: $scope.data.yearAdmission || $rootScope.masterSelectedschoolYear.schoolYearID
+                schoolYearID: $rootScope.masterSelectedschoolYear.schoolYearID
             }
             console.log("save create", dataSave);
             $http.post('/api/student', dataSave, {}).then(function successCallBack(res) {
@@ -76,9 +98,8 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                 email: $scope.data.email,
                 gender: $scope.data.gender,
                 name: $scope.data.name,
-                schoolYearID: $scope.data.schoolYearID || 1,
-                studentCode: $scope.data.studentCode || "",
-                studentID: $scope.data.studentID || ""
+                studentCode: $scope.data.studentCode,
+                studentID: $scope.data.studentID
             }
             console.log("save edit", dataSave);
             $http.put('/api/student', dataSave, {}).then(function successCallBack(res) {
@@ -96,4 +117,10 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             });
         }
     }
+
+    $(function(){
+        $(".dp-birthday").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true,
+            changeYear: true, numberOfMonths: 1, minDate: "-25Y", maxDate: "-15Y" ,
+            showOn: "button", buttonImage: "img/dp-icon.png", buttonImageOnly: true});  
+    })
 }

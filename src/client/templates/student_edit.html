@@ -5,6 +5,12 @@
   <div class="row form-horizontal">
     <div class="col-sm-6">
       <div class="form-group">
+        <label class="control-label col-xs-5 input-sm">Nhập học:</label>
+        <div class="col-xs-7">
+          <input ng-disabled="1" ng-model="data.yearAdmission" type="text" class="form-control input-sm">
+        </div>
+      </div>
+      <div class="form-group">
         <label class="control-label col-xs-5 input-sm">Họ Tên:</label>
         <div class="col-xs-7">
           <input ng-disabled="studentData.action == 'view'" ng-model="data.name" type="text" class="form-control input-sm">
@@ -22,12 +28,18 @@
       </div>
       <div class="form-group">
         <label class="control-label col-xs-5 input-sm">Ngày Sinh:</label>
-        <div class="col-xs-7">
-          <input ng-disabled="studentData.action == 'view'" ng-model="data.birthday" placeholder="yyyy-mm-dd" type="text" class="form-control input-sm">
+        <div class="col-xs-7" ng-class="studentData.action == 'view'?'hide-dp':''">
+          <input ng-disabled="studentData.action == 'view'" ng-readonly="studentData.action != 'view'"ng-model="data.birthday" placeholder="dd/mm/yyyy" type="text" class="dp-birthday form-control input-sm">
         </div>
       </div>
     </div>
     <div class="col-sm-6">
+      <div class="form-group">
+        <label class="control-label col-xs-5 input-sm">Lớp</label>
+        <div class="col-xs-7">
+          <input ng-disabled="1" ng-model="data.className" type="text" class="form-control input-sm">
+        </div>
+      </div>
       <div class="form-group">
         <label class="control-label col-xs-5 input-sm">Email</label>
         <div class="col-xs-7">

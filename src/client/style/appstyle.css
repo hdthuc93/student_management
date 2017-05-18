@@ -190,3 +190,29 @@ ul.sidebar .sidebar-list a:hover {
         padding: 5px;
     }
 }
+/*Datepicker styles - START*/
+.ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
+    width: 45%;
+}
+.ui-datepicker .ui-datepicker-title select {
+    font-size: 13px;
+}
+.hide-dp .ui-datepicker-trigger{
+    pointer-events: none;
+    display: none;
+}
+.ui-datepicker-trigger{
+    width: 20px;
+    height: 19px;
+    position: absolute;
+    top: 5px;
+    right: 18px;
+    cursor: pointer;
+    -webkit-filter: opacity(50%);
+    filter: opacity(50%);
+}
+.ui-datepicker-trigger:hover{
+    -webkit-filter: opacity(100%); /* Safari 6.0 - 9.0 */
+    filter: opacity(100%);
+}
+/*Datepicker styles - END*/
