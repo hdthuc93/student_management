@@ -1,4 +1,6 @@
+import { sequelize, Sequelize } from '../models/index';
 import NamHoc from '../models/namhoc-model';
+import QuyDinh from '../models/quydinh-model';
 
 function getSchoolYear(req, res) {
     NamHoc.findAll().then((result) => {
@@ -54,21 +56,42 @@ function addNewSchoolYear(req, res) {
 function changeSchoolYear(req, res) {
     const schoolYearID = req.body.schoolYearID || req.query.schoolYearID;
     if(schoolYearID) {
-        NamHoc.update({ startFlag: '2' }, { where: { startFlag: '1' } })
+        QuyDinh.findOne({ where: { maNamHoc: schoolYearID } })
         .then((result) => {
-            return NamHoc.update({ startFlag: '1' }, { where: { namHoc_pkey: schoolYearID } })
-        })
-        .then((result) => {
-            return res.status(200).json({
-                success: true,
-                message: "Change the current school year successfully"
-            });
-        })
-        .catch((err) => {
-            return res.status(500).json({
-                success: false,
-                message: "Failed to the current school year"
-            });
+            if(result) {
+                sequelize.transaction().then((t) => {
+                    NamHoc.update({ startFlag: '2' }, { where: { startFlag: '1' }, transaction: t })
+                    .then((result) => {
+                        return NamHoc.update({ startFlag: '1' }, { where: { namHoc_pkey: schoolYearID, startFlag: '0' }, transaction: t })
+                    })
+                    .then((result) => {
+                        if(result[0] === 0) {
+                            t.rollback();
+                            return res.status(200).json({
+                                success: false,
+                                message: "Cannot change school year, because school year want to change in the past"
+                            });
+                        } else {
+                            t.commit();
+                            return res.status(200).json({
+                                success: true,
+                                message: "Change the current school year successfully"
+                            });
+                        }
+                    })
+                    .catch((err) => {
+                        return res.status(500).json({
+                            success: false,
+                            message: "Failed to the current school year"
+                        });
+                    });
+                });
+            } else {
+                return res.status(200).json({
+                    success: false,
+                    message: "Cannot change school year, because regulation has not found"
+                })
+            }
         })
     } else {
         return res.status(200).json({
