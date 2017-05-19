@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.route('/')
     .get(
-        studentCtrl.findStus
+        studentCtrl.searchStudents
     )
     .post(
         studentCtrl.createStu

@@ -4,6 +4,7 @@ import LopHoc from '../models/lophoc-model';
 import { Sequelize } from '../models/index';
 import { generateStudentID } from '../utilities/id_generates';
 import { changeToYYYYMMDD, changeToDDMMYYYY } from '../utilities/date_times';
+import commonObj from '../utilities/common_object';
 
 function getObjReq(req) {
     let objReq = {
@@ -185,6 +186,127 @@ function updateStu(req, res) {
     });
 }
 
+function searchStudents(req, res) {
+    let objReq = getReqOptionParams(req);
+    let objReturning = [];
+    HocSinh.findAll({ where: objReq })
+    .then((result) => {
+        const len = result.length;
+        if(len > 0) {
+            getClassForStudent(req, res, result, 0, objReturning);
+        } else {
+            return res.status(200).json({
+                success: false,
+                message: "No student found"
+            });
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get students"
+        });
+    });
+}
+
+function getClassForStudent(req, res, result, index, objReturning) {
+    if(index > result.length - 1) {
+        console.log(objReturning);
+        getPrevClass(req, res, objReturning, 0);
+    } else if(result[index].inClass) {
+        HocSinh_LopHoc.findOne({
+            where: { maHocSinh: result[index].hocSinh_pkey },
+            include: [{
+                model: LopHoc,
+                where: {
+                    maNamHoc: commonObj.schoolYearID
+                }
+            }]
+        })
+        .then((result2) => {
+            objReturning[objReturning.length] = { 
+                studentID: result[index].hocSinh_pkey,
+                studentCode: result[index].maHocSinh,
+                name: result[index].hoTen,
+                birthday: changeToDDMMYYYY(result[index].ngaySinh),
+                gender: result[index].gioiTinh,
+                address: result[index].diaChi,
+                email: result[index].email,
+                yearAdmission: result[index].namNhapHoc,
+                inClass: result[index].inClass,
+                classID:  result2['M_LOP_HOC'].maLop_pkey,
+                className:  result2['M_LOP_HOC'].tenLop,
+                prevClasses: []
+            };
+            getClassForStudent(req, res, result, ++index, objReturning);
+        })
+        .catch((err) => {
+            console.log(err);
+            return res.status(500).json({
+                success: false,
+                message: "Failed to get students"
+            });
+        });
+    } else {
+        objReturning[objReturning.length] = { 
+            studentID: result[index].hocSinh_pkey,
+            studentCode: result[index].maHocSinh,
+            name: result[index].hoTen,
+            birthday: changeToDDMMYYYY(result[index].ngaySinh),
+            gender: result[index].gioiTinh,
+            address: result[index].diaChi,
+            email: result[index].email,
+            yearAdmission: result[index].namNhapHoc,
+            inClass: result[index].inClass,
+            classID:  -1,
+            className:  "",
+            prevClasses: []
+        };
+        getClassForStudent(req, res, result, ++index, objReturning);
+    }
+}
+
+function getPrevClass(req, res, objReturning, index) {
+    if(index > objReturning.length - 1) {
+        return res.status(200).json({
+            success: true,
+            message: "Get students successfully",
+            datas: objReturning
+        });
+    } else if(objReturning[index].classID) {
+        HocSinh_LopHoc.findAll({ 
+            where: { 
+                maHocSinh: objReturning[index].studentID,
+                maLopHoc:  { $ne: objReturning[index].classID }
+            },
+            include: [{
+                model: LopHoc
+            }]
+        })
+        .then((result2) => {
+            console.log(result2, result2.length);
+            for(let i = 0; i < result2.length; ++i) {
+                objReturning[index].prevClasses[objReturning[index].prevClasses.length] = {
+                    classID: result2[i]['M_LOP_HOC'].maLop_pkey,
+                    className: result2[i]['M_LOP_HOC'].tenLop
+                }
+            }
+
+            getPrevClass(req, res, objReturning, ++index);
+        })
+        .catch((err) => {
+            console.log(err);
+            return res.status(500).json({
+                success: false,
+                message: "Failed to get students"
+            });
+        });
+    } else {
+        getPrevClass(req, res, objReturning, ++index);
+    }
+}
+
 function findStus(req, res) {
     let objReq = getReqOptionParams(req);
     let objReturning = [];
@@ -270,4 +392,4 @@ function findStus(req, res) {
     })
 }
 
-export default { createStu, deleteStu, updateStu, findStus };
+export default { createStu, deleteStu, updateStu, findStus, searchStudents };
