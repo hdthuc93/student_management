@@ -12,5 +12,8 @@ router.route('/')
     .post(
         schoolYearCtrl.addNewSchoolYear
     )
+    .put(
+        schoolYearCtrl.changeSchoolYear
+    )
 
 export default router;

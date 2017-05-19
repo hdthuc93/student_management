@@ -40,7 +40,8 @@ function addNewSchoolYear(req, res) {
     }).then((result) => {
         return res.status(200).json({
             success: true,
-            message: "Create new school year successfully"
+            message: "Create new school year successfully",
+            data: result
         });
     }).catch((err) => {
         return res.status(500).json({
@@ -50,4 +51,32 @@ function addNewSchoolYear(req, res) {
     });
 }
 
-export default { getSchoolYear, addNewSchoolYear }
+function changeSchoolYear(req, res) {
+    const schoolYearID = req.body.schoolYearID;
+    if(schoolYearID) {
+        NamHoc.update({ startFlag: '2' }, { where: { startFlag: '1' } })
+        .then((result) => {
+            return NamHoc.update({ startFlag: '1' }, { where: { namHoc_pkey: schoolYearID } })
+        })
+        .then((result) => {
+            return res.status(200).json({
+                success: true,
+                message: "Change the current school year successfully"
+            });
+        })
+        .catch((err) => {
+            return res.status(500).json({
+                success: false,
+                message: "Failed to the current school year"
+            });
+        })
+    } else {
+        return res.status(200).json({
+            success: false,
+            message: "No school year ID in request"
+        });
+    }
+    
+}
+
+export default { getSchoolYear, addNewSchoolYear, changeSchoolYear }
