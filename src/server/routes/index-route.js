@@ -9,19 +9,18 @@ import semesterRoutes from './semester-route';
 import schoolYearRoutes from './school_year-route';
 import auth from '../middlewares/authentication';
 import { generateStudentID } from '../utilities/id_generates';
+import commonObj from '../utilities/common_object';
 
 const router = express.Router();
 
 router.route('/')
     .get((req, res) => {
-        generateStudentID()
-        .then((result) => {
+        
              res.status(200).json({ 
                 success: true,
                 mes: 'route', 
-                quantity: result 
+                quantity: commonObj 
             });
-        });
     })
     .post(auth.authenToken, (req, res) => {
         res.status(200).json({
