@@ -7,6 +7,7 @@ import subjectRoutes from './subject-route';
 import gradeRoutes from './grade-route';
 import semesterRoutes from './semester-route';
 import schoolYearRoutes from './school_year-route';
+import regulationRoutes from './regulation-route';
 import auth from '../middlewares/authentication';
 import { generateStudentID } from '../utilities/id_generates';
 import commonObj from '../utilities/common_object';
@@ -37,5 +38,6 @@ router.use('/subject', subjectRoutes);
 router.use('/school_year', schoolYearRoutes);
 router.use('/grade', gradeRoutes);
 router.use('/semester', semesterRoutes);
+router.use('/regulation', regulationRoutes)
 
 export default router;

@@ -52,7 +52,7 @@ function addNewSchoolYear(req, res) {
 }
 
 function changeSchoolYear(req, res) {
-    const schoolYearID = req.body.schoolYearID;
+    const schoolYearID = req.body.schoolYearID || req.query.schoolYearID;
     if(schoolYearID) {
         NamHoc.update({ startFlag: '2' }, { where: { startFlag: '1' } })
         .then((result) => {
@@ -76,7 +76,6 @@ function changeSchoolYear(req, res) {
             message: "No school year ID in request"
         });
     }
-    
 }
 
 export default { getSchoolYear, addNewSchoolYear, changeSchoolYear }

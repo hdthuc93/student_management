@@ -1,4 +1,5 @@
 import HocSinh from '../models/hocsinh-model';
+import NamHoc from '../models/namhoc-model';
 import { sequelize } from '../models/index';
 
 function generateSchoolYear() {
@@ -43,4 +44,17 @@ function generateStudentID() {
     });
 }
 
-export { generateSchoolYear, generateStudentID }
+function generateRegulationID(schoolYearID) {
+    return NamHoc.findOne({ where: { namHoc_pkey: schoolYearID } })
+    .then((result) => {
+        if(result.tenNamHoc)
+            return "QD" + result.tenNamHoc;
+        else
+            return new Error();
+    })
+    .catch((err) => {
+        return new Error("An error occured while generating the school year id");
+    });
+}
+
+export { generateSchoolYear, generateStudentID, generateRegulationID }
