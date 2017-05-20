@@ -1,9 +1,10 @@
 import LopHoc from '../models/lophoc-model';
+import commonObj from '../utilities/common_object';
 
 function getClass(req, res) {
     LopHoc.findAll({
         where: {
-            maNamHoc: req.query.schoolYearID,
+            maNamHoc: commonObj.schoolYearID,
             maKhoi: req.query.gradeID
         }
     })

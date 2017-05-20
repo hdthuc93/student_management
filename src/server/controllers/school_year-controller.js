@@ -11,7 +11,8 @@ function getSchoolYear(req, res) {
                 objReturning[objReturning.length] = {
                     schoolYearID: result[i].namHoc_pkey,
                     schooYearCode: result[i].maNamHoc,
-                    schoolYearName: result[i].tenNamHoc
+                    schoolYearName: result[i].tenNamHoc,
+                    status: result[i].startFlag
                 }
             }
 
