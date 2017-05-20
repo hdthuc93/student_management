@@ -137,32 +137,31 @@ function getStuInClass(req, res) {
     .then((result) => {
         let objReturning = [];
         const len = result.length;
-        if(len > 0) {
-            for(let i = 0; i < len; ++i) {
-                objReturning[objReturning.length] = {
-                    studentID: result[i]['AE_HOC_SINH'].hocSinh_pkey,
-                    studentCode: result[i]['AE_HOC_SINH'].maHocSinh,
-                    name: result[i]['AE_HOC_SINH'].hoTen,
-                    birthday: changeToDDMMYYYY(result[i]['AE_HOC_SINH'].ngaySinh),
-                    gender: result[i]['AE_HOC_SINH'].gioiTinh,
-                    address: result[i]['AE_HOC_SINH'].diaChi,
-                    email: result[i]['AE_HOC_SINH'].email,
-                    schoolYearID: result[i]['AE_HOC_SINH'].namNhapHoc,
-                    inClass: result[i]['AE_HOC_SINH'].inClass
-                }
+        for(let i = 0; i < len; ++i) {
+            objReturning[objReturning.length] = {
+                studentID: result[i]['AE_HOC_SINH'].hocSinh_pkey,
+                studentCode: result[i]['AE_HOC_SINH'].maHocSinh,
+                name: result[i]['AE_HOC_SINH'].hoTen,
+                birthday: changeToDDMMYYYY(result[i]['AE_HOC_SINH'].ngaySinh),
+                gender: result[i]['AE_HOC_SINH'].gioiTinh,
+                address: result[i]['AE_HOC_SINH'].diaChi,
+                email: result[i]['AE_HOC_SINH'].email,
+                schoolYearID: result[i]['AE_HOC_SINH'].namNhapHoc,
+                inClass: result[i]['AE_HOC_SINH'].inClass
             }
-
-            return res.status(200).json({
-                success: true,
-                message: "Get student(s) in class successfully",
-                datas: objReturning
-            });
-        } else {
-            return res.status(200).json({
-                success: false,
-                message: "No student found"
-            });
         }
+
+        return res.status(200).json({
+            success: true,
+            message: "Get student(s) in class successfully",
+            datas: objReturning
+        });
+        // } else {
+        //     return res.status(200).json({
+        //         success: false,
+        //         message: "No student found"
+        //     });
+        // }
     })
     .catch((err) => {
         return res.status(500).json({
