@@ -15,6 +15,11 @@ const HocSinh_LopHoc = sequelize.define('HOCSINH_LOPHOC', {
         primaryKey: true,
         notNull: true,
         field: 'MA_LOP_HOC'
+    },
+    passed: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+        field: 'PASSED'
     }
 });
 
