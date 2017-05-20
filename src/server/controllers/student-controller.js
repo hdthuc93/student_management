@@ -1,6 +1,8 @@
 import HocSinh from '../models/hocsinh-model';
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
 import LopHoc from '../models/lophoc-model';
+import Khoi from '../models/khoi-model';
+import NamHoc from '../models/namhoc-model';
 import { Sequelize } from '../models/index';
 import { generateStudentID } from '../utilities/id_generates';
 import { changeToYYYYMMDD, changeToDDMMYYYY } from '../utilities/date_times';
@@ -189,7 +191,12 @@ function updateStu(req, res) {
 function searchStudents(req, res) {
     let objReq = getReqOptionParams(req);
     let objReturning = [];
-    HocSinh.findAll({ where: objReq })
+    HocSinh.findAll({ 
+        where: objReq,
+        include: [{
+            model: NamHoc
+        }]
+    })
     .then((result) => {
         const len = result.length;
         if(len > 0) {
@@ -221,7 +228,10 @@ function getClassForStudent(req, res, result, index, objReturning) {
                 model: LopHoc,
                 where: {
                     maNamHoc: commonObj.schoolYearID
-                }
+                },
+                include: [{
+                    model: Khoi
+                }]
             }]
         })
         .then((result2) => {
@@ -234,10 +244,13 @@ function getClassForStudent(req, res, result, index, objReturning) {
                 address: result[index].diaChi,
                 email: result[index].email,
                 yearAdmission: result[index].namNhapHoc,
+                yearAdmissionName: result[index]['M_NAM_HOC'].tenNamHoc,
                 inClass: result[index].inClass,
                 classID:  result2['M_LOP_HOC'].maLop_pkey,
                 className:  result2['M_LOP_HOC'].tenLop,
-                prevClasses: []
+                grade: Number(result2['M_LOP_HOC']['M_KHOI'].maKhoi.slice(1, 3)),
+                prevClasses: [],
+                prevClassesString: ''
             };
             getClassForStudent(req, res, result, ++index, objReturning);
         })
@@ -258,10 +271,13 @@ function getClassForStudent(req, res, result, index, objReturning) {
             address: result[index].diaChi,
             email: result[index].email,
             yearAdmission: result[index].namNhapHoc,
+            yearAdmissionName: result[index]['M_NAM_HOC'].tenNamHoc,
             inClass: result[index].inClass,
             classID:  -1,
             className:  "",
-            prevClasses: []
+            grade: -1,
+            prevClasses: [],
+            prevClassesString: ''
         };
         getClassForStudent(req, res, result, ++index, objReturning);
     }
@@ -281,18 +297,33 @@ function getPrevClass(req, res, objReturning, index) {
                 maLopHoc:  { $ne: objReturning[index].classID }
             },
             include: [{
-                model: LopHoc
+                model: LopHoc,
+                include: [{
+                    model: Khoi
+                }]
             }]
         })
         .then((result2) => {
-            console.log(result2, result2.length);
             for(let i = 0; i < result2.length; ++i) {
                 objReturning[index].prevClasses[objReturning[index].prevClasses.length] = {
                     classID: result2[i]['M_LOP_HOC'].maLop_pkey,
-                    className: result2[i]['M_LOP_HOC'].tenLop
-                }
-            }
+                    className: result2[i]['M_LOP_HOC'].tenLop,
+                    grade: Number(result2[i]['M_LOP_HOC']['M_KHOI'].tenLop.slice(1, 3)),
+                    passed: result2[i].passed,
+                    schoolYearID: result2[i]['M_LOP_HOC'].maNamHoc,
+                    schoolYearName: result2[i]['M_LOP_HOC']['M_NAM_HOC'].tenNamHoc
+                };
+                objReturning[index].prevClassesString += result2[i]['M_LOP_HOC'].tenLop;
 
+                if(!result2[i].passed) {
+                    objReturning[index].prevClassesString += '(ở lại lớp)';
+                }
+                objReturning[index].prevClassesString += ', ';
+            }
+            const len = objReturning[index].prevClassesString.length;
+            if(len > 0)
+                objReturning[index].prevClassesString = objReturning[index].prevClassesString.slice(0, len - 2);
+                
             getPrevClass(req, res, objReturning, ++index);
         })
         .catch((err) => {
