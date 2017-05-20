@@ -237,7 +237,8 @@ function getClassForStudent(req, res, result, index, objReturning) {
                 inClass: result[index].inClass,
                 classID:  result2['M_LOP_HOC'].maLop_pkey,
                 className:  result2['M_LOP_HOC'].tenLop,
-                prevClasses: []
+                prevClasses: [],
+                prevClassesString: ''
             };
             getClassForStudent(req, res, result, ++index, objReturning);
         })
@@ -261,7 +262,8 @@ function getClassForStudent(req, res, result, index, objReturning) {
             inClass: result[index].inClass,
             classID:  -1,
             className:  "",
-            prevClasses: []
+            prevClasses: [],
+            prevClassesString: ''
         };
         getClassForStudent(req, res, result, ++index, objReturning);
     }
@@ -285,12 +287,12 @@ function getPrevClass(req, res, objReturning, index) {
             }]
         })
         .then((result2) => {
-            console.log(result2, result2.length);
             for(let i = 0; i < result2.length; ++i) {
                 objReturning[index].prevClasses[objReturning[index].prevClasses.length] = {
                     classID: result2[i]['M_LOP_HOC'].maLop_pkey,
                     className: result2[i]['M_LOP_HOC'].tenLop
-                }
+                };
+                objReturning[index].prevClassesString += result2[i]['M_LOP_HOC'].tenLop;
             }
 
             getPrevClass(req, res, objReturning, ++index);
