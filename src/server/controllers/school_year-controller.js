@@ -36,6 +36,36 @@ function getSchoolYear(req, res) {
     });
 }
 
+function getFutureSchoolYear(req, res) {
+    NamHoc.findAll({ 
+        where: { startFlag: '0' }
+    }).then((result) => {
+        const len = result.length;
+
+        let objReturning = [];
+        for(let i = 0; i < len; ++i) {
+            objReturning[objReturning.length] = {
+                schoolYearID: result[i].namHoc_pkey,
+                schooYearCode: result[i].maNamHoc,
+                schoolYearName: result[i].tenNamHoc,
+                status: result[i].startFlag
+            }
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Get future school year(s) successfully",
+            datas: objReturning
+        });
+    })
+    .catch((err) => {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to school year(s)"
+        });
+    });
+}
+
 function addNewSchoolYear(req, res) {
     NamHoc.create({
         maNamHoc: req.body.year,
@@ -102,4 +132,4 @@ function changeSchoolYear(req, res) {
     }
 }
 
-export default { getSchoolYear, addNewSchoolYear, changeSchoolYear }
+export default { getSchoolYear, getFutureSchoolYear, addNewSchoolYear, changeSchoolYear }
