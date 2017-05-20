@@ -42,6 +42,10 @@ const DiemMH = sequelize.define('AE_DIEM_MON_HOC', {
         type: Sequelize.DECIMAL(4, 2),
         notNull: true,
         field: 'DIEM_CUOI_KI'
+    },
+    tongDiem: {
+        type: Sequelize.DECIMAL(4, 2),
+        field: 'TONG_DIEM'
     }
 });
 
