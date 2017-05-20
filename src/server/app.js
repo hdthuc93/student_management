@@ -5,12 +5,12 @@ import { loadCommonObj } from './middlewares/common';
 
 (function () {
     console.log('load common obj');
-    loadCommonObj().then(() => {})
+    loadCommonObj().then(() => {
+        app.listen(connection.port, () => {
+            console.log(`Server is running on port: ${connection.port}`);
+        });
+    })
     .catch((err) => {
         console.log(err);
     })
 })();
-
-app.listen(connection.port, () => {
-    console.log(`Server is running on port: ${connection.port}`);
-});
