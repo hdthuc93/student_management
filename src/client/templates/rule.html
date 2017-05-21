@@ -6,95 +6,89 @@
       </div>
       <div class="panel-body notification-area">
         <div class="container-fluid">
-          <form role="form" name="rule" id="rule">
+          <form role="form" name="rule_form" id="rule">
             <div class="row form-horizontal">
-              <div class="col-md-3 col-sm-6">
+              <div class="col-md-4 col-sm-6">
                 <div class="form-group">
-                  <label class="control-label input-sm col-xs-5">Năm học:</label>
-
-                  <div class=" col-xs-7">
-                    <select class="form-control input-sm" name="Username">
-                                                <option class="placeholder-option" value="" selected>2017</option>
-                                                <option value="10">2018</option>
-                                                <option value="11">2019</option>   
-                                                 <option value="12">2020</option>                                              
-                                            </select>
+                  <label class="control-label input-sm col-xs-3 text-left" style="min-width: 70px">Năm học:</label>
+                  <div class=" col-xs-6">
+                    <select ng-model="rule.schoolYearID" class="form-control input-sm">
+                          <option value="" ng-selected="1">Chọn năm học</option> 
+                          <option ng-repeat="future in futureSchoolYear" value="{{future.schoolYearID}}">{{future.schoolYearName}}</option>                             
+                    </select>
                   </div>
                 </div>
               </div>
-              <div class="col-md-3 col-sm-6">
+              <div class="col-md-8 col-sm-12">
                 <div class="form-group">
-                  <label class="control-label col-xs-5 input-sm col-sm-5">Điểm chuẩn:</label>
-
-                  <div class="col-xs-7 col-sm-7">
-                    <input type="text" class="form-control input-sm">
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="form-group">
-                  <label class="control-label col-xs-5 input-sm">Tuổi MIN:</label>
-                  <div class="col-xs-7">
-                    <input type="text" class="form-control input-sm">
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-3 col-sm-6">
-                <div class="form-group">
-                  <label class="control-label col-xs-5 input-sm">Tuổi MAX:</label>
-                  <div class="col-xs-7">
-                    <input type="text" class="form-control input-sm">
+                  <div class="col-xs-12">
+                      <rzslider rz-slider-model="slider.minValue"
+                      rz-slider-high="slider.maxValue"
+                      rz-slider-options="slider.options"></rzslider>
                   </div>
                 </div>
               </div>
             </div>
             <div class="row form-horizontal">
-              <h4> Khối 10 ({{ruleNameAndMaxStudentClass10.data.length}} lớp)</h4>
+              <div class="col-md-4 col-sm-12 no-padding">
+                <div class="col-xs-12 bold">Khối 10 ({{grade10.data.length}} lớp)</div>
                 <div class="col-xs-12">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm lớp</button>
-                    <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá</button>
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="addRowGrade10()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="deleteRowGrade10()" ng-disabled="!selectedRowGrade10"><i class="fa fa-times"></i> Xoá</button>
                   </div>
                 </div>
-                <div class="col-xs-12">
-                  <div id="grid1" ui-grid="ruleNameAndMaxStudentClass10" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
+                <div class="col-xs-12" style="margin-top: 10px">
+                  <div id="grid-grade10" ui-grid="grade10" ui-grid-edit ui-grid-cellNav ui-grid-selection class="grid"></div>
                 </div>
+              </div>
+              <div class="col-md-4 col-sm-12 no-padding">
+                <div class="col-xs-12">Khối 11 ({{grade11.data.length}} lớp)</div>
+                <div class="col-xs-12">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="addRowGrade11()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="deleteRowGrade11()" ng-disabled="!selectedRowGrade11"><i class="fa fa-times"></i> Xoá</button>
+                  </div>
+                </div>
+                <div class="col-xs-12" style="margin-top: 10px">
+                  <div id="grid-grade11" ui-grid="grade11" ui-grid-edit ui-grid-cellNav ui-grid-selection class="grid"></div>
+                </div>
+              </div>
+              <div class="col-md-4 col-sm-12 no-padding">
+                <div class="col-xs-12">Khối 12 ({{grade12.data.length}} lớp)</div>
+                <div class="col-xs-12">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="addRowGrade12()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="deleteRowGrade12()" ng-disabled="!selectedRowGrade12"><i class="fa fa-times"></i> Xoá</button>
+                  </div>
+                </div>
+                <div class="col-xs-12" style="margin-top: 10px">
+                  <div id="grid-grade12" ui-grid="grade12" ui-grid-edit ui-grid-cellNav ui-grid-selection class="grid"></div>
+                </div>
+            </div>  
             </div>
             <div class="row form-horizontal">
-              <h4> Khối 11 ({{ruleNameAndMaxStudentClass11.data.length}} lớp)</h4>
+              <div class="col-md-6 col-sm-12 no-padding">
                 <div class="col-xs-12">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm lớp</button>
-                    <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá</button>
+                Môn học ({{course.data.length}} môn)
+                </div>
+                <div class="col-xs-12">
+                  <div class="btn-group col-xs-6 no-padding">
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="addRowCourse()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="deleteRowCourse()" ng-disabled="!selectedRowCourse"><i class="fa fa-times"></i> Xoá</button>
+                  </div>
+                  <label class="control-label input-sm col-xs-4">Điểm chuẩn:</label>
+                  <div class="col-xs-2 col-sm-2 no-padding" style="min-width: 30px">
+                    <input ng-model="rule.minScore" type="number" class="form-control input-sm">
                   </div>
                 </div>
-                <div class="col-xs-12">
-                  <div id="grid1" ui-grid="ruleNameAndMaxStudentClass11" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
+                <div class="col-xs-12" style="margin-top: 10px">
+                  <div id="grid-course" ui-grid="course" ui-grid-edit ui-grid-cellNav ui-grid-selection class="grid"></div>
                 </div>
-            </div>
-            <div class="row form-horizontal">
-              <h4> Khối 12 ({{ruleNameAndMaxStudentClass12.data.length}} lớp)</h4>
-                <div class="col-xs-12">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm lớp</button>
-                    <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá</button>
-                  </div>
-                </div>
-                <div class="col-xs-12">
-                  <div id="grid1" ui-grid="ruleNameAndMaxStudentClass12" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
-                </div>
-            </div>
-            <div class="row form-horizontal">
-              <h4> Môn học</h4>
-                <div class="col-xs-12">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-plus-circle"></i> Thêm Môn Học</button>
-                    <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá</button>
-                  </div>
-                </div>
-                <div class="col-xs-12">
-                  <div id="grid1" ui-grid="ruleCourses" class="grid"><span ng-show="studentList.data.length==0" class="text-center">Không có dữ liệu</span></div>
-                </div>
+              </div>
+              <div class="col-md-6 col-sm-12" style="margin-top: 15px;">
+                  <button type="button" class="btn btn-primary btn-xs" ng-click="save()"><i class="fa fa-floppy-o"></i> Lưu lại</button>
+              </div>
             </div>
           </form>
         </div>

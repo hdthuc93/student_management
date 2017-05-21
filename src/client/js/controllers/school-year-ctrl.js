@@ -7,7 +7,7 @@ angular.module('RDash')
 
 function SchoolYearCtrl($scope,$rootScope,$http,helper) {
    console.log("School year");
-   $scope.schoolYear = 0;
+   $scope.schoolYear = [];
    function createNewSchoolYearVariable(){
        $scope.schoolYear = [];
         $http({
@@ -24,6 +24,24 @@ function SchoolYearCtrl($scope,$rootScope,$http,helper) {
    }
    createNewSchoolYearVariable();
 
+   $scope.futureSchoolYear = [];
+   function getFutureSchoolYear(){
+        $http({
+            //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            method: 'GET',
+            url: '/api/school_year/future',
+        }).then(function successCallback(response) {
+            if(response.data.success){
+                $scope.futureSchoolYear = response.data.datas
+                for(var i in $scope.futureSchoolYear){
+
+                }
+            }else{
+            }
+        });
+   }
+    getFutureSchoolYear();
+
     $scope.createSchoolYear = function(){
         var _year = $scope.newSchoolYear
         $http.post('/api/school_year', {year:_year}).then(function successCallBack(res){
@@ -38,6 +56,10 @@ function SchoolYearCtrl($scope,$rootScope,$http,helper) {
         }, function errorCallback(){
             helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
         });
+    }
+
+    $scope.selectFutureSchoolYear = function(){
+        console.log("select future school year to current",$scope.selectedFutureSchoolYear)
     }
 
 }

@@ -5,4 +5,5 @@ angular.module('RDash', [
 'ui.grid', 
 'ui.grid.selection', 
 'ui.grid.resizeColumns',
-'mod.helper']);
+'mod.helper',
+'rzModule', 'ui.grid.edit', 'ui.grid.rowEdit', 'ui.grid.cellNav']);

@@ -30,14 +30,13 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
         }
     });
 
-    $scope.selectedSchoolYear = {};
-    $rootScope.masterSchoolYear = [];
-    $scope.$watch("selectedSchoolYear",function(year){
-        console.log(8989,year);
-        $rootScope.masterSelectedschoolYear = angular.fromJson(year);
-        console.log("current school year ",$rootScope.masterSelectedschoolYear)
-        $rootScope.$broadcast('change-school-year');
-    });
+    //$scope.selectedSchoolYear = {};
+    // $scope.$watch("selectedSchoolYear",function(year){
+    //     console.log(8989,year);
+    //     $rootScope.masterSelectedschoolYear = angular.fromJson(year);
+    //     console.log("current school year ",$rootScope.masterSelectedschoolYear)
+    //     $rootScope.$broadcast('change-school-year');
+    // });
 
     $scope.toggleSidebar = function() {
         $scope.toggle = !$scope.toggle;
@@ -48,6 +47,7 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
         $scope.$apply();
     };
 
+    $rootScope.masterSchoolYear = [];
     function getSchoolYear(){
         $http({
             //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -56,7 +56,12 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
         }).then(function successCallback(response) {
             if(response.data.success){
                 $rootScope.masterSchoolYear = response.data.data
-                $scope.selectedSchoolYear = $rootScope.masterSchoolYear[$scope.masterSchoolYear.length-1];
+                for(var i in $rootScope.masterSchoolYear){
+                    if($rootScope.masterSchoolYear[i].status == "1"){
+                        $rootScope.masterSelectedschoolYear  = $rootScope.masterSchoolYear[i];
+                        break;
+                    }
+                }
             }else{
                 helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
             }

@@ -20,6 +20,13 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             $scope.masterSchoolYear = $rootScope.masterSchoolYear;
             $scope.data = {};
             angular.extend($scope.data, $scope.studentData.data);
+            if(!$scope.data.className){
+                $scope.data.className = "Chưa có";
+            }
+
+            if(!$scope.data.prevClassesString){
+                $scope.data.prevClassesString = "Chưa có";
+            }
             for(var i in $rootScope.masterSchoolYear){
                 if($scope.data.yearAdmission&&$rootScope.masterSchoolYear[i]&&
                   $scope.data.yearAdmission==$rootScope.masterSchoolYear[i].schoolYearID){
@@ -34,7 +41,15 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             $scope.title = "Thông tin học sinh";
             $scope.data = {};
             angular.extend($scope.data, $scope.studentData.data);
+            if(!$scope.data.className){
+                $scope.data.className = "Chưa có";
+            }
+            if(!$scope.data.prevClassesString){
+                $scope.data.prevClassesString = "Chưa có";
+            }
             for(var i in $rootScope.masterSchoolYear){
+                console.log(7777,$scope.data.yearAdmission&&$rootScope.masterSchoolYear[i]&&
+                  $scope.data.yearAdmission==$rootScope.masterSchoolYear[i].schoolYearID)
                 if($scope.data.yearAdmission&&$rootScope.masterSchoolYear[i]&&
                   $scope.data.yearAdmission==$rootScope.masterSchoolYear[i].schoolYearID){
                     $scope.data.yearAdmission = $rootScope.masterSchoolYear[i].schoolYearName;
@@ -48,7 +63,8 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             $scope.title = "Tiếp nhận học sinh";
             $scope.data = {
                 yearAdmission: $rootScope.masterSelectedschoolYear.schoolYearName,
-                className: "Chưa có"
+                className: "Chưa có",
+                prevClassesString: "Chưa có"
             };
             $scope.$on('change-school-year',function(){
                 if(newValue.action == "create"){
@@ -82,7 +98,10 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                     title: "Thông báo",
                     message:res.data.success? "Tạo mới học sinh thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
                     close: function () {
-                        $scope.data = {};
+                        $scope.data = {
+                            yearAdmission: $rootScope.masterSelectedschoolYear.schoolYearName,
+                            className: "Chưa có"
+                        };
                         $rootScope.$broadcast('reset-student-list');
                         return;
                     }
@@ -107,7 +126,6 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                     title: "Thông báo",
                     message: res.data.success?"Cập nhật thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
                     close: function () {
-                        $scope.data = {};
                         $rootScope.$broadcast('reset-student-list');
                         return;
                     }

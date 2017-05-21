@@ -11,30 +11,22 @@
                <div class="col-md-3 col-sm-6">
                 <div class="form-group">
                   <label class="control-label col-xs-5 input-sm">Khối</label>
-
                   <div class="col-xs-7">
-                    <select class="form-control input-sm" name="Username">
-                        <option class="placeholder-option" value="">Tất cả</option>
-                        <option value="1" selected>10</option>
-                        <option value="0">11</option>   
-                          <option value="1">12</option>                                              
+                    <select ng-disabled="!grades.length" ng-change="getClasses()" ng-model="grade" class="form-control input-sm">
+                        <option ng-selected="1" value="">Chọn khối</option>
+                        <option ng-repeat="grade in grades" value="{{grade.gradeID}}">{{grade.gradeName}}</option>                                        
                     </select>
                   </div>
                 </div>
               </div>
+
               <div class="col-md-3 col-sm-6">
                 <div class="form-group">
                   <label class="control-label col-xs-5 input-sm">Lớp</label>
-
                   <div class="col-xs-7">
-                    <select class="form-control input-sm" name="Username">
-                        <option class="placeholder-option" value="">Tất cả</option>
-                        <option value="1" selected>10A1</option>
-                        <option value="0">10A2</option>   
-                          <option value="1">11A1</option>
-                        <option value="0">11A2</option>    
-                          <option value="1">12A1</option>
-                        <option value="0">12A2</option>                                                 
+                    <select ng-change="getStudentInClass()"  ng-model="class" class="form-control input-sm" ng-disabled="!grade">
+                        <option ng-selected="1" value="">Chọn lớp</option>
+                        <option ng-repeat="cls in classes" value="{{cls.classID}}">{{cls.className}}</option>                                          
                     </select>
                   </div>
                 </div>
@@ -44,14 +36,15 @@
 
           <div class="row form-horizontal">
             <div class="btn-group">
-              <button type="button" class="btn btn-primary btn-xs" ng-click="addStudentToClass()"><i class="fa fa-plus-circle"></i> Thêm Học Sinh</button>
-              <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-times"></i> Xoá Khỏi Lớp</button>
-              <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-file-text-o"></i> Nhập Điểm</button>
-              <button type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-file-text"></i> Nhận Điểm</button>
+              <button ng-disabled="!class" type="button" class="btn btn-primary btn-xs" ng-click="openStudentList()"><i class="fa fa-plus-circle"></i> Thêm Học Sinh</button>
+              <button ng-disabled="!selectedRow" type="button" class="btn btn-primary btn-xs" ng-click="removeStudentFromClass()"><i class="fa fa-times"></i> Xoá Khỏi Lớp</button>
+              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-file-text-o"></i> Nhập Điểm</button>
+              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click=""><i class="fa fa-file-text"></i> Nhận Điểm</button>
             </div>
           </div>
 
           <div id="listStudent" ui-grid-selection ui-grid-resize-columns ui-grid="studentList" class="grid"><span ng-show="studentList.data.length==0" class="grid-status">{{studentListStatus}}</span></div>
+          <search-student>
         </div>
       </div>
 
