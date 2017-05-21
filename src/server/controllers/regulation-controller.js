@@ -4,11 +4,8 @@ import { generateRegulationID } from '../utilities/id_generates';
 
 function insertRegulation(req, res) {
     const insertObj = {
-        tuoiMin: req.body.ageMin,
-        tuoiMax: req.body.ageMax,
-        slHocSinh_10: req.body.quanGrade10,
-        slHocSinh_11: req.body.quanGrade11,
-        slHocSinh_12: req.body.quanGrade12,
+        tuoiMin: req.body.minAge,
+        tuoiMax: req.body.maxAge,
         diemChuan: req.body.minScore,
         maNamHoc: req.body.schoolYearID
     };
@@ -47,9 +44,6 @@ function updateRegulation(req, res) {
     const updateObj = {
         tuoiMin: req.body.ageMin || req.query.ageMin,
         tuoiMax: req.body.ageMax || req.query.ageMax,
-        slHocSinh_10: req.body.quanGrade10 || req.query.quanGrade10,
-        slHocSinh_11: req.body.quanGrade11 || req.query.quanGrade11,
-        slHocSinh_12: req.body.quanGrade12 || req.query.quanGrade12,
         diemChuan: req.body.minScore || req.query.minScore
     };
 
@@ -93,4 +87,40 @@ function updateRegulation(req, res) {
     });
 }
 
-export default { insertRegulation, updateRegulation };
+function getRegulation(req, res) {
+    QuyDinh.findOne({
+        where: { maNamHoc: req.query.schoolYearID }
+    })
+    .then((result) => {
+        let objReturning = {};
+        if(result) {
+            objReturning = {
+                regulationID: result.quyDinh_pkey,
+                regulationCode: result.maQuyDinh,
+                minAge: result.tuoiMin,
+                maxAge: result.tuoiMax,
+                minScore: result.diemChuan,
+                schoolYearID: result.maNamHoc
+            };
+            objReturning = Object.assign({}, objReturning, JSON.parse(result.dsKhoi10));
+            objReturning = Object.assign({}, objReturning, JSON.parse(result.dsKhoi11));
+            objReturning = Object.assign({}, objReturning, JSON.parse(result.dsKhoi12));
+            objReturning = Object.assign({}, objReturning, JSON.parse(result.dsMonHoc));
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Get regulation successfully",
+            data: objReturning
+        });
+    })
+    .catch((err) => {
+        console.log(err);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get regulation"
+        });
+    });
+}
+
+export default { insertRegulation, updateRegulation, getRegulation };

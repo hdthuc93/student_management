@@ -219,7 +219,6 @@ function searchStudents(req, res) {
 
 function getClassForStudent(req, res, result, index, objReturning) {
     if(index > result.length - 1) {
-        console.log(objReturning);
         getPrevClass(req, res, objReturning, 0);
     } else if(result[index].inClass) {
         HocSinh_LopHoc.findOne({

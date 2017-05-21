@@ -30,6 +30,26 @@ const QuyDinh = sequelize.define('M_QUY_DINH', {
         notNull: true,
         field: 'DIEM_CHUAN'
     },
+    dsKhoi10: {
+        type: Sequelize.TEXT,
+        notNull: true,
+        field: 'DS_KHOI10'
+    },
+    dsKhoi11: {
+        type: Sequelize.TEXT,
+        notNull: true,
+        field: 'DS_KHOI11'
+    },
+    dsKhoi12: {
+        type: Sequelize.TEXT,
+        notNull: true,
+        field: 'DS_KHOI12'
+    },
+    dsMonHoc: {
+        type: Sequelize.TEXT,
+        notNull: true,
+        field: 'DS_MON'
+    },
     maNamHoc: {
         type: Sequelize.INTEGER,
         notNull: true,
