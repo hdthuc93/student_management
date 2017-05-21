@@ -7,11 +7,11 @@ const router = express.Router();
 
 router.route('/')
     .get(
-        // regulationCtrl.
+        regulationCtrl.getRegulation
     )
-    .post(
-        regulationCtrl.insertRegulation
-    )
+    // .post(
+    //     regulationCtrl.insertRegulation
+    // )
     .put(
         regulationCtrl.updateRegulation
     )
