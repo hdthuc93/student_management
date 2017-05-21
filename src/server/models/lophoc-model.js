@@ -22,6 +22,16 @@ const LopHoc = sequelize.define('M_LOP_HOC', {
         notNull: true,
         field: 'TEN_LOP'
     },
+    siSo: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        field: 'SISO'
+    },
+    siSoMax: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+        field: 'SISO_MAX'
+    },
     maKhoi: {
         type: Sequelize.INTEGER,
         field: 'MA_KHOI'

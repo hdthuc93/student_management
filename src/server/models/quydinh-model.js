@@ -25,21 +25,6 @@ const QuyDinh = sequelize.define('M_QUY_DINH', {
         notNull: true,
         field: 'TUOI_MAX'
     },
-    slHocSinh_10: {
-        type: Sequelize.INTEGER,
-        notNull: true,
-        field: 'SL_HOC_SINH_10'
-    },
-    slHocSinh_11: {
-        type: Sequelize.INTEGER,
-        notNull: true,
-        field: 'SL_HOC_SINH_11'
-    },
-    slHocSinh_12: {
-        type: Sequelize.INTEGER,
-        notNull: true,
-        field: 'SL_HOC_SINH_12'
-    },
     diemChuan: {
         type: Sequelize.DECIMAL(4, 2),
         notNull: true,

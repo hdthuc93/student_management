@@ -17,6 +17,8 @@ function getClass(req, res) {
                     classID: result[i].maLop_pkey,
                     classCode: result[i].maLopHoc,
                     className: result[i].tenLop,
+                    numOfStus: result[i].siSo,
+                    maxNum: result[i].siSoMax,
                     gradeID: result[i].maKhoi,
                     schoolYearID: result[i].maNamHoc,
                 }

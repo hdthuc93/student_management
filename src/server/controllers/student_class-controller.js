@@ -1,4 +1,4 @@
-import { Sequelize } from '../models/index';
+import { sequelize, Sequelize } from '../models/index';
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
 import HocSinh from '../models/hocsinh-model';
 import LopHoc from '../models/lophoc-model';
@@ -59,6 +59,12 @@ function addStuInClass(req, res) {
                 where: { hocSinh_pkey: result.maHocSinh }
             });
 
+            LopHoc.update({
+                siSo: sequelize.literal('siSo + 1')
+            }, { 
+                where: { maLop_pkey: result.maLopHoc }
+            })
+
             return res.status(200).json({
                     success: true,
                     message: "Insert student in class successfully"
@@ -93,6 +99,12 @@ function delStuInClass(req, res) {
                         inClass: false
                     }, {
                         where: { hocSinh_pkey: result.maHocSinh }
+                    });
+
+                    LopHoc.update({
+                        siSo: sequelize.literal('siSo - 1')
+                    }, { 
+                        where: { maLop_pkey: result.maLopHoc }
                     });
 
                     return res.status(200).json({

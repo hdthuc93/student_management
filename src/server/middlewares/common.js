@@ -16,9 +16,6 @@ function loadCommonObj() {
     .then((result) => {
         commonObj.ageMax = result.tuoiMax || 20;
         commonObj.ageMin = result.tuoiMin || 15;
-        commonObj.quan_10 = result.slHocSinh_10 || 40;
-        commonObj.quan_11 = result.slHocSinh_11 || 40;
-        commonObj.quan_12 = result.slHocSinh_12 || 40;
         commonObj.minScore = result.diemChuan || 5;
     });
 }
