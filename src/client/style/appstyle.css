@@ -320,3 +320,15 @@ ul.sidebar li a {
     left: 20px;
 }
 /*slide bar menu style - END*/
+
+/*school year page - START*/
+.current-school{
+    color: blue;
+}
+.past-school{
+    color: gray;
+}
+.past-school{
+    color: green;
+}
+/*school year page - END*/

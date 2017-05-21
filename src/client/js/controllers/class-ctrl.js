@@ -20,9 +20,9 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
         selectionRowHeaderWidth: 35,
         columnDefs: [
             { field: 'no', displayName: 'STT', minWidth: 50, maxWidth: 70 },
-            { field: 'studentID', displayName: 'Mã học sinh', minWidth: 110, maxWidth: 140  },
+            { field: 'studentCode', displayName: 'Mã học sinh', minWidth: 110, maxWidth: 140  },
             { field: 'name', displayName: 'Họ Tên', minWidth: 250 },
-            { field: 'gender', displayName: 'Giới', minWidth: 50, maxWidth: 70 },
+            { field: 'gender', displayName: 'Giới', cellFilter: 'GenderToText', minWidth: 50, maxWidth: 70 },
             { field: 'birthday', displayName: 'Ngày Sinh', minWidth: 110, maxWidth: 120},
             { field: 'email', displayName: 'Email', minWidth: 220 },
             { field: 'address', displayName: 'Địa chỉ', minWidth: 350}
@@ -84,9 +84,10 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
             params:{classID: $scope.class}
         }).then(function successCallback(response) {
             if(response.data.success){
-                console.log("===dassadas=====")
                 $scope.studentList.data = response.data.datas;
-                console.log(222222222,$scope.studentList.data);
+                $scope.studentList.data.forEach(function (e, i) {
+                    $scope.studentList.data[i].no = i + 1;
+                });
             }else{
                 helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
             }
@@ -94,12 +95,18 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
     }
 
     $scope.openStudentList = function(){
-        var configs = {
-            templateUrl: 'templates/popup_student_list.html',
-            animation: true,
-            appendTo: angular.element("#modal_area"),
-            size: 'lg'
-        };
-        modalInstance = $uibModal.open(configs)
+        helper.loadStudentNotInClass({
+            close: function (callBackStudent) {
+                if(callBackStudent&&callBackStudent.length){
+                    console.log("return student ID", callBackStudent);
+                }else{
+                    console.log("no student to select ID", callBackStudent);
+                }
+            }
+        })
+    }
+
+    $scope.addStudentToClass = function(){
+        console.log(999999999)
     }
 }

@@ -1,5 +1,5 @@
 <div class="row" ng-controller="SchoolYearCtrl">
-  <div class="col-md-6 col-sm-12">
+  <div class="col-xs-12">
     <div class="panel panel-default">
       <div class="panel-heading">
         <strong><span class="fa fa-plus-circle"></span> Tạo năm học mới</strong>
@@ -10,19 +10,38 @@
             <div class="row form-horizontal">
                <div class="col-sm-8">
                 <div class="form-group">
-                  <label class="control-label col-xs-4 input-sm">Năm học</label>
-
-                  <div class="col-xs-8">
+                  <label class="control-label col-sm-4 col-xs-12 input-sm">Tạo năm học</label>
+                  <div class="col-sm-4 col-xs-6">
                     <input type="text" class="form-control input-sm" disabled ng-model="newSchoolYear">
+                  </div>
+                  <div class="col-sm-4 col-xs-6">
+                    <button type="submit" class="btn btn-primary btn-xs" ng-click="createSchoolYear()"><i class="fa fa-plus"></i> Tạo</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="control-label col-sm-4 col-xs-12 input-sm">Mở năm học mới</label>
+                  <div class="col-sm-4 col-xs-6">
+                    <!--<select ng-change="selectFutureSchoolYear()" class="form-control input-sm" ng-model="selectedFutureSchoolYear">
+                      <option ng-selected="1">Chọn năm học</option>
+                      <option ng-repeat="future in futureSchoolYear" value="{{future.schoolYearID}}">{{future.schoolYearName}}</option>
+                    </select>-->
+                    <input type="text" class="form-control input-sm" disabled ng-model="selectedFutureSchoolYearName">
+                  </div>
+                  <div class="col-sm-4 col-xs-6">
+                    <button type="submit" class="btn btn-primary btn-xs" ng-click="selectSchoolYear()"><i class="fa fa-check-square"></i> Mở</button>
                   </div>
                 </div>
               </div>
               <div class="col-sm-4">
                 <div class="form-group">
                   <div class="col-xs-12 text-right">
-                    <button type="submit" class="btn btn-primary btn-xs" ng-click="createSchoolYear()"><i class="fa fa-plus"></i> Tạo Năm Học</button>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="row form-horizontal">
+              <div class="col-sm-8 col-xs-12">
+                  <div id="gridSchooYearList" ui-grid-resize-columns ui-grid="schoolYearList" class="grid"></div>
               </div>
             </div>
           </form>
@@ -30,7 +49,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-6 col-sm-12">
+  <!--<div class="col-md-6 col-sm-12">
     <div class="panel panel-default">
       <div class="panel-heading">
         <strong><span class="fa fa-check-square-o"></span> Chọn năm học mới</strong>
@@ -40,20 +59,11 @@
           <form role="form" name="create_school_year" id="create_school_year">
             <div class="row form-horizontal">
                <div class="col-sm-8">
-                <div class="form-group">
-                  <label class="control-label col-xs-4 input-sm">Năm học</label>
-                  <div class="col-xs-8">
-                    <select ng-change="selectFutureSchoolYear()" class="form-control input-sm" ng-model="selectedFutureSchoolYear">
-                      <option ng-selected="1">Chọn năm học</option>
-                      <option ng-repeat="future in futureSchoolYear" value="{{future.schoolYearID}}">{{future.schoolYearName}}</option>
-                    </select>
-                  </div>
-                </div>
+                
               </div>
               <div class="col-sm-4">
                 <div class="form-group">
                   <div class="col-xs-12 text-right">
-                    <button type="submit" class="btn btn-primary btn-xs" ng-click="selectSchoolYear()"><i class="fa fa-check-square"></i> Chọn</button>
                   </div>
                 </div>
               </div>
@@ -62,5 +72,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>-->
 </div>

@@ -17,7 +17,6 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
     };
 
     $scope.$watch($scope.getWidth, function(newValue, oldValue) {
-        console.log(888888888,newValue);
         if (newValue >= mobileView) {
             if (angular.isDefined($cookieStore.get('toggle'))) {
                 $scope.toggle = ! $cookieStore.get('toggle') ? false : true;

@@ -2,23 +2,7 @@
  * Student List Controller
  * Implement: Phong Nguyen
  */
-var module = angular.module('RDash');
-module.filter('GenderText', function () {
-    return function (input) {
-        switch (input) {
-            case "1":
-                return "Nam";
-                break;
-            case "0":
-                return "Nữ";
-                break;
-            default:
-                return "Nam";
-        }
-    };
-});
-
-module.controller('StudentListCtrl', ['$scope', 'helper', '$http', '$rootScope', StudentListCtrl]);
+angular.module('RDash').controller('StudentListCtrl', ['$scope', 'helper', '$http', '$rootScope', StudentListCtrl]);
 
 function StudentListCtrl($scope, helper, $http, $rootScope) {
     $scope.showHandleArea = false; //Hien vung xu ly Them/Sua
@@ -55,7 +39,7 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
             { field: 'no', displayName: 'STT', minWidth: 50, maxWidth: 70 },
             { field: 'studentCode', displayName: 'Mã Học Sinh', minWidth: 110, maxWidth: 140 },
             { field: 'name', displayName: 'Họ Tên', minWidth: 250 },
-            { field: 'gender', displayName: 'Giới', cellFilter: 'GenderText', minWidth: 50, maxWidth: 70 },
+            { field: 'gender', displayName: 'Giới', cellFilter: 'GenderToText', minWidth: 50, maxWidth: 70 },
             { field: 'birthday', displayName: 'Ngày Sinh', minWidth: 110, maxWidth: 120 },
             { field: 'email', displayName: 'Email', minWidth: 220 },
             { field: 'address', displayName: 'Địa Chỉ', minWidth: 350 }
