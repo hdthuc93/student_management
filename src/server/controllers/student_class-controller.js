@@ -4,80 +4,96 @@ import HocSinh from '../models/hocsinh-model';
 import LopHoc from '../models/lophoc-model';
 import { changeToDDMMYYYY } from '../utilities/date_times';
 
-function canAdd(studentID, classID) {
+async function canAdd(studentList) {
     let resultStudent;
-    return HocSinh_LopHoc.findAll({
-        where: {
-            maHocSinh: studentID
-        },
-        include: [{
-            model: LopHoc,
-            where: {
-                maLop_pkey: Sequelize.col('HOCSINH_LOPHOC.MA_LOP_HOC')
-            }
-        }]
-    })
-    .then((result) => {
-        resultStudent = result;
-        return LopHoc.findOne({
-            where: { maLop_pkey: classID }
-        })
-        
-    })
-    .then((resultClass) => {
-        if(resultStudent.length > 0)
-            for(let i = 0; i < resultStudent.length; ++i) {
-                if(resultClass.maNamHoc === resultStudent[i]['M_LOP_HOC'].maNamHoc)
-                    return false;
-            }
-        return true;
-    });
+    for(let i = 0; i < studentList.length; ++i) {
+        let flag = await HocSinh.findOne({ where: { hocSinh_pkey: studentList[i] }});
+                        
+        if(flag)
+            return false;
+    }
 }
 
-function addStuInClass(req, res) {
-    const studentID = req.body.studentID;
+async function addStuInClass(req, res) {
+    const studentList = req.body.studentList;
+    const len = studentList.length;
     const classID = req.body.classID;
 
-    canAdd(studentID, classID).then((result) => {
-        if(result) {
-            return HocSinh_LopHoc.create({
-                maHocSinh: studentID,
+    
+
+    if(canAdd(studentList)) {
+        let arrIns = [];
+        for(let i = 0; i < len; ++i) {
+            arrIns[arrIns.length] = {
+                maHocSinh: studentList[i],
                 maLopHoc: classID
-            })
-        } else {
-            return res.status(200).json({
-                success: false,
-                message: "A student exist in another class"
-            });
+            }
         }
-    })
-    .then((result) => {
-        if(result.maHocSinh) { 
-            HocSinh.update({
-                inClass: true
-            }, {
-                where: { hocSinh_pkey: result.maHocSinh }
-            });
-
-            LopHoc.update({
-                siSo: sequelize.literal('siSo + 1')
-            }, { 
-                where: { maLop_pkey: result.maLopHoc }
-            })
-
-            return res.status(200).json({
-                    success: true,
-                    message: "Insert student in class successfully"
+        try {
+            let result = await HocSinh_LopHoc.bulkCreate(arrIns);
+            for(let i = 0; i < len; ++i) {
+                await HocSinh.update({
+                    inClass: true
+                }, {
+                    where: { hocSinh_pkey: studentList[i] }
                 });
+            }
+        } catch(ex) {
+            console.log(ex);
+            return res.status(500).json({
+                success: false,
+                message: "Failed to insert student(s) into class"
+            });
         }
-    })
-    .catch((err) => {
-        console.log(err);
-        return res.status(500).json({
-            success: false,
-            message: "Failed to insert student into class"
+        return res.status(200).json({
+            success: true,
+            message: "Insert student in class successfully"
         });
-    });
+    } else {
+        return res.status(200).json({
+            success: false,
+            message: "A student exist in another class"
+        });
+    }
+    
+    // if(result) {
+    //     return HocSinh_LopHoc.create({
+    //         maHocSinh: studentID,
+    //         maLopHoc: classID
+    //     })
+    // } else {
+    //     return res.status(200).json({
+    //         success: false,
+    //         message: "A student exist in another class"
+    //     });
+    // }
+    // .then((result) => {
+    //     if(result.maHocSinh) { 
+    //         HocSinh.update({
+    //             inClass: true
+    //         }, {
+    //             where: { hocSinh_pkey: result.maHocSinh }
+    //         });
+
+    //         LopHoc.update({
+    //             siSo: sequelize.literal('siSo + 1')
+    //         }, { 
+    //             where: { maLop_pkey: result.maLopHoc }
+    //         })
+
+    //         return res.status(200).json({
+    //                 success: true,
+    //                 message: "Insert student in class successfully"
+    //             });
+    //     }
+    // })
+    // .catch((err) => {
+    //     console.log(err);
+    //     return res.status(500).json({
+    //         success: false,
+    //         message: "Failed to insert student into class"
+    //     });
+    // });
 }
 
 function delStuInClass(req, res) {

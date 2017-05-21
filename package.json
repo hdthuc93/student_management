@@ -8,7 +8,7 @@
     "Huynh Duy Thuc <1642076@student.hcmus.edu.vn>"
   ],
   "scripts": {
-    "dev-server": "./node_modules/.bin/babel-node --presets babel-preset-es2015 ./src/server/app.js",
+    "dev-server": "./node_modules/.bin/babel-node --presets babel-preset-es2017 ./src/server/app.js",
     "dev-client": "gulp",
     "dev": "concurrently --kill-others \"npm run dev-client\" \"npm run dev-server\""
   },
@@ -22,6 +22,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
     "babel-register": "^6.24.1",
     "bower": "^1.3.9",
     "concurrently": "^3.4.0",
