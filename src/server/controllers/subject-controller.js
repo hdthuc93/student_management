@@ -1,6 +1,8 @@
 import { sequelize, Sequelize } from '../models/index';
 import DiemMH from '../models/diemmh-model';
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
+import QuyDinh from '../models/quydinh-model';
+import MonHoc from '../models/monhoc-model';
 
 function addScores(req, res) {
     const len = req.body.listScores.length;
@@ -99,4 +101,24 @@ function getScores(req, res) {
     })
 }
 
-export default { addScores, getScores };
+function addSubjects(schoolYearID) {
+    QuyDinh.findOne({
+        where: { maNamHoc: schoolYearID }
+    })
+    .then((result) => {
+        let arrSubjects = JSON.parse(result.dsMonHoc);
+        arrSubjects = arrSubjects.course;
+        let arrIns = []
+        arrSubjects.forEach((element) => {
+            arrIns[arrIns.length] = {
+                tenMonHoc: element.courseName,
+                maNamHoc: schoolYearID
+            }
+        });
+
+        MonHoc.bulkCreate(arrIns)
+        .then();
+    });
+}
+
+export default { addScores, getScores, addSubjects };

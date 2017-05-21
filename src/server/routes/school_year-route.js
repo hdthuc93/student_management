@@ -11,14 +11,16 @@ router.route('/')
     )
     .post(
         schoolYearCtrl.addNewSchoolYear
-    )
-    .put(
+    );
+
+router.route('/change')
+    .post(
         schoolYearCtrl.changeSchoolYear
     );
 
 router.route('/future')
     .get(
         schoolYearCtrl.getFutureSchoolYear
-    )
+    );
 
 export default router;

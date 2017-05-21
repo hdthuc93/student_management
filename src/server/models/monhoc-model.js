@@ -9,12 +9,6 @@ const MonHoc = sequelize.define('M_MON_HOC', {
         autoIncrement: true,
         field: 'MON_HOC_PKEY'
     },
-    maMonHoc: {
-        type: Sequelize.STRING,
-        notNull: true,
-        unique: true,
-        field: 'MA_MON_HOC'
-    },
     tenMonHoc: {
         type: Sequelize.STRING,
         notNull: true,

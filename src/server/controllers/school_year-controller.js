@@ -2,6 +2,9 @@ import { sequelize, Sequelize } from '../models/index';
 import NamHoc from '../models/namhoc-model';
 import QuyDinh from '../models/quydinh-model';
 import regulationCtrl from './regulation-controller';
+import subjectCtrl from './subject-controller';
+import classCtrl from './class-controller';
+
 
 function getSchoolYear(req, res) {
     NamHoc.findAll().then((result) => {
@@ -115,6 +118,8 @@ function changeSchoolYear(req, res) {
                             });
                         } else {
                             t.commit();
+                            subjectCtrl.addSubjects(schoolYearID);
+                            classCtrl.addClass(schoolYearID)
                             return res.status(200).json({
                                 success: true,
                                 message: "Change the current school year successfully"
@@ -122,6 +127,7 @@ function changeSchoolYear(req, res) {
                         }
                     })
                     .catch((err) => {
+                        t.rollback();
                         return res.status(500).json({
                             success: false,
                             message: "Failed to the current school year"

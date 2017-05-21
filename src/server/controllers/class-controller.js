@@ -1,4 +1,5 @@
 import LopHoc from '../models/lophoc-model';
+import QuyDinh from '../models/quydinh-model';
 import commonObj from '../utilities/common_object';
 
 function getClass(req, res) {
@@ -44,4 +45,44 @@ function getClass(req, res) {
     });
 }
 
-export default { getClass };
+function addClass(schoolYearID) {
+    QuyDinh.findOne({
+        where: { maNamHoc: schoolYearID }
+    })
+    .then((result) => {
+        addClassInGrade(result, 0, schoolYearID)
+    })
+    .catch((err) => {
+        console.log('---------findClass---------', err);
+        return new Error(err);
+    });
+}
+
+function addClassInGrade(data, index, schoolYearID) {
+    if(index > 2)
+        return true;
+
+    let arrClasses = JSON.parse(data['dsKhoi1' + index]);
+    arrClasses = arrClasses['grade1' + index]
+    let arrIns = []
+    arrClasses.forEach((element) => {
+        arrIns[arrIns.length] = {
+            maLopHoc: element.className + '_' + schoolYearID,
+            tenLop: element.className,
+            siSo: element.maxQty,
+            maKhoi: index + 1,
+            maNamHoc: schoolYearID
+        }
+    });
+
+    LopHoc.bulkCreate(arrIns)
+    .then((result) => {
+        addClassInGrade(data, index + 1, schoolYearID);
+    })
+    .catch((err) => {
+        console.log('addClassInGrade', err);
+        return new Error(err);
+    });
+}
+
+export default { getClass, addClass };
