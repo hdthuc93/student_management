@@ -1,42 +1,32 @@
 import QuyDinh from '../models/quydinh-model';
 import NamHoc from '../models/namhoc-model';
 import { generateRegulationID } from '../utilities/id_generates';
+import commonObj from '../utilities/common_object';
 
-function insertRegulation(req, res) {
+function insertRegulation(req, res, schoolYearID) {
     const insertObj = {
-        tuoiMin: req.body.minAge,
-        tuoiMax: req.body.maxAge,
-        diemChuan: req.body.minScore,
-        maNamHoc: req.body.schoolYearID
+        tuoiMin: commonObj.ageMin,
+        tuoiMax: commonObj.ageMax,
+        diemChuan: commonObj.minScore,
+        dsKhoi10: commonObj.listGrade10,
+        dsKhoi11: commonObj.listGrade11,
+        dsKhoi12: commonObj.listGrade12,
+        dsMonHoc: commonObj.listSubjects,
+        maNamHoc: schoolYearID
     };
 
-    generateRegulationID(insertObj.maNamHoc)
+    return generateRegulationID(schoolYearID)
     .then((regulationID) => {
         insertObj.maQuyDinh = regulationID;
 
         if(regulationID) {
             QuyDinh.create(insertObj)
-            .then((result) => {
-                return res.status(200).json({
-                    success: true,
-                    message: "Insert new regulation successfully"
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-                return res.status(500).json({
-                    success: false,
-                    message: "Failed to insert new regulation"
-                });
-            })
+            .then();
         }
     })
     .catch((err) => {
         console.log(err);
-        return res.status(500).json({
-            success: false,
-            message: "Failed to generate regulation ID"
-        });
+        throw new Error(err);
     })
 }
 

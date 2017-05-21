@@ -1,6 +1,7 @@
 import { sequelize, Sequelize } from '../models/index';
 import NamHoc from '../models/namhoc-model';
 import QuyDinh from '../models/quydinh-model';
+import regulationCtrl from './regulation-controller';
 
 function getSchoolYear(req, res) {
     NamHoc.findAll().then((result) => {
@@ -71,10 +72,20 @@ function addNewSchoolYear(req, res) {
         maNamHoc: req.body.year,
         tenNamHoc: req.body.year
     }).then((result) => {
-        return res.status(200).json({
-            success: true,
-            message: "Create new school year successfully",
-            data: result
+        let objReturning = {
+            schoolYearID: result.namHoc_pkey,
+            schoolYearCode: result.maNamHoc,
+            schoolYearName: result.tenNamHoc,
+            startFlag: result.startFlag
+        };
+
+        regulationCtrl.insertRegulation(req, res, result.namHoc_pkey)
+        .then(() => {
+            return res.status(200).json({
+                success: true,
+                message: "Create new school year successfully",
+                data: objReturning
+            });
         });
     }).catch((err) => {
         return res.status(500).json({

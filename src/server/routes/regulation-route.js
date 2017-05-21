@@ -9,9 +9,9 @@ router.route('/')
     .get(
         regulationCtrl.getRegulation
     )
-    .post(
-        regulationCtrl.insertRegulation
-    )
+    // .post(
+    //     regulationCtrl.insertRegulation
+    // )
     .put(
         regulationCtrl.updateRegulation
     )
