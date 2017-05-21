@@ -1,12 +1,18 @@
 <div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal">&times;</button>
+  <button type="button" class="close" ng-click="closeModal()">&times;</button>
   <h4 class="modal-title">Danh sách học sinh</h4>
 </div>
 <div class="modal-body">
+  <div class="row">
+      <div class="col-xs-12 no-padding">
+        <button type="button" ng-disabled="!selectedRows" class="btn btn-primary btn-xs" ng-click="selectStudent()">
+          <i class="fa fa-check"></i> Chọn</button>
+      </div>
+  </div>
   <div id="studentList" ui-grid-selection ui-grid-resize-columns ui-grid="studentList" class="grid"></div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-primary btn-xs" ng-click="addStudentToClass()" data-dismiss="modal">
-    <i class="fa fa-check"></i> Chọn</button>
+  <button type="button" class="btn btn-primary btn-xs" ng-click="closeModal()">
+    <i class="fa fa-check"></i> Đóng</button>
 </div>
     

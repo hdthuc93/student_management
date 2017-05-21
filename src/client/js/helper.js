@@ -109,7 +109,7 @@ module.factory('helper',['$uibModal','$interval',
         };
         modalInstance = $uibModal.open(configs);
         modalInstance.result.then(function (rs) {
-            if (rs.title == 'studentID' && typeof options.close !== 'undefined' && angular.isFunction(options.close)) {
+            if (rs && rs.title == 'studentID' && typeof options.close !== 'undefined' && angular.isFunction(options.close)) {
                 options.close(rs.data);
             }
         });
@@ -135,16 +135,19 @@ module.controller('studentListNotInClassCtrl', ['$scope', '$uibModalInstance', f
             onRegisterApi: function (gridApi) {
                 $scope.gridApi = gridApi;
                 gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                    //chon nhieu row
                     if (row.isSelected) {
                         $scope.selectedRows = gridApi.selection.getSelectedRows();
                     } else {
                         $scope.selectedRows = null;
                     }
                 });
+                gridApi.selection.on.rowSelectionChangedBatch($scope, function (gridData) {
+                    var rowsSelected = gridApi.selection.getSelectedRows();
+                    $scope.selectedRows = rowsSelected.length?rowsSelected:null;
+                });
             }
         };
-       $scope.addStudentToClass = function () {
+       $scope.selectStudent = function () {
             //get student list
             var callBack = {
                 title: "studentID",
@@ -152,6 +155,10 @@ module.controller('studentListNotInClassCtrl', ['$scope', '$uibModalInstance', f
             }
             $uibModalInstance.close(callBack);
         };
+
+        $scope.closeModal = function(){
+            $uibModalInstance.close("");
+        }
     }]);
 
 module.controller('popupCtrl', ['$scope', '$uibModalInstance', 'items', function ($scope, $uibModalInstance, items) {
