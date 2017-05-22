@@ -97,56 +97,57 @@ async function addStuInClass(req, res) {
 }
 
 function delStuInClass(req, res) {
-    HocSinh_LopHoc.findOne({ where: {
-        maHocSinh: req.body.studentID || req.body.studentID,
-        maLopHoc: req.body.classID || req.body.classID
-    }})
-    .then((result) => {
-        if(result) {
-            HocSinh_LopHoc.destroy({ 
-                where: {
-                    maHocSinh: result.maHocSinh,
-                    maLopHoc: result.maLopHoc
-                }
-            })
-            .then((rows) => {
-                if(rows > 0) {
-                    HocSinh.update({
-                        inClass: false
-                    }, {
-                        where: { hocSinh_pkey: result.maHocSinh }
-                    });
+    let studentList = req.body.studentList || req.body.studentList || [];
+    let classID = req.body.classID || req.body.classID;
+    delStudents(res, studentList, 0, classID);
+}
 
-                    LopHoc.update({
-                        siSo: sequelize.literal('siSo - 1')
-                    }, { 
-                        where: { maLop_pkey: result.maLopHoc }
-                    });
-
-                    return res.status(200).json({
-                        success: true,
-                        message: "Delete student in class successfully"
-                    });
-                } else {
-                    return res.status(200).json({
-                        success: false,
-                        message: "No student in class is deleted"
-                    });
-                }
-            });
-        } else {
-            return res.status(200).json({
-                success: false,
-                message: "No student found to delete"
-            });
-        }
-    })
-    .catch((err) => {
-        return res.status(500).json({
-            success: false,
-            message: "Failed to delete student into class"
+function delStudents(res, studentList, index, classID) {
+    if(index > studentList.length - 1)
+        return res.status(200).json({
+            success: true,
+            message: "Delete student in class successfully"
         });
-    });
+    else {
+        HocSinh_LopHoc.findOne({ where: {
+            maHocSinh: studentList[index],
+            maLopHoc: classID
+        }})
+        .then((result) => {
+            if(result) {
+                HocSinh_LopHoc.destroy({ 
+                    where: {
+                        maHocSinh: result.maHocSinh,
+                        maLopHoc: result.maLopHoc
+                    }
+                })
+                .then((rows) => {
+                    if(rows > 0) {
+                        HocSinh.update({
+                            inClass: false
+                        }, {
+                            where: { hocSinh_pkey: result.maHocSinh }
+                        });
+
+                        LopHoc.update({
+                            siSo: sequelize.literal('siSo - 1')
+                        }, { 
+                            where: { maLop_pkey: result.maLopHoc }
+                        });
+                    }
+                    delStudents(res, studentList, index + 1, classID);
+                });
+            } else {
+                delStudents(res, studentList, index + 1, classID);
+            }
+        })
+        .catch((err) => {
+            return res.status(500).json({
+                success: false,
+                message: "Failed to delete student into class"
+            });
+        });
+    }
 }
 
 function getStuInClass(req, res) {

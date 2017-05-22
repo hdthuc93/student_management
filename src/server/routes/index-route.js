@@ -14,23 +14,13 @@ import commonObj from '../utilities/common_object';
 
 const router = express.Router();
 
-router.route('/')
-    .get((req, res) => {
-        
-             res.status(200).json({ 
-                success: true,
-                mes: 'route', 
-                quantity: commonObj 
-            });
-    })
-    .post(auth.authenToken, (req, res) => {
-        res.status(200).json({
-            success: true, 
-            message: 'Authentication successfully'
-        })
-    });
-
 router.use('/user', userRoutes);
+
+router.use('/*', (req, res, next) => {
+    next();
+});
+
+
 router.use('/student', studentRoutes);
 router.use('/class', classRoutes);
 router.use('/student_class', student_classRoutes);
