@@ -45,44 +45,32 @@ function getClass(req, res) {
     });
 }
 
-function addClass(schoolYearID) {
-    QuyDinh.findOne({
-        where: { maNamHoc: schoolYearID }
-    })
-    .then((result) => {
-        addClassInGrade(result, 0, schoolYearID)
-    })
-    .catch((err) => {
-        console.log('---------findClass---------', err);
-        return new Error(err);
-    });
-}
+async function addClass(schoolYearID) {
+    try {
+        let result = await QuyDinh.findOne({
+            where: { maNamHoc: schoolYearID }
+        })
 
-function addClassInGrade(data, index, schoolYearID) {
-    if(index > 2)
-        return true;
+        for(let i = 0; i < 3; ++i) {
+            let arrClasses = JSON.parse(result['dsKhoi1' + i]);
+            arrClasses = arrClasses['grade1' + i]
+            let arrIns = []
+            for(let j = 0; j < arrClasses.length; ++j) {
+                arrIns[arrIns.length] = {
+                    maLopHoc: arrClasses[j].className + '_' + schoolYearID,
+                    tenLop: arrClasses[j].className,
+                    siSo: arrClasses[j].maxQty,
+                    maKhoi: i + 1,
+                    maNamHoc: schoolYearID
+                }
+            };
 
-    let arrClasses = JSON.parse(data['dsKhoi1' + index]);
-    arrClasses = arrClasses['grade1' + index]
-    let arrIns = []
-    arrClasses.forEach((element) => {
-        arrIns[arrIns.length] = {
-            maLopHoc: element.className + '_' + schoolYearID,
-            tenLop: element.className,
-            siSo: element.maxQty,
-            maKhoi: index + 1,
-            maNamHoc: schoolYearID
+            LopHoc.bulkCreate(arrIns);
         }
-    });
-
-    LopHoc.bulkCreate(arrIns)
-    .then((result) => {
-        addClassInGrade(data, index + 1, schoolYearID);
-    })
-    .catch((err) => {
-        console.log('addClassInGrade', err);
-        return new Error(err);
-    });
+    } catch(ex) {
+        console.log("--------------", ex);
+        throw new Error(ex);
+    }
 }
 
 export default { getClass, addClass };

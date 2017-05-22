@@ -101,24 +101,22 @@ function getScores(req, res) {
     })
 }
 
-function addSubjects(schoolYearID) {
-    QuyDinh.findOne({
+async function addSubjects(schoolYearID) {
+    let result = await QuyDinh.findOne({
         where: { maNamHoc: schoolYearID }
-    })
-    .then((result) => {
-        let arrSubjects = JSON.parse(result.dsMonHoc);
-        arrSubjects = arrSubjects.course;
-        let arrIns = []
-        arrSubjects.forEach((element) => {
-            arrIns[arrIns.length] = {
-                tenMonHoc: element.courseName,
-                maNamHoc: schoolYearID
-            }
-        });
-
-        MonHoc.bulkCreate(arrIns)
-        .then();
     });
+    
+    let arrSubjects = JSON.parse(result.dsMonHoc);
+    arrSubjects = arrSubjects.course;
+    let arrIns = []
+    arrSubjects.forEach((element) => {
+        arrIns[arrIns.length] = {
+            tenMonHoc: element.courseName,
+            maNamHoc: schoolYearID
+        }
+    });
+
+    MonHoc.bulkCreate(arrIns);
 }
 
 export default { addScores, getScores, addSubjects };

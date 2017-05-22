@@ -117,13 +117,23 @@ function changeSchoolYear(req, res) {
                                 message: "Cannot change school year, because school year want to change in the past"
                             });
                         } else {
-                            t.commit();
-                            subjectCtrl.addSubjects(schoolYearID);
-                            classCtrl.addClass(schoolYearID)
-                            return res.status(200).json({
-                                success: true,
-                                message: "Change the current school year successfully"
-                            });
+                            
+                            try {
+                                classCtrl.addClass(schoolYearID);
+                                subjectCtrl.addSubjects(schoolYearID);
+                                t.commit();
+
+                                return res.status(200).json({
+                                    success: true,
+                                    message: "Change the current school year successfully"
+                                });
+                            } catch(ex) {
+                                console.log(ex);
+                                return res.status(500).json({
+                                    success: false,
+                                    message: "Failed to the current school year"
+                                });
+                            }
                         }
                     })
                     .catch((err) => {
