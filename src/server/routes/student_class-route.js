@@ -12,9 +12,11 @@ router.route('/')
     .post(
         student_classCtrl.addStuInClass
     )
-    .delete(
+
+router.route('/del')
+    .post(
         student_classCtrl.delStuInClass
-    );
+    )
     
 
 
