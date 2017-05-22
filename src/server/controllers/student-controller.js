@@ -46,7 +46,10 @@ function getReqOptionParams(req) {
         objReq.email = req.query.email;
 
     if(req.query.gender)
-        obj.gioiTinh = req.query.gender;
+        objReq.gioiTinh = req.query.gender;
+
+    if(req.query.inClass)
+        objReq.inClass = req.query.inClass;
 
     if(req.query.name)
         objReq.hoTen = { $like: '%' + req.query.name + '%' }
