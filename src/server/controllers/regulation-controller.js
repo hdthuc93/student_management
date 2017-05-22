@@ -32,9 +32,13 @@ function insertRegulation(req, res, schoolYearID) {
 
 function updateRegulation(req, res) {
     const updateObj = {
-        tuoiMin: req.body.ageMin || req.query.ageMin,
-        tuoiMax: req.body.ageMax || req.query.ageMax,
-        diemChuan: req.body.minScore || req.query.minScore
+        tuoiMin: req.body.minAge || req.query.minAge,
+        tuoiMax: req.body.maxAge || req.query.maxAge,
+        diemChuan: req.body.minScore || req.query.minScore,
+        dsKhoi10: JSON.stringify({ grade10: req.body.grade10 || req.query.grade10 }),
+        dsKhoi11: JSON.stringify({ grade11: req.body.grade11 || req.query.grade11 }),
+        dsKhoi12: JSON.stringify({ grade12: req.body.grade12 || req.query.grade12 }),
+        dsMonHoc: JSON.stringify({ course: req.body.course || req.query.course }),
     };
 
     const schoolYearID = req.body.schoolYearID || req.query.schoolYearID

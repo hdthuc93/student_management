@@ -8,12 +8,11 @@ const router = express.Router();
 router.route('/')
     .get(
         regulationCtrl.getRegulation
-    )
-    // .post(
-    //     regulationCtrl.insertRegulation
-    // )
-    .put(
+    );
+
+router.route('/update')
+    .post(
         regulationCtrl.updateRegulation
-    )
+    );
 
 export default router;
