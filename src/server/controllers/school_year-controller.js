@@ -4,6 +4,7 @@ import QuyDinh from '../models/quydinh-model';
 import regulationCtrl from './regulation-controller';
 import subjectCtrl from './subject-controller';
 import classCtrl from './class-controller';
+import studentCtrl from './student-controller';
 
 
 function getSchoolYear(req, res) {
@@ -121,6 +122,7 @@ function changeSchoolYear(req, res) {
                             try {
                                 classCtrl.addClass(schoolYearID);
                                 subjectCtrl.addSubjects(schoolYearID);
+                                studentCtrl.updateForNewSchoolYear();
                                 t.commit();
 
                                 return res.status(200).json({
