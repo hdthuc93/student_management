@@ -1,8 +1,10 @@
 import { sequelize, Sequelize } from '../models/index';
 import DiemMH from '../models/diemmh-model';
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
+import HocSinh from '../models/hocsinh-model';
 import QuyDinh from '../models/quydinh-model';
 import MonHoc from '../models/monhoc-model';
+import commonObj from '../utilities/common_object';
 
 function addScores(req, res) {
     const len = req.body.listScores.length;
@@ -119,4 +121,32 @@ async function addSubjects(schoolYearID) {
     MonHoc.bulkCreate(arrIns);
 }
 
-export default { addScores, getScores, addSubjects };
+function getSubjects(req, res) {
+    MonHoc.findAll({ where: { maNamHoc: commonObj.schoolYearID } })
+    .then((result) => {
+        const len = result.length;
+
+        let objReturning = [];
+        for(let i = 0; i < len; ++i) {
+            objReturning[objReturning.length] = {
+                subjectID: result[i].monHoc_pkey,
+                subjectName: result[i].tenMonHoc,
+                schoolYearID: result[i].maNamHoc
+            }
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Get subject successfully",
+            datas: objReturning
+        });
+    })
+    .catch((err) => {
+        return res.status(500).json({
+            success: false,
+            message: "Failed to get subject"
+        });
+    });
+}
+
+export default { addScores, getScores, addSubjects, getSubjects };
