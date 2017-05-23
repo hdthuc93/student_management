@@ -5,6 +5,11 @@ import validation from '../middlewares/validation'
 
 const router = express.Router();
 
+router.route('/')
+    .get(
+        subjectCtrl.getSubjects
+    );
+
 router.route('/score')
     .get(
         subjectCtrl.getScores
