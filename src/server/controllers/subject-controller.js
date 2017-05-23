@@ -57,11 +57,12 @@ function getScores(req, res) {
             where: {
                 maHocSinh: Sequelize.col('AE_DIEM_MON_HOC.MA_HOC_SINH'),
                 maLopHoc: Sequelize.col('AE_DIEM_MON_HOC.MA_LOP_HOC')
-            }
+            },
+            required: true
         }]
     })
     .then((result) => {
-        
+        console.log(result.length);
         const len = result.length;
         let prevStudentID = -1;
         let objReturning = {};
@@ -74,12 +75,13 @@ function getScores(req, res) {
         }
 
         for(let i = 0; i < len; ++i) {
+            
             if(result[i].maHocSinh === prevStudentID) {
                 continue;
             }
-
             objReturning.listScores[objReturning.listScores.length] = {
                 studentID: result[i].maHocSinh,
+                studentName: '',
                 score1: result[i].diem_15phut,
                 score2: result[i].diem_1tiet,
                 score3: result[i].diemCuoiKy
@@ -88,11 +90,18 @@ function getScores(req, res) {
             prevStudentID = result[i].maHocSinh;
         }
 
-        return res.status(200).json({
-            success: true,
-            message: "Get score(s) successfully",
-            datas: objReturning
-        });
+        (async function (req, res, objReturning) {
+            for(let i = 0; i < objReturning.listScores.length; ++i) {
+                const resStudent = await HocSinh.findOne({ where: { hocSinh_pkey: objReturning.listScores[i].studentID } });
+                objReturning.listScores[i].studentName = resStudent.hoTen;
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Get score(s) successfully",
+                datas: objReturning
+            });
+        })(req, res, objReturning);
     })
     .catch((err) => {
         console.log(err);
