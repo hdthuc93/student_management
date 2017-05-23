@@ -7,12 +7,14 @@
       <div class="col-xs-12 no-padding">
         <button type="button" ng-disabled="!selectedRows" class="btn btn-primary btn-xs" ng-click="selectStudent()">
           <i class="fa fa-check"></i> Chọn</button>
+          <button type="button" class="pull-right btn btn-primary btn-xs" ng-click="loadStudentNotInClass()">
+          <i class="fa fa-refresh"></i> Tải lại danh sách</button>
       </div>
   </div>
-  <div id="studentList" ui-grid-selection ui-grid-resize-columns ui-grid="studentList" class="grid"></div>
+  <div id="studentList" ui-grid-selection ui-grid-resize-columns ui-grid="studentList" class="grid"><span ng-show="studentList.data.length==0" class="grid-status">{{studentListStatus}}</span></div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary btn-xs" ng-click="closeModal()">
-    <i class="fa fa-check"></i> Đóng</button>
+    <i class="fa fa-times"></i> Đóng</button>
 </div>
     

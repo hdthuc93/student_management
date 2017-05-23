@@ -101,7 +101,7 @@ module.factory('helper',['$uibModal','$interval',
 
     service.loadStudentNotInClass = function(options){
         var configs = {
-            templateUrl: "templates/popup_student_list.html",
+            templateUrl: "templates/popup_student_list_no_class.html",
             animation: true,
             controller: 'studentListNotInClassCtrl',
             appendTo: angular.element("#modal_area"),
@@ -117,62 +117,4 @@ module.factory('helper',['$uibModal','$interval',
     return service;
 }]);
 
-module.controller('studentListNotInClassCtrl', ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
-        $scope.selectedRows = null;
-        $scope.studentList = {
-            enableSorting: false,
-            enableRowSelection: true,
-            multiSelect:true,
-            enableColumnResizing: true,
-            selectionRowHeaderWidth: 35,
-            data: [{studentCode:"1111",name:"Phong Nguyen"},{studentCode:"2222",name:"Thuc Huynh"}],
-            columnDefs: [
-                { field: 'studentCode', displayName: 'Mã học sinh', minWidth: 110, maxWidth: 120  },
-                { field: 'name', displayName: 'Họ Tên', minWidth: 220 },
-                { field: 'gender', displayName: 'Giới', cellFilter: 'GenderToText', minWidth: 50, maxWidth: 70 },
-                { field: 'birthday', displayName: 'Ngày Sinh', minWidth: 100, maxWidth: 120},
-            ],
-            onRegisterApi: function (gridApi) {
-                $scope.gridApi = gridApi;
-                gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                    if (row.isSelected) {
-                        $scope.selectedRows = gridApi.selection.getSelectedRows();
-                    } else {
-                        $scope.selectedRows = null;
-                    }
-                });
-                gridApi.selection.on.rowSelectionChangedBatch($scope, function (gridData) {
-                    var rowsSelected = gridApi.selection.getSelectedRows();
-                    $scope.selectedRows = rowsSelected.length?rowsSelected:null;
-                });
-            }
-        };
-       $scope.selectStudent = function () {
-            //get student list
-            var callBack = {
-                title: "studentID",
-                data: $scope.selectedRows || null
-            }
-            $uibModalInstance.close(callBack);
-        };
 
-        $scope.closeModal = function(){
-            $uibModalInstance.close("");
-        }
-    }]);
-
-module.controller('popupCtrl', ['$scope', '$uibModalInstance', 'items', function ($scope, $uibModalInstance, items) {
-        $scope.Header = items.Header;
-        $scope.Message = items.Message;
-        $scope.Class = items.Class;
-        $scope.hideButton = items.hideButton;
-        $scope.ok = function () {
-            $uibModalInstance.close('ok');
-        };
-        $scope.cancel = function () {
-            $uibModalInstance.close('cancel');
-        };
-        $scope.close = function () {
-            $uibModalInstance.close('close');
-        };
-    }]);

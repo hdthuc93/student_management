@@ -13,9 +13,9 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
     $scope.classes = [];
 
     $scope.studentList = {
-        enableSorting: false,
+        enableSorting: true,
         enableRowSelection: true,
-        multiSelect:false,
+        multiSelect:true,
         enableColumnResizing: true,
         selectionRowHeaderWidth: 35,
         columnDefs: [
@@ -30,11 +30,14 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
-                if (row.isSelected) {
-                    $scope.selectedRow = row.entity;
-                } else {
-                    $scope.selectedRow = null;
-                }
+                var rowsSelected = gridApi.selection.getSelectedRows();
+                $scope.selectedStudents = rowsSelected.length?rowsSelected:null;
+                console.log("====",$scope.selectedStudents);
+            });
+            gridApi.selection.on.rowSelectionChangedBatch($scope, function (gridData) {
+                var rowsSelected = gridApi.selection.getSelectedRows();
+                $scope.selectedStudents = rowsSelected.length?rowsSelected:null;
+                console.log("====",$scope.selectedStudents);
             });
         }
     };
@@ -51,6 +54,7 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
                 $scope.grade = null;
                 $scope.class = null;
                 $scope.studentList.data = [];
+                $scope.selectedStudents = null;
             }else{
                 helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
             }
@@ -81,7 +85,7 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
             //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             method: 'GET',
             url: '/api/student_class',
-            params:{classID: $scope.class}
+            params:{classID: angular.fromJson($scope.class).classID}
         }).then(function successCallback(response) {
             if(response.data.success){
                 $scope.studentList.data = response.data.datas;
@@ -99,14 +103,75 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
             close: function (callBackStudent) {
                 if(callBackStudent&&callBackStudent.length){
                     console.log("return student ID", callBackStudent);
+                    var callBackData = callBackStudent;
+                    if(angular.fromJson($scope.class).maxNum < ($scope.studentList.data.length + callBackStudent.length - 40)){
+                        helper.popup.info({title: "Lỗi",
+                        message: "Số học sinh vừa thêm vào vượt quá quy định.",
+                        close: function () { $scope.openStudentList(); return;}})
+                    }
+                    var studentIDList = [];
+                    for(var i in callBackData){
+                        studentIDList.push(callBackData[i].studentID);
+                    }
+                    if(studentIDList.length){
+                        console.log(angular.fromJson($scope.class),88888888)
+                        addStudentToClass(studentIDList,angular.fromJson($scope.class).classID);
+                    }
                 }else{
-                    console.log("no student to select ID", callBackStudent);
                 }
             }
         })
     }
 
-    $scope.addStudentToClass = function(){
-        console.log(999999999)
+    function addStudentToClass(studentIDList,classID){
+        console.log("action add student to class");
+        $http.post('/api/student_class', {studentList : studentIDList, classID: classID}, {}).then(function successCallBack(res) {
+                helper.popup.info({
+                title: "Thông báo",
+                message:res.data.success? "Thêm học sinh thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
+                close: function () {
+                    return;
+                }
+            });
+            $scope.getStudentInClass();
+        }, function errorCallback() {
+            helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
+        });
+    }
+
+    $scope.removeStudentFromClass = function(){
+        var studentIDList = [];
+        console.log("select student to del",$scope.selectedStudents);
+        for(var i in $scope.selectedStudents){
+            console.log(77777,$scope.selectedStudents[i].studentID)
+            studentIDList.push($scope.selectedStudents[i].studentID);
+        }
+        var param = {
+            studentList: studentIDList,
+            classID: angular.fromJson($scope.class).classID
+        }
+
+        console.log("param    - - - - - -",param);
+        helper.popup.confirm({
+            title: "Xoá học sinh khỏi lớp",
+            message: "Bạn có thưc sự muốn xoá (những) học sinh này?",
+            ok: function () {
+                $http.post('/api/student_class/del', param).then(function successCallBack(res) {
+                    helper.popup.info({
+                        title: "Thông báo",
+                        message: res.data.success ? "Xoá học sinh thành công." : "Xoá thất bại. Vui lòng thử lại",
+                        close: function () {
+                            return;
+                        }
+                    });
+                    $scope.getStudentInClass();
+                }, function errorCallback() {
+                    helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
+                });
+            },
+            cancel: function () {
+                return;
+            }
+        })
     }
 }

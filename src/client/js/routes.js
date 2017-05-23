@@ -27,9 +27,9 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
                 url: '/report',
                 templateUrl: 'templates/report.html'
             })
-            .state('rule', {
-                url: '/rule',
-                templateUrl: 'templates/rule.html'
+            .state('regulation', {
+                url: '/regulation',
+                templateUrl: 'templates/regulation.html'
             })
             .state('schoolyear', {
                 url: '/schoolyear',

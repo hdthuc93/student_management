@@ -1,54 +1,49 @@
 /**
- * Rule Controller
+ * Regulation Controller
  */
 
 angular.module('RDash')
-    .controller('RuleCtrl', ['$scope','$http', RuleCtrl]);
+    .controller('RegulationCtrl', ['$scope','$http','helper', RuleCtrl]);
 
-function RuleCtrl($scope,$http) {
+function RuleCtrl($scope,$http,helper) {
     var minRowGrade = 5, minRowCourse = 9, rowHeight = 30;
+    $scope.futureSchoolyearID = "";
 
     function init(){
-            $scope.rule = {
-            grade10: [
-                {className: "10A1", maxQty: 40},
-                {className: "10A2", maxQty: 40},
-                {className: "10A3", maxQty: 40},
-                {className: "10A4", maxQty: 40}],
-            grade11: [
-                {className: "11A1", maxQty: 40},
-                {className: "11A2", maxQty: 40},
-                {className: "11A3", maxQty: 40}],
-            grade12: [
-                {className: "12A1", maxQty: 40},
-                {className: "12A2", maxQty: 40}],
-            course:[
-                {courseName: "Toán"},
-                {courseName: "Lý"},
-                {courseName: "Hóa"},
-                {courseName: "Sinh"},
-                {courseName: "Sử"},
-                {courseName: "Địa"},
-                {courseName: "Văn"},
-                {courseName: "Đạo đức"},
-                {courseName: "Thể dục"}],
+        $scope.reg = {
+            grade10: [],
+            grade11: [],
+            grade12: [],
+            course:[],
             minAge: 15,
             maxAge: 20,
             minScore: 5,
-            schoolYearID: ""
+            schoolYearID: "",
+            regulationID: ""
         }
 
+        initSlider($scope.reg.minAge,$scope.reg.maxAge);
+
+        $scope.selectedRowGrade10 = null;
+        $scope.selectedRowGrade11 = null;
+        $scope.selectedRowGrade12 = null;
+    }
+    init();
+
+    function initSlider(minAge, maxAge){
         $scope.slider = {
-            minValue: $scope.rule.minAge,
-            maxValue: $scope.rule.maxAge,
+            minValue: minAge,
+            maxValue: maxAge,
             options: {
                 floor: 4,
                 ceil: 50,
                 translate: function(value, sliderId, label) {
                     switch (label) {
                         case 'model':
+                        $scope.reg.minAge = value;
                         return '<b>Tuổi MIN:</b>'+ value;
                         case 'high':
+                        $scope.reg.maxAge = value;
                         return '<b>Tuổi MAX:</b>' + value;
                         default:
                         return  value
@@ -56,12 +51,7 @@ function RuleCtrl($scope,$http) {
                 }
             }
         };
-
-        $scope.selectedRowGrade10 = null;
-        $scope.selectedRowGrade11 = null;
-        $scope.selectedRowGrade12 = null;
     }
-    init();
 
     function getFutureSchoolYear(){
         $http({
@@ -77,8 +67,57 @@ function RuleCtrl($scope,$http) {
    }
     getFutureSchoolYear();
 
+    $scope.getRegulation = function(){
+        $http({
+            //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            method: 'GET',
+            type: 'application/json',
+            url: '/api/regulation',
+            params: {schoolYearID: $scope.futureSchoolyearID}
+        }).then(function successCallback(response) {
+            if(response.data.success){
+                $scope.reg = response.data.data;
+                $scope.grade10.data = $scope.reg.grade10;
+                $scope.grade11.data = $scope.reg.grade11;
+                $scope.grade12.data = $scope.reg.grade12;
+                $scope.course.data = $scope.reg.course;
+                initSlider($scope.reg.minAge,$scope.reg.maxAge);
+            }else{
+            }
+        });
+    }
+
+    $scope.save = function(){
+        console.log(77778888,$scope.reg);
+        var dataSave = {
+            grade10: $scope.reg.grade10,
+            grade11: $scope.reg.grade11,
+            grade12: $scope.reg.grade12,
+            course: $scope.reg.course,
+            minAge: $scope.reg.minAge,
+            maxAge: $scope.reg.maxAge,
+            minScore: $scope.reg.minScore,
+            schoolYearID: $scope.reg.schoolYearID,
+            regulationID: $scope.reg.regulationID,
+            regulationCode: $scope.reg.regulationCode
+        }
+        console.log("save",dataSave);
+
+        $http.post('/api/regulation/update', dataSave, {}).then(function successCallBack(res) {
+            helper.popup.info({
+                title: "Thông báo",
+                message:res.data.success? "Cập nhật thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
+                close: function () {
+                    return;
+                }
+            });
+        }, function errorCallback() {
+            helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
+        });
+    }
+
     $scope.grade10 = {
-        data: $scope.rule.grade10,
+        data: $scope.reg.grade10,
         minRowsToShow: minRowGrade,
         rowheight: rowHeight,
         enableSorting: false,
@@ -108,7 +147,7 @@ function RuleCtrl($scope,$http) {
             if (lastRecord.className.trim() === "" || !lastRecord.maxQty) {return;}
         }
         if (!data) { data = {};}
-        $scope.rule.grade10.push(
+        $scope.reg.grade10.push(
             {className: data.className || "",maxQty: data.maxQty || ""}
         )
     }
@@ -126,7 +165,7 @@ function RuleCtrl($scope,$http) {
     };
 
     $scope.grade11 = {
-        data: $scope.rule.grade11,
+        data: $scope.reg.grade11,
         minRowsToShow: minRowGrade,
         rowheight: rowHeight,
         enableSorting: false,
@@ -135,8 +174,8 @@ function RuleCtrl($scope,$http) {
         enableColumnResizing: true,
         selectionRowHeaderWidth: 35,
         columnDefs: [
-            { field: 'className', displayName: 'Tên Lớp', minWidth: 100  },
-            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', minWidth: 70  }
+            { field: 'className', displayName: 'Tên Lớp', type: 'text', minWidth: 100  },
+            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', type: 'number', minWidth: 70  }
         ],
         onRegisterApi: function (gridApi) {
              gridApi.selection.on.rowSelectionChanged($scope, function (row) {
@@ -156,7 +195,7 @@ function RuleCtrl($scope,$http) {
             if (lastRecord.className.trim() === "" || !lastRecord.maxQty) {return;}
         }
         if (!data) { data = {};}
-        $scope.rule.grade11.push(
+        $scope.reg.grade11.push(
             {className: data.className || "",maxQty: data.maxQty || ""}
         )
     }
@@ -174,7 +213,7 @@ function RuleCtrl($scope,$http) {
     };
 
     $scope.grade12 = {
-        data: $scope.rule.grade12,
+        data: $scope.reg.grade12,
         minRowsToShow: minRowGrade,
         rowheight: rowHeight,
         enableSorting: false,
@@ -183,8 +222,8 @@ function RuleCtrl($scope,$http) {
         enableColumnResizing: true,
         selectionRowHeaderWidth: 35,
         columnDefs: [
-            { field: 'className', displayName: 'Tên Lớp', minWidth: 100  },
-            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', minWidth: 70  }
+            { field: 'className', displayName: 'Tên Lớp', type: 'text', minWidth: 100  },
+            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', type: 'number', minWidth: 70  }
         ],
         onRegisterApi: function (gridApi) {
              gridApi.selection.on.rowSelectionChanged($scope, function (row) {
@@ -204,7 +243,7 @@ function RuleCtrl($scope,$http) {
             if (lastRecord.className.trim() === "" || !lastRecord.maxQty) {return;}
         }
         if (!data) { data = {};}
-        $scope.rule.grade12.push(
+        $scope.reg.grade12.push(
             {className: data.className || "",maxQty: data.maxQty || ""}
         )
     }
@@ -222,7 +261,7 @@ function RuleCtrl($scope,$http) {
     };
 
     $scope.course = {
-        data: $scope.rule.course,
+        data: $scope.reg.course,
         minRowsToShow: minRowCourse,
         rowheight: rowHeight,
         enableSorting: false,
@@ -231,7 +270,7 @@ function RuleCtrl($scope,$http) {
         enableColumnResizing: true,
         selectionRowHeaderWidth: 35,
         columnDefs: [
-            { field: 'courseName', displayName: 'Môn Học', minWidth: 130  }
+            { field: 'courseName', displayName: 'Môn Học', type: 'text', minWidth: 130  }
         ],
         onRegisterApi: function (gridApi) {
              gridApi.selection.on.rowSelectionChanged($scope, function (row) {
@@ -251,7 +290,7 @@ function RuleCtrl($scope,$http) {
             if (lastRecord.courseName.trim() === "" ) {return;}
         }
         if (!data) { data = {};}
-        $scope.rule.course.unshift(
+        $scope.reg.course.unshift(
             {courseName: data.courseName || ""}
         )
     }
@@ -268,10 +307,5 @@ function RuleCtrl($scope,$http) {
         }
     };
     
-    $scope.save = function(){
-        console.log(77778888,$scope.rule);
-        //khoi 10: string
-        
-    }
 
 }

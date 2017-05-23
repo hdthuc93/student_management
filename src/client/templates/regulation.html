@@ -1,4 +1,4 @@
-<div class="row" ng-controller="RuleCtrl">
+<div class="row" ng-controller="RegulationCtrl">
   <div class="col-lg-12">
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -6,13 +6,13 @@
       </div>
       <div class="panel-body notification-area">
         <div class="container-fluid">
-          <form role="form" name="rule_form" id="rule">
+          <form role="form" name="reg_form" id="reg">
             <div class="row form-horizontal">
               <div class="col-md-4 col-sm-6">
                 <div class="form-group">
                   <label class="control-label input-sm col-xs-3 text-left" style="min-width: 70px">Năm học:</label>
                   <div class=" col-xs-6">
-                    <select ng-model="rule.schoolYearID" class="form-control input-sm">
+                    <select ng-model="futureSchoolyearID" ng-change="getRegulation()" class="form-control input-sm">
                           <option value="" ng-selected="1">Chọn năm học</option> 
                           <option ng-repeat="future in futureSchoolYear" value="{{future.schoolYearID}}">{{future.schoolYearName}}</option>                             
                     </select>
@@ -34,7 +34,7 @@
                 <div class="col-xs-12 bold">Khối 10 ({{grade10.data.length}} lớp)</div>
                 <div class="col-xs-12">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-xs" ng-click="addRowGrade10()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
+                    <button ng-disabled="!reg.regulationID" type="button" class="btn btn-primary btn-xs" ng-click="addRowGrade10()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
                     <button type="button" class="btn btn-primary btn-xs" ng-click="deleteRowGrade10()" ng-disabled="!selectedRowGrade10"><i class="fa fa-times"></i> Xoá</button>
                   </div>
                 </div>
@@ -46,7 +46,7 @@
                 <div class="col-xs-12">Khối 11 ({{grade11.data.length}} lớp)</div>
                 <div class="col-xs-12">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-xs" ng-click="addRowGrade11()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
+                    <button ng-disabled="!reg.regulationID" type="button" class="btn btn-primary btn-xs" ng-click="addRowGrade11()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
                     <button type="button" class="btn btn-primary btn-xs" ng-click="deleteRowGrade11()" ng-disabled="!selectedRowGrade11"><i class="fa fa-times"></i> Xoá</button>
                   </div>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="col-xs-12">Khối 12 ({{grade12.data.length}} lớp)</div>
                 <div class="col-xs-12">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-primary btn-xs" ng-click="addRowGrade12()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
+                    <button ng-disabled="!reg.regulationID" type="button" class="btn btn-primary btn-xs" ng-click="addRowGrade12()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
                     <button type="button" class="btn btn-primary btn-xs" ng-click="deleteRowGrade12()" ng-disabled="!selectedRowGrade12"><i class="fa fa-times"></i> Xoá</button>
                   </div>
                 </div>
@@ -74,12 +74,12 @@
                 </div>
                 <div class="col-xs-12">
                   <div class="btn-group col-xs-6 no-padding">
-                    <button type="button" class="btn btn-primary btn-xs" ng-click="addRowCourse()"><i class="fa fa-plus-circle"></i> Thêm lớp</button>
+                    <button ng-disabled="!reg.regulationID" type="button" class="btn btn-primary btn-xs" ng-click="addRowCourse()"><i class="fa fa-plus-circle"></i> Thêm môn học</button>
                     <button type="button" class="btn btn-primary btn-xs" ng-click="deleteRowCourse()" ng-disabled="!selectedRowCourse"><i class="fa fa-times"></i> Xoá</button>
                   </div>
                   <label class="control-label input-sm col-xs-4">Điểm chuẩn:</label>
                   <div class="col-xs-2 col-sm-2 no-padding" style="min-width: 30px">
-                    <input ng-model="rule.minScore" type="number" class="form-control input-sm">
+                    <input ng-model="reg.minScore" type="number" class="form-control input-sm">
                   </div>
                 </div>
                 <div class="col-xs-12" style="margin-top: 10px">
@@ -87,7 +87,7 @@
                 </div>
               </div>
               <div class="col-md-6 col-sm-12" style="margin-top: 15px;">
-                  <button type="button" class="btn btn-primary btn-xs" ng-click="save()"><i class="fa fa-floppy-o"></i> Lưu lại</button>
+                  <button ng-disabled="!reg.regulationID" type="button" class="btn btn-primary btn-xs" ng-click="save()"><i class="fa fa-floppy-o"></i> Cập nhật quy định</button>
               </div>
             </div>
           </form>

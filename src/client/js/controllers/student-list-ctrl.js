@@ -37,12 +37,13 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
         selectionRowHeaderWidth: 35,
         columnDefs: [
             { field: 'no', displayName: 'STT', minWidth: 50, maxWidth: 70 },
-            { field: 'studentCode', displayName: 'Mã Học Sinh', minWidth: 110, maxWidth: 140 },
+            { field: 'className', displayName: 'Lớp', minWidth: 50, maxWidth: 70 },
+            { field: 'studentCode', displayName: 'Mã Học Sinh', minWidth: 100, maxWidth: 120 },
             { field: 'name', displayName: 'Họ Tên', minWidth: 250 },
             { field: 'gender', displayName: 'Giới', cellFilter: 'GenderToText', minWidth: 50, maxWidth: 70 },
             { field: 'birthday', displayName: 'Ngày Sinh', minWidth: 110, maxWidth: 120 },
-            { field: 'email', displayName: 'Email', minWidth: 220 },
-            { field: 'address', displayName: 'Địa Chỉ', minWidth: 350 }
+            { field: 'address', displayName: 'Địa Chỉ', minWidth: 350 },
+            { field: 'email', displayName: 'Email', minWidth: 220 }
         ],
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
@@ -124,10 +125,10 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
                         title: "Thông báo",
                         message: res.data.success ? "Xoá học sinh thành công." : "Xoá thất bại. Vui lòng thử lại",
                         close: function () {
-                            $scope.reset();
                             return;
                         }
                     });
+                    $scope.reset();
                 }, function errorCallback() {
                     helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
                 });
