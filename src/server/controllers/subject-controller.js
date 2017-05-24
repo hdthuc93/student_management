@@ -16,9 +16,9 @@ function addScores(req, res) {
                 maHocKy: req.body.semesterID,
                 maLopHoc: req.body.classID,
                 maHocSinh: req.body.listScores[i].studentID,
-                diem_15phut: req.body.listScores[i].score1 || 15,
-                diem_1tiet: req.body.listScores[i].score2 || 15,
-                diemCuoiKy: req.body.listScores[i].score3 || 15
+                diem_15phut: req.body.listScores[i].score1,
+                diem_1tiet: req.body.listScores[i].score2,
+                diemCuoiKy: req.body.listScores[i].score3
             };
         }
     } catch(ex) {
@@ -47,74 +47,104 @@ function addScores(req, res) {
     });
 }
 
+async function addAllSubjectInClass(classID, studentList) {
+    let subjectList = await MonHoc.findAll({ where: { maNamHoc: commonObj.schoolYearID } });
+
+    for(let i = 0; i < subjectList.length; ++i) {
+        for(let j = 0; j < studentList.length; ++j) {
+            try {
+                await DiemMH.create({
+                    maMonHoc: subjectList[i].monHoc_pkey,
+                    maHocKy: 1,
+                    maLopHoc: classID,
+                    maHocSinh: studentList[j]
+                });
+
+                await DiemMH.create({
+                    maMonHoc: subjectList[i].monHoc_pkey,
+                    maHocKy: 2,
+                    maLopHoc: classID,
+                    maHocSinh: studentList[j]
+                })
+            } catch(ex) {
+                console.log(ex);
+                continue;
+            }
+        }
+    }
+}
+
 function getScores(req, res) {
     const reqParams = {
-        maHocKy: req.query.semesterID,
-        maLopHoc: req.query.classID
+        maHocKy: req.query.semesterID || 'DIEM.MA_HOC_KI',
+        maLopHoc: req.query.classID || 'HS_LOP.MA_LOP_HOC',
+        maMonHoc: req.query.subjectID || 'MH.MON_HOC_PKEY',
+        maHocSinh: req.query.studentID || 'HS.HOC_SINH_PKEY'
     }
 
-    if(req.query.subjectID)
-        reqParams.maMonHoc = req.query.subjectID;
+    let queryStr = `SELECT HS.HOC_SINH_PKEY as studentID,
+                            HS.HO_TEN as studentName,
+                            HS_LOP.MA_LOP_HOC as classID,
+                            MH.MON_HOC_PKEY as subjectID,
+                            MH.TEN_MON_HOC as subjectName,
+                            DIEM.MA_HOC_KI as semesterID,
+                            DIEM.DIEM_15_PHUT as score1,
+                            DIEM.DIEM_1_TIET as score2,
+                            DIEM.DIEM_CUOI_KI as score3,
+                            DIEM.TONG_DIEM as totalScore
+                    FROM AE_HOC_SINH as HS, HOCSINH_LOPHOC as HS_LOP, AE_DIEM_MON_HOC as DIEM, M_MON_HOC as MH
+                    WHERE HS_LOP.MA_HOC_SINH = DIEM.MA_HOC_SINH AND
+                            HS_LOP.MA_LOP_HOC = DIEM.MA_LOP_HOC AND
+                            HS.HOC_SINH_PKEY = HS_LOP.MA_HOC_SINH AND
+                            DIEM.MA_MON_HOC = MH.MON_HOC_PKEY AND
+                            DIEM.MA_HOC_KI = ${reqParams.maHocKy} AND
+                            HS_LOP.MA_LOP_HOC = ${reqParams.maLopHoc} AND
+                            HS.HOC_SINH_PKEY = ${reqParams.maHocSinh} AND 
+                            MH.MON_HOC_PKEY = ${reqParams.maMonHoc}
+                    ORDER BY MH.MON_HOC_PKEY ASC;`;
+    
+    sequelize.query(queryStr)
+    .spread((results, metadata) => {
+        const len = results.length;
+        let prevSubjectID = -1;
 
-    if(req.query.studentID)
-        reqParams.maHocSinh = req.query.studentID;
-
-    DiemMH.findAll({
-        where: reqParams,
-        include:[{
-            model: HocSinh_LopHoc,
-            attributes: [],
-            where: {
-                maHocSinh: Sequelize.col('AE_DIEM_MON_HOC.MA_HOC_SINH'),
-                maLopHoc: Sequelize.col('AE_DIEM_MON_HOC.MA_LOP_HOC')
-            },
-            required: true
-        }]
-    })
-    .then((result) => {
-        const len = result.length;
-        let prevStudentID = -1;
-        let objReturning = {};
-
-        objReturning = {
-            semesterID: Number(reqParams.maHocKy),
-            classID: Number(reqParams.maLopHoc),
-            listScores: []
+        let objReturning = {
+            semesterID: Number(req.query.semesterID),
+            classID: Number(req.query.classID),
+            list: []
         }
 
         for(let i = 0; i < len; ++i) {
-            
-            if(result[i].maHocSinh === prevStudentID) {
-                continue;
+            let lenList = objReturning.list.length;
+            let studentInfo = {
+                studentID: results[i].studentID,
+                studentName: results[i].studentName,
+                score1: results[i].score1 || -1,
+                score2: results[i].score2 || -1,
+                score3: results[i].score3 || -1,
+                totalScore: results[i].totalScore || -1
             }
-            objReturning.listScores[objReturning.listScores.length] = {
-                studentID: result[i].maHocSinh,
-                studentName: '',
-                subjectID: result[i].maMonHoc,
-                subjectName: '',
-                score1: result[i].diem_15phut,
-                score2: result[i].diem_1tiet,
-                score3: result[i].diemCuoiKy,
-                totalScore: result[i].tongDiem || 15
 
+            if(prevSubjectID == results[i].subjectID) {
+                let lenListScores = objReturning.list[lenList - 1].listScores.length;
+
+                objReturning.list[lenList - 1].listScores[lenListScores] = studentInfo;
+            } else {
+                objReturning.list[lenList] = {
+                    subjectID: results[i].subjectID,
+                    subjectName: results[i].subjectName,
+                    listScores: [ studentInfo ]
+                }
             }
-            prevStudentID = result[i].maHocSinh;
+
+            prevSubjectID = results[i].subjectID;
         }
 
-        (async function (req, res, objReturning) {
-            for(let i = 0; i < objReturning.listScores.length; ++i) {
-                const resStudent = await HocSinh.findOne({ where: { hocSinh_pkey: objReturning.listScores[i].studentID } });
-                const resSubject = await MonHoc.findOne({ where: { monHoc_pkey: objReturning.listScores[i].subjectID }});
-                objReturning.listScores[i].studentName = resStudent.hoTen;
-                objReturning.listScores[i].subjectName = resSubject.tenMonHoc;
-            }
-
-            return res.status(200).json({
-                success: true,
-                message: "Get score(s) successfully",
-                datas: objReturning
-            });
-        })(req, res, objReturning);
+        return res.status(200).json({
+            success: true,
+            message: "Get score(s) successfully",
+            datas: objReturning
+        });
     })
     .catch((err) => {
         console.log(err);
@@ -122,7 +152,7 @@ function getScores(req, res) {
             success: false,
             message: "Failed to get score(s)"
         });
-    })
+    });
 }
 
 async function addSubjects(schoolYearID) {
@@ -249,4 +279,4 @@ function summary(req, res) {
     })
 }
 
-export default { addScores, getScores, addSubjects, getSubjects, summary };
+export default { addScores, getScores, addSubjects, getSubjects, summary, addAllSubjectInClass };

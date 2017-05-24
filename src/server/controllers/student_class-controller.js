@@ -2,6 +2,7 @@ import { sequelize, Sequelize } from '../models/index';
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
 import HocSinh from '../models/hocsinh-model';
 import LopHoc from '../models/lophoc-model';
+import subjectCtrl from './subject-controller';
 import { changeToDDMMYYYY } from '../utilities/date_times';
 
 async function canAdd(studentList, classID) {
@@ -46,7 +47,9 @@ async function addStuInClass(req, res) {
                 siSo: sequelize.literal('siSo + ' + len)
             }, { 
                 where: { maLop_pkey: classID }
-            })
+            });
+
+            subjectCtrl.addAllSubjectInClass(classID, studentList);
             
         } catch(ex) {
             console.log(ex);
