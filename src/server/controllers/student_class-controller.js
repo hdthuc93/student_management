@@ -38,6 +38,13 @@ async function addStuInClass(req, res) {
                     where: { hocSinh_pkey: studentList[i] }
                 });
             }
+
+            LopHoc.update({
+                siSo: sequelize.literal('siSo + ' + len)
+            }, { 
+                where: { maLop_pkey: result.maLopHoc }
+            })
+            
         } catch(ex) {
             console.log(ex);
             return res.status(500).json({

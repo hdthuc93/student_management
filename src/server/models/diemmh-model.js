@@ -30,17 +30,14 @@ const DiemMH = sequelize.define('AE_DIEM_MON_HOC', {
     },
     diem_15phut: {
         type: Sequelize.DECIMAL(4, 2),
-        notNull: true,
         field: 'DIEM_15_PHUT'
     },
     diem_1tiet: {
         type: Sequelize.DECIMAL(4, 2),
-        notNull: true,
         field: 'DIEM_1_TIET'
     },
     diemCuoiKy: {
         type: Sequelize.DECIMAL(4, 2),
-        notNull: true,
         field: 'DIEM_CUOI_KI'
     },
     tongDiem: {

@@ -18,5 +18,9 @@ router.route('/score')
         subjectCtrl.addScores
     );
 
+router.route('/summary')
+    .post(
+        subjectCtrl.summary
+    )
 
 export default router;

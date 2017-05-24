@@ -16,6 +16,18 @@ const HocSinh_LopHoc = sequelize.define('HOCSINH_LOPHOC', {
         notNull: true,
         field: 'MA_LOP_HOC'
     },
+    tongHK1: {
+        type: Sequelize.DECIMAL(4, 2),
+        field: 'TONG_HK1'
+    },
+    tongHK2: {
+        type: Sequelize.DECIMAL(4, 2),
+        field: 'TONG_HK2'
+    },
+    tongCaNam: {
+        type: Sequelize.DECIMAL(4, 2),
+        field: 'TONG_CA_NAM'
+    },
     passed: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
