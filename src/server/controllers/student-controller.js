@@ -3,7 +3,7 @@ import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
 import LopHoc from '../models/lophoc-model';
 import Khoi from '../models/khoi-model';
 import NamHoc from '../models/namhoc-model';
-import { Sequelize } from '../models/index';
+import { sequelize, Sequelize } from '../models/index';
 import { generateStudentID } from '../utilities/id_generates';
 import { changeToYYYYMMDD, changeToDDMMYYYY } from '../utilities/date_times';
 import commonObj from '../utilities/common_object';
@@ -51,6 +51,9 @@ function getReqOptionParams(req) {
     if(req.query.inClass)
         objReq.inClass = req.query.inClass;
 
+    if(req.query.classLevel)
+        objReq.trinhDo = req.query.classLevel;
+
     if(req.query.name)
         objReq.hoTen = { $like: '%' + req.query.name + '%' }
 
@@ -80,7 +83,8 @@ function createStu(req, res) {
                 gioiTinh: req.body.gender,
                 diaChi: req.body.address,
                 email: req.body.email,
-                namNhapHoc: req.body.schoolYearID
+                namNhapHoc: req.body.schoolYearID,
+                trinhDo: req.body.classLevel || 1
             });
     })
     .then((student) => {
@@ -245,6 +249,7 @@ function getClassForStudent(req, res, result, index, objReturning) {
                 gender: result[index].gioiTinh,
                 address: result[index].diaChi,
                 email: result[index].email,
+                classLevel: result[index].trinhDo,
                 yearAdmission: result[index].namNhapHoc,
                 yearAdmissionName: result[index]['M_NAM_HOC'].tenNamHoc,
                 inClass: result[index].inClass,
@@ -272,6 +277,7 @@ function getClassForStudent(req, res, result, index, objReturning) {
             gender: result[index].gioiTinh,
             address: result[index].diaChi,
             email: result[index].email,
+            classLevel: result[index].trinhDo,
             yearAdmission: result[index].namNhapHoc,
             yearAdmissionName: result[index]['M_NAM_HOC'].tenNamHoc,
             inClass: result[index].inClass,

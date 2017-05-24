@@ -57,6 +57,11 @@ const HocSinh = sequelize.define('AE_HOC_SINH', {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
         field: 'IN_CLASS'
+    },
+    trinhDo: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1,
+        field: 'TRINH_DO'
     }
 });
 

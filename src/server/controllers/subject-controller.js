@@ -224,6 +224,13 @@ function summary(req, res) {
                             maHocSinh: result[i].maHocSinh
                         }
                     });
+
+                    if(passed)
+                        await HocSinh.update({ trinhDo: sequelize.literal('trinhDo + 1') }, {
+                            where: {
+                                hocSinh_pkey: result[i].maHocSinh
+                            }
+                        });
                 }
             }
         })
