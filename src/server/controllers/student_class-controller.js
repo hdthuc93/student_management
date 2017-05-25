@@ -2,6 +2,7 @@ import { sequelize, Sequelize } from '../models/index';
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
 import HocSinh from '../models/hocsinh-model';
 import LopHoc from '../models/lophoc-model';
+import DiemMH from '../models/diemmh-model';
 import subjectCtrl from './subject-controller';
 import { changeToDDMMYYYY } from '../utilities/date_times';
 
@@ -89,11 +90,19 @@ function delStudents(res, studentList, index, classID) {
         }})
         .then((result) => {
             if(result) {
-                HocSinh_LopHoc.destroy({ 
+                DiemMH.destroy({
                     where: {
                         maHocSinh: result.maHocSinh,
                         maLopHoc: result.maLopHoc
                     }
+                })
+                .then((result) => {
+                    return HocSinh_LopHoc.destroy({ 
+                        where: {
+                            maHocSinh: result.maHocSinh,
+                            maLopHoc: result.maLopHoc
+                        }
+                    })
                 })
                 .then((rows) => {
                     if(rows > 0) {
