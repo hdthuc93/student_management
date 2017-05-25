@@ -7,9 +7,9 @@ import MonHoc from '../models/monhoc-model';
 import commonObj from '../utilities/common_object';
 
 function addScores(req, res) {
+    let upsertArr = [];
     try{
         const len = req.body.listScores.length;
-        let upsertArr = [];
         for(let i = 0; i < len; ++i) {
             upsertArr[i] = {
                 maMonHoc: req.body.subjectID,
