@@ -99,8 +99,8 @@ function delStudents(res, studentList, index, classID) {
                 .then((result) => {
                     return HocSinh_LopHoc.destroy({ 
                         where: {
-                            maHocSinh: result.maHocSinh,
-                            maLopHoc: result.maLopHoc
+                            maHocSinh: studentList[index],
+                            maLopHoc: classID
                         }
                     })
                 })
