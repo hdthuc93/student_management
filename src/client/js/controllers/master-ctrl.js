@@ -29,14 +29,6 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
         }
     });
 
-    //$scope.selectedSchoolYear = {};
-    // $scope.$watch("selectedSchoolYear",function(year){
-    //     console.log(8989,year);
-    //     $rootScope.masterSelectedschoolYear = angular.fromJson(year);
-    //     console.log("current school year ",$rootScope.masterSelectedschoolYear)
-    //     $rootScope.$broadcast('change-school-year');
-    // });
-
     $scope.toggleSidebar = function() {
         $scope.toggle = !$scope.toggle;
         $cookieStore.put('toggle', $scope.toggle);
@@ -46,27 +38,21 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
         $scope.$apply();
     };
 
-    $rootScope.masterSchoolYear = [];
-    function getSchoolYear(){
+    $rootScope.masterRegulation = [];
+    function getRegulation(){
         $http({
-            //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             method: 'GET',
-            url: '/api/school_year',
+            url: '/api/regulation',
         }).then(function successCallback(response) {
             if(response.data.success){
-                $rootScope.masterSchoolYear = response.data.data
-                for(var i in $rootScope.masterSchoolYear){
-                    if($rootScope.masterSchoolYear[i].status == "1"){
-                        $rootScope.masterSelectedschoolYear  = $rootScope.masterSchoolYear[i];
-                        break;
-                    }
-                }
+                console.log("master regulation",response.data.data)
+                $rootScope.masterRegulation = response.data.data;
             }else{
                 helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
             }
         });
     }
-    getSchoolYear();
+    getRegulation();
      
      
 }

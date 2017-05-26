@@ -17,7 +17,6 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             //UPDATE
             console.log("UPDATE");
             $scope.title = "Cập nhật học sinh";
-            $scope.masterSchoolYear = $rootScope.masterSchoolYear;
             $scope.data = {};
             angular.extend($scope.data, $scope.studentData.data);
             if(!$scope.data.className){
@@ -26,13 +25,6 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
 
             if(!$scope.data.prevClassesString){
                 $scope.data.prevClassesString = "Chưa có";
-            }
-            for(var i in $rootScope.masterSchoolYear){
-                if($scope.data.yearAdmission&&$rootScope.masterSchoolYear[i]&&
-                  $scope.data.yearAdmission==$rootScope.masterSchoolYear[i].schoolYearID){
-                    $scope.data.yearAdmission = $rootScope.masterSchoolYear[i].schoolYearName;
-                    break;
-                }
             }
         }
         if (newValue !== oldValue && Object.keys(newValue.data).length > 0 && newValue.action == "view") {
@@ -46,15 +38,6 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             }
             if(!$scope.data.prevClassesString){
                 $scope.data.prevClassesString = "Chưa có";
-            }
-            for(var i in $rootScope.masterSchoolYear){
-                console.log(7777,$scope.data.yearAdmission&&$rootScope.masterSchoolYear[i]&&
-                  $scope.data.yearAdmission==$rootScope.masterSchoolYear[i].schoolYearID)
-                if($scope.data.yearAdmission&&$rootScope.masterSchoolYear[i]&&
-                  $scope.data.yearAdmission==$rootScope.masterSchoolYear[i].schoolYearID){
-                    $scope.data.yearAdmission = $rootScope.masterSchoolYear[i].schoolYearName;
-                    break;
-                }
             }
         }
         if (newValue.action == "create") {
