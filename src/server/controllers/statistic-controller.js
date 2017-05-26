@@ -8,13 +8,13 @@ import commonObj from '../utilities/common_object';
 
 function createSubjectStatistic(subjectID, semesterID) {
 
-    let inputData[0] = {
+    let inputData = [{
         maMonHoc: subjectID,
         maHocKy: semesterID,
         siSo: 0,
         slDat: 0,
         tyLe: 0,
-    }
+    }];
 
     DiemMH.findAndCountAll({ 
         where: {
