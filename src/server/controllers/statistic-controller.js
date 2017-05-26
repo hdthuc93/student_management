@@ -6,9 +6,7 @@ import MonHoc from '../models/monhoc-model';
 import HocSinh_LopHoc from '../models/hocsinh_lophoc-model';
 import commonObj from '../utilities/common_object';
 
-function createSubjectStatistic() {
-    const subjectID = '';
-    const semesterID = '';
+function createSubjectStatistic(subjectID, semesterID) {
 
     let inputData[0] = {
         maMonHoc: subjectID,
@@ -38,10 +36,12 @@ function createSubjectStatistic() {
         })
     })
     .then((result) => {
-
+        console.log(result);
+        return true;
     })
     .catch((err) => {
-
+        console.log(err);
+        return false;
     })
 }
 
@@ -65,24 +65,33 @@ function getSubjectStatistic(req, res) {
     .then((results) => {
         
         let len = results.length;
-        if(len > 0)
+        if(len > 0) {
             objReturning.subjectName = result[0]['M_MON_HOC'].tenMonHoc;
 
-        objReturning.list = [];
-        for(let i = 0; i < len; ++i) {
-            objReturning.list[objReturning.list.length] = {
-                classID: result[i].maLopHoc,
-                numOfStudents: result[i].siSo,
-                numOfPass: result[i].slDat,
-                ratio: result[i].tyLe
+            objReturning.list = [];
+            for(let i = 0; i < len; ++i) {
+                objReturning.list[objReturning.list.length] = {
+                    classID: result[i].maLopHoc,
+                    numOfStudents: result[i].siSo,
+                    numOfPass: result[i].slDat,
+                    ratio: result[i].tyLe
+                }
             }
-        }
 
-        return res.status(200).json({
-            success: true,
-            message: "Get subject statistic successfully",
-            data: objReturning
-        });
+            return res.status(200).json({
+                success: true,
+                message: "Get subject statistic successfully",
+                data: objReturning
+            });
+        } else {
+            createSubjectStatistic(subjectID, semesterID)
+            .then((result) => {
+                if(result)
+                    getSubjectStatistic(req, res);
+                else
+                    throw new Error("Something wrong when create subject statistic");
+            })
+        }
     })
     .catch((err) => {
         return res.status(500).json({
@@ -92,47 +101,48 @@ function getSubjectStatistic(req, res) {
     })
 }
 
-function createSemesterStatistic() {
-    const classID = '';
-    const semesterID = '';
+async function createSemesterStatistic(semesterID) {
+    let classList = await LopHoc.findAll({
+        where: { maNamHoc: commonObj.schoolYearID }
+    });
+    let inputData = [];
+    for(let i = 0; i < classList.length; ++i) {
+        inputData[i] = {
+            maLopHoc: classList[i].maLop_pkey,
+            maHocKy: semesterID,
+            siSo: 0,
+            slDat: 0,
+            tyLe: 0,
+        }
 
-    let inputData[0] = {
-        maLopHoc: classID,
-        maHocKy: semesterID,
-        siSo: 0,
-        slDat: 0,
-        tyLe: 0,
+        let objCondition = {
+            maLopHoc: classID,
+        }
+
+        if(semesterID == 1)
+            objCondition.tongHK1 = { $gte: commonObj.minScore };
+        else
+            objCondition.tongHK2 = { $gte: commonObj.minScore };
+
+        let hs_lopResult = await HocSinh_LopHoc.findAndCountAll({ 
+            where: objCondition
+        });
+       
+        inputData[i].slDat = hs_lopResult.count;
+        let lopHocResult = await LopHoc.findOne({ where: { maLop_pkey: classList[i].maLop_pkey } });
+        inputData[i].siSo = lopHocResult.siSo;
+        inputData[i].tyLe = inputData[i].slDat / inputData[i].siSo;
     }
 
-    let objCondition = {
-        maLopHoc: classID,
-    }
-
-    if(semesterID == 1)
-        objCondition.tongHK1 = { $gte: commonObj.minScore };
-    else
-        objCondition.tongHK2 = { $gte: commonObj.minScore };
-
-    HocSinh_LopHoc.findAndCountAll({ 
-        where: objCondition
-    })
-    .then((result) => { 
-        inputData[0].slDat = result.count;
-        return LopHoc.findOne({ where: { maLop_pkey: classID } })
+    return ThongKeHK.bulkCreate(inputData, {
+        updateOnDuplicate: ['siSo', 'slDat', 'tyLe']
     })
     .then((result) => {
-        inputData[0].siSo = result.siSo;
-        inputData[0].tyLe = inputData[0].slDat / inputData[0].siSo;
-
-        return ThongKeHK.bulkCreate(inputData, {
-            updateOnDuplicate: ['siSo', 'slDat', 'tyLe']
-        })
-    })
-    .then((result) => {
-
+        console.log(result);
+        return true;
     })
     .catch((err) => {
-        
+        return false;
     })
 }
 
@@ -145,28 +155,43 @@ function getSemesterStatistic(req, res) {
 
     ThongKeHK.findAll({
         where: {
-            maMonHoc: subjectID,
             maHocKy: semesterID
-        }
+        },
+        include: [{
+            model: LopHoc,
+            where: {
+                maNamHoc: commonObj.schoolYearID
+            }
+        }]
     })
     .then((results) => {
         let len = results.length;
 
-        objReturning.list = [];
-        for(let i = 0; i < len; ++i) {
-            objReturning.list[objReturning.list.length] = {
-                classID: result[i].maLopHoc,
-                numOfStudents: result[i].siSo,
-                numOfPass: result[i].slDat,
-                ratio: result[i].tyLe
+        if(len > 0) {
+            objReturning.list = [];
+            for(let i = 0; i < len; ++i) {
+                objReturning.list[objReturning.list.length] = {
+                    classID: result[i].maLopHoc,
+                    numOfStudents: result[i].siSo,
+                    numOfPass: result[i].slDat,
+                    ratio: result[i].tyLe
+                }
             }
-        }
 
-        return res.status(200).json({
-            success: true,
-            message: "Get semester statistic successfully",
-            data: objReturning
-        });
+            return res.status(200).json({
+                success: true,
+                message: "Get semester statistic successfully",
+                data: objReturning
+            });
+        } else {
+            createSemesterStatistic(semesterID)
+            .then((result) => {
+                if(result)
+                    getSemesterStatistic(req, res);
+                else
+                    throw new Error("Something wrong when create semester statistic");
+            });
+        }
     })
     .catch((err) => {
         return res.status(500).json({
