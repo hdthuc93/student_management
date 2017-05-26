@@ -156,8 +156,12 @@ function getStuInClass(req, res) {
                 name: result[i]['AE_HOC_SINH'].hoTen,
                 birthday: changeToDDMMYYYY(result[i]['AE_HOC_SINH'].ngaySinh),
                 gender: result[i]['AE_HOC_SINH'].gioiTinh,
+                average1: result[i].tongHK1 || '',
+                average2: result[i].tongHK2 || '',
+                average: result[i].tongCaNam || '',
                 address: result[i]['AE_HOC_SINH'].diaChi,
                 email: result[i]['AE_HOC_SINH'].email,
+
                 schoolYearID: result[i]['AE_HOC_SINH'].namNhapHoc,
                 inClass: result[i]['AE_HOC_SINH'].inClass
             }

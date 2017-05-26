@@ -119,10 +119,10 @@ function getScores(req, res) {
             let studentInfo = {
                 studentID: results[i].studentID,
                 studentName: results[i].studentName,
-                score1: results[i].score1 || -1,
-                score2: results[i].score2 || -1,
-                score3: results[i].score3 || -1,
-                totalScore: results[i].totalScore || -1
+                score1: results[i].score1 || '',
+                score2: results[i].score2 || '',
+                score3: results[i].score3 || '',
+                totalScore: results[i].totalScore || ''
             }
 
             if(prevSubjectID == results[i].subjectID) {
@@ -246,7 +246,7 @@ function summary(req, res) {
                         }
                     });
                 else {
-                    let tongCaNam = (result[i].tongHK1 || 0 + tongHK) / 2;
+                    let tongCaNam = (result[i].tongHK1 || 0 + tongHK*2) / 3;
                     let passed = tongCaNam < commonObj.minScore ? false : true; 
                     await HocSinh_LopHoc.update({ tongHK2: tongHK, tongCaNam: tongCaNam, passed: passed }, {
                         where: {
