@@ -99,12 +99,18 @@ module.factory('helper',['$uibModal','$interval',
             }, 500, 30);
     }
 
-    service.loadStudentNotInClass = function(options){
+    service.openModalStudentNotInClass = function(options){
+        var classValue = options.classValue;
         var configs = {
-            templateUrl: "templates/popup_student_list_no_class.html",
+            templateUrl: "templates/popup_select_student.html",
             animation: true,
             controller: 'studentListNotInClassCtrl',
             appendTo: angular.element("#modal_area"),
+            resolve: {
+                itemClassValue: function () {
+                    return classValue;
+                }
+            },
             size: 'md'
         };
         modalInstance = $uibModal.open(configs);
@@ -114,6 +120,7 @@ module.factory('helper',['$uibModal','$interval',
             }
         });
     }
+
     return service;
 }]);
 

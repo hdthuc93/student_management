@@ -39,15 +39,20 @@
             <div class="btn-group">
               <button ng-disabled="!class" type="button" class="btn btn-primary btn-xs" ng-click="openStudentList()"><i class="fa fa-plus-circle"></i> Thêm Học Sinh</button>
               <button ng-disabled="!selectedStudents" type="button" class="btn btn-primary btn-xs" ng-click="removeStudentFromClass()"><i class="fa fa-times"></i> Xoá Khỏi Lớp</button>
-              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click="inputScoreSem1()"><i class="fa fa-file-text-o"></i> Nhập Điểm HK I</button>
-              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click="inputScoreSem2()"><i class="fa fa-file-text-o"></i> Nhập Điểm HK II</button>
-              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click="viewscroe()"><i class="fa fa-file-text"></i> Nhận Điểm</button>
+              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click="enterScore(1)"><i class="fa fa-file-text-o"></i> Nhập Điểm HK I</button>
+              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click="enterScore(2)"><i class="fa fa-file-text-o"></i> Nhập Điểm HK II</button>
+              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click="viewScore()"><i class="fa fa-file-text"></i> Nhận Điểm</button>
+              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click="summarySemester(1)"><i class="fa fa-step-forward"></i> Tổng kết HK I</button>
+              <button ng-disabled="!studentList.data.length" type="button" class="btn btn-primary btn-xs" ng-click="summarySemester(2)"><i class="fa fa-fast-forward"></i> Tổng kết HK II</button>
             </div>
           </div>
-          <div id="listStudent" ui-grid-selection ui-grid-resize-columns ui-grid="studentList" class="grid"><span ng-show="studentList.data.length==0" class="grid-status">{{studentListStatus}}</span></div>
+          <div ng-if="studentList.data.length" id="listStudent" ui-grid-selection ui-grid-resize-columns ui-grid="studentList" class="grid"><span ng-show="studentList.data.length==0" class="grid-status">Chưa có dữ liệu</span></div>
+          <div id="handle-score-area" ng-show="showHandleArea">
+            <div ng-show="handleEnterScore" data-enter-score="dataToEnter"></div>
+            <div ng-show="!handleEnterScore" data-view-score="dataToView"></div>
+          </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>

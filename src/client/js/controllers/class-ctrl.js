@@ -11,6 +11,7 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
     $scope.class = null;
     $scope.grades = [];
     $scope.classes = [];
+    $scope.showHandleArea = false;
 
     $scope.studentList = {
         enableSorting: true,
@@ -25,18 +26,23 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
             { field: 'gender', displayName: 'Giới', cellFilter: 'GenderToText', minWidth: 50, maxWidth: 70 },
             { field: 'birthday', displayName: 'Ngày Sinh', minWidth: 110, maxWidth: 120},
             { field: 'email', displayName: 'Email', minWidth: 220 },
-            { field: 'address', displayName: 'Địa chỉ', minWidth: 350}
+            { field: 'address', displayName: 'Địa chỉ', minWidth: 350},
+            { field: 'average1', displayName: 'TB HKI', minWidth: 90,maxWidth: 150},
+            { field: 'average2', displayName: 'TB HKII', minWidth: 90, maxWidth: 150},
+            { field: 'average', displayName: 'TB Cả Năm', minWidth: 90, maxWidth: 150}
         ],
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
             gridApi.selection.on.rowSelectionChanged($scope, function (row) {
                 var rowsSelected = gridApi.selection.getSelectedRows();
                 $scope.selectedStudents = rowsSelected.length?rowsSelected:null;
+                $scope.showHandleArea = false
                 console.log("====",$scope.selectedStudents);
             });
             gridApi.selection.on.rowSelectionChangedBatch($scope, function (gridData) {
                 var rowsSelected = gridApi.selection.getSelectedRows();
                 $scope.selectedStudents = rowsSelected.length?rowsSelected:null;
+                $scope.showHandleArea = false
                 console.log("====",$scope.selectedStudents);
             });
         }
@@ -55,6 +61,7 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
                 $scope.class = null;
                 $scope.studentList.data = [];
                 $scope.selectedStudents = null;
+                $scope.showHandleArea = false
             }else{
                 helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
             }
@@ -74,6 +81,7 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
                 $scope.classes = response.data.datas;
                 $scope.class = null;
                 $scope.studentList.data = [];
+                $scope.showHandleArea = false
             }else{
                 helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
             }
@@ -87,11 +95,13 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
             url: '/api/student_class',
             params:{classID: angular.fromJson($scope.class).classID}
         }).then(function successCallback(response) {
-            if(response.data.success){
+            if(response.data.success&&response.data.datas){
+                $scope.studentList.minRowsToShow = response.data.datas.length;
                 $scope.studentList.data = response.data.datas;
                 $scope.studentList.data.forEach(function (e, i) {
                     $scope.studentList.data[i].no = i + 1;
                 });
+                $scope.showHandleArea = false
             }else{
                 helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
             }
@@ -99,22 +109,25 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
     }
 
     $scope.openStudentList = function(){
-        helper.loadStudentNotInClass({
+        $scope.showHandleArea = false
+        var clsValue  = angular.fromJson($scope.class).gradeID;
+        helper.openModalStudentNotInClass({
+            classValue: clsValue,
             close: function (callBackStudent) {
                 if(callBackStudent&&callBackStudent.length){
                     console.log("return student ID", callBackStudent);
                     var callBackData = callBackStudent;
-                    if(angular.fromJson($scope.class).maxNum < ($scope.studentList.data.length + callBackStudent.length - 40)){
+                    if(angular.fromJson($scope.class).maxNum < ($scope.studentList.data.length + callBackStudent.length)){
                         helper.popup.info({title: "Lỗi",
-                        message: "Số học sinh vừa thêm vào vượt quá quy định.",
+                        message: "Số học sinh vừa thêm vào vượt quá quy định. (Sĩ số tối đa "+ angular.fromJson($scope.class).maxNum+ " học sinh.)",
                         close: function () { $scope.openStudentList(); return;}})
+                        return;
                     }
                     var studentIDList = [];
                     for(var i in callBackData){
                         studentIDList.push(callBackData[i].studentID);
                     }
                     if(studentIDList.length){
-                        console.log(angular.fromJson($scope.class),88888888)
                         addStudentToClass(studentIDList,angular.fromJson($scope.class).classID);
                     }
                 }else{
@@ -173,5 +186,42 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
                 return;
             }
         })
+    }
+    
+    $scope.enterScore = function(sesID){
+        $scope.showHandleArea = true;
+        $scope.handleEnterScore = true;
+        $scope.dataToEnter = {
+            title: "Nhập điểm học kì "+ sesID,
+            semesterID: sesID,
+            classID: angular.fromJson($scope.class).classID
+        }
+        helper.scrollTo("handle-score-area");
+    }
+
+    $scope.viewScore = function(){
+        $scope.showHandleArea = true;
+        $scope.handleEnterScore = false;
+        $scope.dataToView = {
+            title: "Xem Điểm",
+            classID: angular.fromJson($scope.class).classID
+        }
+        helper.scrollTo("handle-score-area");
+    }
+
+    $scope.summarySemester = function(ses){
+        console.log("tong ket hoc ki",ses);
+        $http.post('/api/subject/summary', {semesterID : parseInt(ses), classID: angular.fromJson($scope.class).classID}, {}).then(function successCallBack(res) {
+                helper.popup.info({
+                title: "Thông báo",
+                message:res.data.success? "Tổng kết thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
+                close: function () {
+                    return;
+                }
+            });
+            $scope.getStudentInClass();
+        }, function errorCallback() {
+            helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
+        });
     }
 }
