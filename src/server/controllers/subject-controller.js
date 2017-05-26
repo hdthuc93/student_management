@@ -214,7 +214,6 @@ function summary(req, res) {
         }
     })
     .then( async (result) => {
-        console.log(result);
         if(result[0] > 0) {
             let subjectCount = await MonHoc.findAndCountAll({
                                     where: { maNamHoc: commonObj.schoolYearID }

@@ -83,7 +83,7 @@ function updateRegulation(req, res) {
 
 function getRegulation(req, res) {
     QuyDinh.findOne({
-        where: { maNamHoc: req.query.schoolYearID }
+        where: { maNamHoc: req.query.schoolYearID || commonObj.schoolYearID }
     })
     .then((result) => {
         let objReturning = {};
