@@ -214,67 +214,69 @@ function summary(req, res) {
         }
     })
     .then( async (result) => {
-        let subjectCount = await MonHoc.findAndCountAll({
-                                where: { maNamHoc: commonObj.schoolYearID }
-                            });
-        subjectCount = subjectCount.count;
-
-        HocSinh_LopHoc.findAll({
-            where: { maLopHoc: inputClassID }
-        })
-        .then( async (result) => {
-            for(let i = 0; i < result.length; ++i) {
-                const subjects = await DiemMH.findAll({ 
-                                    where: { 
-                                        maLopHoc: inputClassID,
-                                        maHocKy: inputSemesterID,
-                                        maHocSinh: result[i].maHocSinh
-                                    } 
+        console.log(result);
+        if(result[0] > 0) {
+            let subjectCount = await MonHoc.findAndCountAll({
+                                    where: { maNamHoc: commonObj.schoolYearID }
                                 });
-                
-                let tongHK = 0;
-                for(let j = 0; j < subjects.length; ++j) {
-                    tongHK += subjects[i].tongDiem || 0;
-                }
-                tongHK = tongHK / subjectCount;
+            subjectCount = subjectCount.count;
 
-                if(inputSemesterID == 1)
-                    await HocSinh_LopHoc.update({ tongHK1: tongHK }, {
-                        where: {
-                            maLopHoc: inputClassID,
-                            maHocSinh: result[i].maHocSinh
-                        }
-                    });
-                else {
-                    let tongCaNam = (result[i].tongHK1 || 0 + tongHK*2) / 3;
-                    let passed = tongCaNam < commonObj.minScore ? false : true; 
-                    await HocSinh_LopHoc.update({ tongHK2: tongHK, tongCaNam: tongCaNam, passed: passed }, {
-                        where: {
-                            maLopHoc: inputClassID,
-                            maHocSinh: result[i].maHocSinh
-                        }
-                    });
+            HocSinh_LopHoc.findAll({
+                where: { maLopHoc: inputClassID }
+            })
+            .then( async (result) => {
+                for(let i = 0; i < result.length; ++i) {
+                    const subjects = await DiemMH.findAll({ 
+                                        where: { 
+                                            maLopHoc: inputClassID,
+                                            maHocKy: inputSemesterID,
+                                            maHocSinh: result[i].maHocSinh
+                                        } 
+                                    });
+                    
+                    let tongHK = 0;
+                    for(let j = 0; j < subjects.length; ++j) {
+                        tongHK += subjects[i].tongDiem || 0;
+                    }
+                    tongHK = tongHK / subjectCount;
 
-                    if(passed)
-                        await HocSinh.update({ trinhDo: sequelize.literal('trinhDo + 1') }, {
+                    if(inputSemesterID == 1)
+                        await HocSinh_LopHoc.update({ tongHK1: tongHK }, {
                             where: {
-                                hocSinh_pkey: result[i].maHocSinh
+                                maLopHoc: inputClassID,
+                                maHocSinh: result[i].maHocSinh
                             }
                         });
-                }
-            }
-        })
+                    else {
+                        let tongCaNam = (result[i].tongHK1 || 0 + tongHK*2) / 3;
+                        let passed = tongCaNam < commonObj.minScore ? false : true; 
+                        await HocSinh_LopHoc.update({ tongHK2: tongHK, tongCaNam: tongCaNam, passed: passed }, {
+                            where: {
+                                maLopHoc: inputClassID,
+                                maHocSinh: result[i].maHocSinh
+                            }
+                        });
 
+                        if(passed)
+                            await HocSinh.update({ trinhDo: sequelize.literal('trinhDo + 1') }, {
+                                where: {
+                                    hocSinh_pkey: result[i].maHocSinh
+                                }
+                            });
+                    }
+                }
+            })
+        }
         return res.status(200).json({
             success: true,
-            message: "Summary school year is successfully"
+            message: "Summary semester in school year is successfully"
         });
     })
     .catch((err) => {
         console.log(err);
         return res.status(500).json({
             success: false,
-            message: "Failed to summary school year"
+            message: "Failed to summary semester in school year"
         });
     })
 }
