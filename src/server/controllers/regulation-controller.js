@@ -83,7 +83,10 @@ function updateRegulation(req, res) {
 
 function getRegulation(req, res) {
     QuyDinh.findOne({
-        where: { maNamHoc: req.query.schoolYearID || commonObj.schoolYearID }
+        where: { maNamHoc: req.query.schoolYearID || commonObj.schoolYearID },
+        include: [{
+            model: NamHoc
+        }]
     })
     .then((result) => {
         let objReturning = {};
@@ -94,7 +97,8 @@ function getRegulation(req, res) {
                 minAge: result.tuoiMin,
                 maxAge: result.tuoiMax,
                 minScore: result.diemChuan,
-                schoolYearID: result.maNamHoc
+                schoolYearID: result.maNamHoc,
+                schoolYearName: result['M_NAM_HOC'].tenNamHoc
             };
             objReturning = Object.assign({}, objReturning, JSON.parse(result.dsKhoi10));
             objReturning = Object.assign({}, objReturning, JSON.parse(result.dsKhoi11));
