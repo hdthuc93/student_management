@@ -7,12 +7,12 @@ const router = express.Router();
 
 router.route('/semester')
     .get(
-        statisticCtrl.getSemesterStatistic
+        statisticCtrl.createSemesterStatistic
     );
 
 router.route('/subject')
     .get(
-        statisticCtrl.getSubjectStatistic
+        statisticCtrl.createSubjectStatistic
     );
 
 export default router;
