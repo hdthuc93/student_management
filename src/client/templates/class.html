@@ -9,7 +9,7 @@
           <search-student/>
           <form role="form" name="class_management" id="class_management">
             <div class="row form-horizontal">
-               <div class="col-md-3 col-sm-6">
+               <div class="col-md-3 col-sm-5">
                 <div class="form-group">
                   <label class="control-label col-xs-5 input-sm">Khối</label>
                   <div class="col-xs-7">
@@ -21,7 +21,7 @@
                 </div>
               </div>
 
-              <div class="col-md-3 col-sm-6">
+              <div class="col-md-3 col-sm-5">
                 <div class="form-group">
                   <label class="control-label col-xs-5 input-sm">Lớp</label>
                   <div class="col-xs-7">
@@ -30,6 +30,11 @@
                         <option ng-repeat="cls in classes" value="{{cls}}">{{cls.className}}</option>                                          
                     </select>
                   </div>
+                </div>
+              </div>
+              <div class="col-md-3 col-sm-2">
+                <div class="form-group">
+                  <label class="contol-label col-xs-12 input-sm">Sĩ số: {{studentList.data.length}}</label>
                 </div>
               </div>
             </div>

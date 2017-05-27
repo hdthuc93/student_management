@@ -5,12 +5,6 @@
   <div class="row form-horizontal">
     <div class="col-sm-6">
       <div class="form-group">
-        <label class="control-label col-xs-5 input-sm">Nhập học:</label>
-        <div class="col-xs-7">
-          <input ng-disabled="1" ng-model="data.yearAdmissionName" type="text" class="form-control input-sm">
-        </div>
-      </div>
-      <div class="form-group">
         <label class="control-label col-xs-5 input-sm">Họ Tên:</label>
         <div class="col-xs-7">
           <input ng-disabled="studentData.action == 'view'" ng-model="data.name" type="text" class="form-control input-sm">
@@ -32,8 +26,26 @@
           <input ng-disabled="studentData.action == 'view'" ng-readonly="studentData.action != 'view'"ng-model="data.birthday" placeholder="dd/mm/yyyy" type="text" class="dp-birthday form-control input-sm">
         </div>
       </div>
+      <div class="form-group">
+        <label class="control-label col-xs-5 input-sm">Địa chỉ:</label>
+        <div class="col-xs-7">
+          <textarea  rows="2" ng-disabled="studentData.action == 'view'" ng-model="data.address" type="text" class="form-control input-sm"></textarea>
+        </div>
+      </div>
     </div>
     <div class="col-sm-6">
+      <div class="form-group">
+        <label class="control-label col-xs-5 input-sm">Email:</label>
+        <div class="col-xs-7">
+          <input ng-disabled="studentData.action == 'view'" ng-model="data.email" type="text" class="form-control input-sm">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-xs-5 input-sm">Nhập học:</label>
+        <div class="col-xs-7">
+          <input ng-disabled="1" ng-model="data.yearAdmissionName" type="text" class="form-control input-sm">
+        </div>
+      </div>
       <div class="form-group">
         <label class="control-label col-xs-5 input-sm">Lớp:</label>
         <div class="col-xs-7">
@@ -44,18 +56,6 @@
         <label class="control-label col-xs-5 input-sm">Lớp đã học:</label>
         <div class="col-xs-7">
           <textarea  ng-disabled="1" rows="2"  ng-model="data.prevClassesString" type="text" class="form-control input-sm"></textarea>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="control-label col-xs-5 input-sm">Email:</label>
-        <div class="col-xs-7">
-          <input ng-disabled="studentData.action == 'view'" ng-model="data.email" type="text" class="form-control input-sm">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="control-label col-xs-5 input-sm">Địa chỉ:</label>
-        <div class="col-xs-7">
-          <textarea  rows="2" ng-disabled="studentData.action == 'view'" ng-model="data.address" type="text" class="form-control input-sm"></textarea>
         </div>
       </div>
       <div ng-show="studentData.action != 'view'" class="form-group">

@@ -1,45 +1,84 @@
 /**
- * Student List Controller
+ * Report Controller
  */
 
 angular.module('RDash')
-    .controller('ReportCtrl', ['$scope', ReportCtrl]);
+    .controller('ReportCtrl', ['$scope','$http','helper', ReportCtrl]);
 
-function ReportCtrl($scope) {
-    console.log("TESTING!!!Phong Nguyen Class");
+function ReportCtrl($scope,$http,helper) {
+    function getSubject(){
+        $http({
+                method: 'GET',
+                url: '/api/subject',
+            }).then(function successCallback(response) {
+                if (response.data.success) {
+                    $scope.subjectList = response.data.datas;
+                } else {
+                    $scope.subjectList = null;
+                }
+            }, function errorCallback(response) {
+                helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
+            });
+    }
+    getSubject();
+
+    $scope.reset = function(){
+        $scope.subjectID = "";
+        $scope.semesterID = "1";
+        if($scope.reportList){
+            $scope.reportList.data = [];
+        }
+       };
+    $scope.reset();
+
+    $scope.report = function(){
+        console.log(1111,$scope.gradeID,  $scope.semesterID, $scope.subjectID);
+        if($scope.subjectID){
+            console.log("BAO CAO THEO SUBJECT")
+            var semesterID = $scope.semesterID?parseInt($scope.semesterID):"";
+            var subjectID = $scope.subjectID?parseInt($scope.subjectID):"";
+
+             $http({
+                method: 'GET',
+                url: '/api/statistic/subject',
+                params:{semesterID: semesterID,subjectID: subjectID}
+            }).then(function successCallback(response) {
+                if (response.data.success) {
+                    console.log("ket qua",response.data);
+                    $scope.reportList.minRowsToShow = response.data.datas.length;
+                    $scope.reportList.data = response.data.datas;
+                } else {
+                    $scope.reportList.data = [];
+                    helper.popup.info({title: "Lỗi",message: "Không có dữ liệu.",close: function () {; return;}})
+                }
+            }, function errorCallback(response) {
+                helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
+            });
+        }else{
+            console.log("BAO CAO THEO HOC KI")
+
+            var semesterID = $scope.semesterID?parseInt($scope.semesterID):"";
+             $http({
+                method: 'GET',
+                url: '/api/statistic/semester',
+                params:{semesterID: semesterID}
+            }).then(function successCallback(response) {
+                if (response.data.success) {
+                    console.log("ket qua",response.data);
+                    $scope.reportList.minRowsToShow = response.data.datas.length;
+                    $scope.reportList.data = response.data.datas;
+                } else {
+                    $scope.reportList.data = [];
+                    helper.popup.info({title: "Lỗi",message: "Không có dữ liệu.",close: function () {; return;}})
+                }
+            }, function errorCallback(response) {
+                helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
+            });
+        }
+        helper.scrollTo("report-area")
+    }
+
     $scope.reportList = {
-        data: [
-            {
-                cls: "10A1",
-                totalStudent: "39",
-                totalPass: "39",
-                passPercent: "100%"
-            },
-            {
-                cls: "10A2",
-                totalStudent: "41",
-                totalPass: "40",
-                passPercent: "99%"
-            },
-            {
-                cls: "11A1",
-                totalStudent: "43",
-                totalPass: "43",
-                passPercent: "100%"
-            },
-            {
-                cls: "11A2",
-                totalStudent: "39",
-                totalPass: "35",
-                passPercent: "89%"
-            },
-            {
-                cls: "12A3",
-                totalStudent: "42",
-                totalPass: "42",
-                passPercent: "100%"
-            },
-        ],
         columnDefs: [
             { field: 'no', displayName: 'STT', width: 70 },
             { field: 'cls', displayName: 'Lớp' },

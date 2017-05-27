@@ -45,15 +45,10 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             console.log("CREATE");
             $scope.title = "Tiếp nhận học sinh";
             $scope.data = {
-                yearAdmission: $rootScope.masterSelectedschoolYear.schoolYearName,
+                yearAdmissionName: $rootScope.masterRegulation.schoolYearName,
                 className: "Chưa có",
                 prevClassesString: "Chưa có"
             };
-            $scope.$on('change-school-year',function(){
-                if(newValue.action == "create"){
-                    $scope.data.yearAdmission = $rootScope.masterSelectedschoolYear.schoolYearName;
-                }
-            });
         }
     }
 
@@ -73,7 +68,7 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                 email: $scope.data.email,
                 gender: $scope.data.gender,
                 name: $scope.data.name,
-                schoolYearID: $rootScope.masterSelectedschoolYear.schoolYearID
+                schoolYearID: $rootScope.masterRegulation.schoolYearID
             }
             console.log("save create", dataSave);
             $http.post('/api/student', dataSave, {}).then(function successCallBack(res) {
@@ -82,8 +77,9 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                     message:res.data.success? "Tạo mới học sinh thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
                     close: function () {
                         $scope.data = {
-                            yearAdmission: $rootScope.masterSelectedschoolYear.schoolYearName,
-                            className: "Chưa có"
+                            yearAdmission: $rootScope.masterRegulation.schoolYearName,
+                            className: "Chưa có",
+                            prevClassesString: "Chưa có"
                         };
                         $rootScope.$broadcast('reset-student-list');
                         return;

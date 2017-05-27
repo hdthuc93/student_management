@@ -188,12 +188,12 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
         })
     }
     
-    $scope.enterScore = function(sesID){
+    $scope.enterScore = function(semesterID){
         $scope.showHandleArea = true;
         $scope.handleEnterScore = true;
         $scope.dataToEnter = {
-            title: "Nhập điểm học kì "+ sesID,
-            semesterID: sesID,
+            title: "Nhập điểm học kì "+ semesterID,
+            semesterID: semesterID,
             classID: angular.fromJson($scope.class).classID
         }
         helper.scrollTo("handle-score-area");
@@ -209,9 +209,9 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
         helper.scrollTo("handle-score-area");
     }
 
-    $scope.summarySemester = function(ses){
-        console.log("tong ket hoc ki",ses);
-        $http.post('/api/subject/summary', {semesterID : parseInt(ses), classID: angular.fromJson($scope.class).classID}, {}).then(function successCallBack(res) {
+    $scope.summarySemester = function(semesterID){
+        console.log("tong ket hoc ki",semesterID);
+        $http.post('/api/subject/summary', {semesterID : parseInt(semesterID), classID: angular.fromJson($scope.class).classID}, {}).then(function successCallBack(res) {
                 helper.popup.info({
                 title: "Thông báo",
                 message:res.data.success? "Tổng kết thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",

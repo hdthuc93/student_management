@@ -8,6 +8,13 @@ body {
     font-size: 12.5px;
     height: 26px!important;
 }
+input[type=radio] {
+    margin: 1px 0 0;
+    line-height: normal;
+}
+textarea.input-sm{
+    height: auto!important;
+}
 .form-horizontal .control-label {
     padding-top: 5px;
 }
