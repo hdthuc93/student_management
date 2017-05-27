@@ -183,6 +183,7 @@ function getSemesterStatistic(req, res, semesterID) {
             for(let i = 0; i < len; ++i) {
                 objReturning.list[objReturning.list.length] = {
                     classID: results[i].maLopHoc,
+                    className: results[i]['M_LOP_HOC'].tenLop,
                     numOfStudents: results[i].siSo,
                     numOfPass: results[i].slDat,
                     ratio: results[i].tyLe
