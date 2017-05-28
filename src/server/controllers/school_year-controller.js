@@ -5,6 +5,7 @@ import regulationCtrl from './regulation-controller';
 import subjectCtrl from './subject-controller';
 import classCtrl from './class-controller';
 import studentCtrl from './student-controller';
+import commonMid from '../middlewares/common';
 
 
 function getSchoolYear(req, res) {
@@ -123,6 +124,7 @@ function changeSchoolYear(req, res) {
                                 classCtrl.addClass(schoolYearID);
                                 subjectCtrl.addSubjects(schoolYearID);
                                 studentCtrl.updateForNewSchoolYear();
+                                commonMid.loadCommonObj();
                                 t.commit();
 
                                 return res.status(200).json({
