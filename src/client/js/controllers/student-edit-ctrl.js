@@ -11,7 +11,7 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             return $scope.studentData;
         }, init);
     }
-
+    
     function init(newValue, oldValue) {
         if (newValue !== oldValue && Object.keys(newValue.data).length > 0 && newValue.action == "edit") {
             //UPDATE
@@ -114,10 +114,19 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
             });
         }
     }
-
     $(function(){
-        $(".dp-birthday").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true,
-            changeYear: true, numberOfMonths: 1, minDate: "-25Y", maxDate: "-15Y" ,
-            showOn: "button", buttonImage: "img/dp-icon.png", buttonImageOnly: true});  
+        $http({
+            method: 'GET',
+            url: '/api/regulation',
+        }).then(function successCallback(response) {
+            if(response.data.success){
+                var data = response.data.data
+                var minDate = "-"+data.maxAge+"Y";
+                var maxDate = "-"+data.minAge+"Y";
+                    $(".dp-birthday").datepicker({ dateFormat: 'dd-mm-yy', changeMonth: true,
+                    changeYear: true, numberOfMonths: 1, minDate: minDate, maxDate: maxDate,
+                    showOn: "button", buttonImage: "img/dp-icon.png", buttonImageOnly: true});  
+            }
+        });
     })
 }

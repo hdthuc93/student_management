@@ -30,8 +30,9 @@ function SchoolYearCtrl($scope,$rootScope,$http,helper,$timeout) {
             if(response.data.success){
                 var data = response.data.datas;
                  if(data.length){
-                    $scope.selectedFutureSchoolYear = data[0].schooYearID;
-                    $scope.selectedFutureSchoolYearName = data[0].schoolYearName;   
+                    $scope.selectedFutureSchoolYear = data[0].schoolYearID;
+                    $scope.selectedFutureSchoolYearName = data[0].schoolYearName;  
+                    console.log(12121212,$scope.selectedFutureSchoolYear) 
                 }else{
                     $scope.selectedFutureSchoolYearName = "Chưa tạo";   
                 }               
@@ -67,8 +68,19 @@ function SchoolYearCtrl($scope,$rootScope,$http,helper,$timeout) {
         });
     }
 
-    $scope.selectFutureSchoolYear = function(){
-        console.log("select future school year to current",$scope.selectedFutureSchoolYear)
+    $scope.changeSchoolYear = function(){
+        $http.post('/api/school_year/change', {schoolYearID:$scope.selectedFutureSchoolYear}).then(function successCallBack(res){
+            helper.popup.info({
+                title:"Thông báo",
+                message:res.data.success?"Đã mở thành công năm học mới. Năm học hiện tại là "+$scope.selectedFutureSchoolYearName:"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
+                close:function(){
+                    location.reload();
+                    return;
+                }
+            });
+        }, function errorCallback(){
+            helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
+        });
     }
 
     $scope.schoolYearList = {

@@ -15,13 +15,13 @@ module.filter('schoolYearStatusToText', function () {
     return function (input) {
         switch (input) {
             case "1":
-                return "Năm học hiện tại";
+                return "ĐANG DIỄN RA";
                 break;
             case "2":
-                return "Năm học đã qua";
+                return "ĐÃ KẾT THÚC";
                 break;
             default:
-                return "Năm học chưa mở";
+                return "CHƯA MỞ";
         }
     };
 });
@@ -37,6 +37,14 @@ module.filter('GenderToText', function () {
                 break;
             default:
                 return "Nam";
+        }
+    };
+});
+
+module.filter('toPercent', function () {
+    return function (input) {           
+        if(typeof input == 'number' && input>=0){
+            return Math.round(input*100).toFixed(0) +"%";
         }
     };
 });

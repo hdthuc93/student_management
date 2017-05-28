@@ -13,7 +13,7 @@
 </div>
 <div class="modal-footer">
   <button type="button" ng-disabled="!selectedRows" class="btn btn-primary btn-xs" ng-click="selectStudent()">
-          <i class="fa fa-check"></i> Chọn</button>
+          <i class="fa fa-check"></i> Chọn ({{selectedRows.length?selectedRows.length:0}})</button>
   <button type="button" class="btn btn-primary btn-xs" ng-click="closeModal()">
     <i class="fa fa-times"></i> Đóng</button>
 </div>

@@ -25,7 +25,6 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
             { field: 'name', displayName: 'Họ Tên', minWidth: 250 },
             { field: 'gender', displayName: 'Giới', cellFilter: 'GenderToText', minWidth: 50, maxWidth: 70 },
             { field: 'birthday', displayName: 'Ngày Sinh', minWidth: 110, maxWidth: 120},
-            { field: 'email', displayName: 'Email', minWidth: 220 },
             { field: 'address', displayName: 'Địa chỉ', minWidth: 350},
             { field: 'average1', displayName: 'TB HKI', minWidth: 90,maxWidth: 150},
             { field: 'average2', displayName: 'TB HKII', minWidth: 90, maxWidth: 150},
@@ -96,6 +95,11 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
             params:{classID: angular.fromJson($scope.class).classID}
         }).then(function successCallback(response) {
             if(response.data.success&&response.data.datas){
+                if(!response.data.datas.length){
+                    helper.popup.info({title: "Thông báo",message: "Lớp học này hiện chưa có học sinh. Bấm nút \"Thêm học sinh\" để lập danh sách học sinh.",close: function () {$scope.openStudentList(); return;}})
+
+                }
+
                 $scope.studentList.minRowsToShow = response.data.datas.length;
                 $scope.studentList.data = response.data.datas;
                 $scope.studentList.data.forEach(function (e, i) {

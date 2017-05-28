@@ -22,6 +22,18 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
         }
     }
     initOptions();
+    function getSchoolYears(){
+        $http({
+            method: 'GET',
+            url: '/api/school_year',
+        }).then(function successCallback(response) {
+            if(response.data.success){
+                $scope.schoolYear = response.data.data;
+            }else{
+            }
+        });
+    }
+    getSchoolYears();
 
     $scope.reset = function () {
         initOptions();

@@ -226,11 +226,17 @@ ul.sidebar .sidebar-list a:hover {
     }
 }
 /*Datepicker styles - START*/
+.ui-datepicker select.ui-datepicker-year {
+    width: 35%!important;
+}
+.ui-datepicker select.ui-datepicker-month{
+    width: 55%!important;
+}
 .ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
     width: 45%;
 }
 .ui-datepicker .ui-datepicker-title select {
-    font-size: 13px;
+    font-size: 11px;
 }
 .hide-dp .ui-datepicker-trigger{
     pointer-events: none;

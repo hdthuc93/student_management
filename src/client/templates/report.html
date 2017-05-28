@@ -18,9 +18,9 @@
               <div class="col-md-3 col-sm-6">
                 <div class="form-group">
                     <div class="col-xs-7 col-sm-6 col-md-6 no-padding">
-                      <select ng-change="getScoreList()" ng-model="subjectID" class="form-control input-sm">
+                      <select ng-change="getScoreList()" ng-model="subject" class="form-control input-sm">
                         <option ng-selected="1" value="">Tất cả môn học</option>
-                        <option ng-repeat="subject in subjectList" value="{{subject.subjectID}}">{{subject.subjectName}}</option>                                          
+                        <option ng-repeat="subject in subjectList" value="{{subject}}">{{subject.subjectName}}</option>                                          
                     </select>
                   </div>
                 </div>
@@ -39,7 +39,7 @@
             <!--<div class="btn-group">
               <button type="button" class="btn btn-primary btn-xs" ng-click="" ng-disabled="1"><i class="fa fa-files"></i> Xuất PDF</button>
             </div>-->
-            <h4>Test</h4>
+            <h4>{{title}}</h4>
           </div>
           <div ng-if="reportList.data.length" id="reportGrid" ui-grid="reportList" class="grid"></div>
         </div>

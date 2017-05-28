@@ -23,68 +23,60 @@ function ReportCtrl($scope,$http,helper) {
     getSubject();
 
     $scope.reset = function(){
-        $scope.subjectID = "";
+        $scope.subject = null;
         $scope.semesterID = "1";
         if($scope.reportList){
             $scope.reportList.data = [];
         }
+        $scope.title = "";
        };
     $scope.reset();
 
     $scope.report = function(){
-        console.log(1111,$scope.gradeID,  $scope.semesterID, $scope.subjectID);
-        if($scope.subjectID){
-            console.log("BAO CAO THEO SUBJECT")
-            var semesterID = $scope.semesterID?parseInt($scope.semesterID):"";
-            var subjectID = $scope.subjectID?parseInt($scope.subjectID):"";
-
-             $http({
-                method: 'GET',
-                url: '/api/statistic/subject',
-                params:{semesterID: semesterID,subjectID: subjectID}
-            }).then(function successCallback(response) {
-                if (response.data.success) {
-                    console.log("ket qua",response.data);
-                    $scope.reportList.minRowsToShow = response.data.datas.length;
-                    $scope.reportList.data = response.data.datas;
-                } else {
-                    $scope.reportList.data = [];
-                    helper.popup.info({title: "Lỗi",message: "Không có dữ liệu.",close: function () {; return;}})
-                }
-            }, function errorCallback(response) {
-                helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
-            });
-        }else{
-            console.log("BAO CAO THEO HOC KI")
-
-            var semesterID = $scope.semesterID?parseInt($scope.semesterID):"";
-             $http({
-                method: 'GET',
-                url: '/api/statistic/semester',
-                params:{semesterID: semesterID}
-            }).then(function successCallback(response) {
-                if (response.data.success) {
-                    console.log("ket qua",response.data);
-                    $scope.reportList.minRowsToShow = response.data.datas.length;
-                    $scope.reportList.data = response.data.datas;
-                } else {
-                    $scope.reportList.data = [];
-                    helper.popup.info({title: "Lỗi",message: "Không có dữ liệu.",close: function () {; return;}})
-                }
-            }, function errorCallback(response) {
-                helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
-            });
+        var subject = null;
+        if($scope.subject){
+            subject = angular.fromJson($scope.subject);
         }
-        helper.scrollTo("report-area")
+        var subjectID = subject?subject.subjectID:null;
+        var subjectName = subject?subject.subjectName:null;
+
+        var url = subjectID?"subject":"semester";
+
+        $scope.title = subjectID?("Báo cáo kết quả môn "+ subjectName+" - Học kì "+($scope.semesterID==1?"I":"II"))
+        :"Báo cáo kết quả học kì "+($scope.semesterID==1?"I":"II");
+
+        var semesterID = $scope.semesterID?parseInt($scope.semesterID):"";
+
+        $http({
+            method: 'GET',
+            url: '/api/statistic/'+url,
+            params:{semesterID: semesterID,subjectID: subjectID}
+        }).then(function successCallback(response) {
+            if (response.data.success) {
+                console.log("ket qua",response.data);
+                $scope.reportList.minRowsToShow = response.data.data.list.length;
+                $scope.reportList.data = response.data.data.list;
+                $scope.reportList.data.forEach(function (e, i) {
+                    $scope.reportList.data[i].no = i + 1;
+                });
+                helper.scrollTo("report-area");
+            } else {
+                $scope.reportList.data = [];
+                $scope.title = "Không có dữ liệu";
+                helper.popup.info({title: "Lỗi",message: "Không có dữ liệu.",close: function () {; return;}})
+            }
+        }, function errorCallback(response) {
+            helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})
+        });
     }
 
     $scope.reportList = {
         columnDefs: [
             { field: 'no', displayName: 'STT', width: 70 },
-            { field: 'cls', displayName: 'Lớp' },
-            { field: 'totalStudent', displayName: 'Sĩ Số' },
-            { field: 'totalPass', displayName: 'SL Đạt' },
-            { field: 'passPercent', displayName: 'Tỉ Lệ' }
+            { field: 'className', displayName: 'Lớp' },
+            { field: 'numOfStudents', displayName: 'Sĩ Số' },
+            { field: 'numOfPass', displayName: 'SL Đạt' },
+            { field: 'ratio', displayName: 'Tỉ Lệ', cellFilter:'toPercent' }
         ]
     };
 }
