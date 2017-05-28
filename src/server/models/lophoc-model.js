@@ -46,6 +46,6 @@ Khoi.hasMany(LopHoc, { foreignKey: 'maKhoi', sourceKey: 'maKhoi_pkey' });
 LopHoc.belongsTo(Khoi, { foreignKey: 'maKhoi', targetKey: 'maKhoi_pkey' });
 
 NamHoc.hasMany(LopHoc, { foreignKey: 'maNamHoc', sourceKey: 'namHoc_pkey' });
-LopHoc.belongsTo(Khoi, { foreignKey: 'maNamHoc', sourceKey: 'namHoc_pkey' });
+LopHoc.belongsTo(NamHoc, { foreignKey: 'maNamHoc', targetKey: 'namHoc_pkey' });
 
 export default LopHoc;
