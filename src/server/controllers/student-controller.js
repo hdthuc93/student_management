@@ -302,25 +302,32 @@ function getPrevClass(req, res, objReturning, index) {
         HocSinh_LopHoc.findAll({ 
             where: { 
                 maHocSinh: objReturning[index].studentID,
-                maLopHoc:  { $ne: objReturning[index].classID }
+                // maLopHoc:  { $ne: objReturning[index].classID }
             },
             include: [{
                 model: LopHoc,
+                where: {
+                    maNamHoc: { $ne: commonObj.schoolYearID }
+                },
                 include: [{
                     model: Khoi
-                }]
+                }],
+                required: true
             }]
         })
-        .then((result2) => {
+        .then( async (result2) => {
+            let schoolYear;
             for(let i = 0; i < result2.length; ++i) {
+               schoolYear = await NamHoc.findOne({ where: { namHoc_pkey: result2[i]['M_LOP_HOC'].maNamHoc } });
                 objReturning[index].prevClasses[objReturning[index].prevClasses.length] = {
                     classID: result2[i]['M_LOP_HOC'].maLop_pkey,
                     className: result2[i]['M_LOP_HOC'].tenLop,
-                    grade: Number(result2[i]['M_LOP_HOC']['M_KHOI'].tenLop.slice(1, 3)),
+                    grade: Number(result2[i]['M_LOP_HOC']['M_KHOI'].maKhoi.slice(1, 3)),
                     passed: result2[i].passed,
                     schoolYearID: result2[i]['M_LOP_HOC'].maNamHoc,
-                    schoolYearName: result2[i]['M_LOP_HOC']['M_NAM_HOC'].tenNamHoc
+                    schoolYearName: schoolYear.tenNamHoc || ''
                 };
+                
                 objReturning[index].prevClassesString += result2[i]['M_LOP_HOC'].tenLop;
 
                 if(!result2[i].passed) {
