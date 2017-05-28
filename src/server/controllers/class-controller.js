@@ -59,7 +59,7 @@ async function addClass(schoolYearID) {
                 arrIns[arrIns.length] = {
                     maLopHoc: arrClasses[j].className + '_' + schoolYearID,
                     tenLop: arrClasses[j].className,
-                    siSo: arrClasses[j].maxQty,
+                    siSoMax: arrClasses[j].maxQty,
                     maKhoi: i + 1,
                     maNamHoc: schoolYearID
                 }
