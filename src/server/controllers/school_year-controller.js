@@ -5,7 +5,8 @@ import regulationCtrl from './regulation-controller';
 import subjectCtrl from './subject-controller';
 import classCtrl from './class-controller';
 import studentCtrl from './student-controller';
-import commonMid from '../middlewares/common';
+import { loadCommonObj } from '../middlewares/common';
+import commonObj from '../utilities/common_object';
 
 
 function getSchoolYear(req, res) {
@@ -106,46 +107,46 @@ function changeSchoolYear(req, res) {
         QuyDinh.findOne({ where: { maNamHoc: schoolYearID } })
         .then((result) => {
             if(result) {
-                sequelize.transaction().then((t) => {
-                    NamHoc.update({ startFlag: '2' }, { where: { startFlag: '1' }, transaction: t })
-                    .then((result) => {
-                        return NamHoc.update({ startFlag: '1' }, { where: { namHoc_pkey: schoolYearID, startFlag: '0' }, transaction: t })
-                    })
-                    .then((result) => {
-                        if(result[0] === 0) {
-                            t.rollback();
-                            return res.status(200).json({
-                                success: false,
-                                message: "Cannot change school year, because school year want to change in the past"
-                            });
-                        } else {
-                            
-                            try {
-                                classCtrl.addClass(schoolYearID);
-                                subjectCtrl.addSubjects(schoolYearID);
-                                studentCtrl.updateForNewSchoolYear();
-                                commonMid.loadCommonObj();
-                                t.commit();
-
-                                return res.status(200).json({
-                                    success: true,
-                                    message: "Change the current school year successfully"
-                                });
-                            } catch(ex) {
-                                console.log(ex);
-                                return res.status(500).json({
-                                    success: false,
-                                    message: "Failed to the current school year"
-                                });
-                            }
-                        }
-                    })
-                    .catch((err) => {
-                        t.rollback();
-                        return res.status(500).json({
+                let currentYear = commonObj.schoolYearID;
+                NamHoc.update({ startFlag: '2' }, { where: { startFlag: '1' }})
+                .then((result) => {
+                    return NamHoc.update({ startFlag: '1' }, { where: { namHoc_pkey: schoolYearID, startFlag: '0' }})
+                })
+                .then((result) => {
+                    console.log(result);
+                    if(result[0] === 0) {
+                        updateStatus(currentYear, schoolYearID);
+                        return res.status(200).json({
                             success: false,
-                            message: "Failed to the current school year"
+                            message: "Cannot change school year, because school year want to change in the past"
                         });
+                    } else {
+                        
+                        try {
+                            classCtrl.addClass(schoolYearID);
+                            subjectCtrl.addSubjects(schoolYearID);
+                            studentCtrl.updateForNewSchoolYear();
+                            loadCommonObj();
+
+                            return res.status(200).json({
+                                success: true,
+                                message: "Change the current school year successfully"
+                            });
+                        } catch(ex) {
+                            console.log(ex);
+                            return res.status(500).json({
+                                success: false,
+                                message: "Failed to the current school year"
+                            });
+                        }
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    updateStatus(currentYear, schoolYearID);
+                    return res.status(500).json({
+                        success: false,
+                        message: "Failed to the current school year"
                     });
                 });
             } else {
@@ -161,6 +162,11 @@ function changeSchoolYear(req, res) {
             message: "No school year ID in request"
         });
     }
+}
+
+function updateStatus(current, newYear) {
+    NamHoc.update({ startFlag: '0' }, { where: { namHoc_pkey: newYear, startFlag: '0' }});
+    NamHoc.update({ startFlag: '1' }, { where: { namHoc_pkey: current }});
 }
 
 export default { getSchoolYear, getFutureSchoolYear, addNewSchoolYear, changeSchoolYear }
