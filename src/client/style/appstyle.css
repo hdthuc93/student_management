@@ -425,8 +425,14 @@ ul.sidebar li a {
 .logo {
     padding: 15px 0;
     font-size: 21px;
-    color: #ffffff;
     font-weight: bold;
+    color: #e7f3d5;
+    -webkit-transition: all .2s linear;
+    transition: all .2s linear;
+    text-shadow: 0px 1px 2px rgb(60, 30, 5);
+}
+.logo:hover {
+    font-size: 23px;
 }
 .login-container{
     position: absolute;

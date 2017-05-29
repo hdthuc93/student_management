@@ -34,7 +34,7 @@ function authenCtrl($scope, $cookieStore, $http, $rootScope,$timeout,$location,h
                 helper.popup.info({title: "Đăng nhập thất bại",message: "Tên đăng nhập hoặc mật khẩu không đúng, vui lòng thử lại.",close: function () { return;}})
             }
         }, function errorCallback(){
-            helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
+            helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { location.reload(); return;}})
         });
     }
 }
