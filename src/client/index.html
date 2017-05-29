@@ -95,6 +95,9 @@
         <!-- Header Bar -->
         <div class="row header">
           <div class="col-xs-12">
+            <div ng-controller="loginCtrl" class="user pull-right">
+              <label style="padding: 20px; margin: 0;">Xin chào {{masterUserName}},    <span style="color: blue; text-decoration: underline; cursor: pointer;" ng-click="logout()">Đăng xuất</span></label>
+            </div>
             <!--<div class="user pull-right">
               <div class="item dropdown" uib-dropdown>
                 <a href="#" class="dropdown-toggle" uib-dropdown-toggle>

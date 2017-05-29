@@ -34,6 +34,9 @@ angular.module('RDash').config(['$stateProvider', '$urlRouterProvider',
             .state('schoolyear', {
                 url: '/schoolyear',
                 templateUrl: 'templates/school_year.html'
+            }).state('login', {
+                url: '/login',
+                templateUrl: 'templates/login.html'
             });
     }
 ]);
