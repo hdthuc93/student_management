@@ -17,7 +17,11 @@ const User = sequelize.define('M_USER', {
         type: Sequelize.STRING,
         notNull: true,
         field: 'PASSWORD'
-    }
+    },
+    fullName: {
+        type: Sequelize.STRING,
+        field: 'FULL_NAME'
+    },
 });
 
 User.beforeCreate((user, options, callback) => {

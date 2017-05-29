@@ -14,13 +14,15 @@ function register(req, res) {
 
         User.create({
             username: req.body.username,
-            password: req.body.password
+            password: req.body.password,
+            fullName: req.body.fullName
         }).then((user) => {
             return res.status(200).json({
                 success: true,
                 message: "Create user successfully"
             });
         }).catch((err) => {
+            console.log(err);
             return res.status(500).json({
                 success: false,
                 message: "Failed to create user"
@@ -59,6 +61,7 @@ function login(req, res) {
                     return res.status(200).json({
                         success: true,
                         message: "Login successfully",
+                        name: user.fullName,
                         token: token
                     });
                 })
