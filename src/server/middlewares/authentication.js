@@ -4,7 +4,7 @@ import User from '../models/user-model';
 
 
 function authenToken(req, res, next) {
-    const token = req.body.token || req.header('token');
+    const token = req.header('token') || req.body.token;
     console.log(token);
 
     if(token) {
