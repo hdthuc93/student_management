@@ -9,7 +9,7 @@
                   <div class="login-group">
                     <div class="form-group">
                       <label for="lg_username" class="sr-only">Username</label>
-                      <input required type="text" class="form-control" id="lg_username" name="lg_username" ng-model="username" placeholder="Tên đăng nhập" 
+                      <input required type="text" class="form-control" id="lg_username" name="lg_username" ng-model="username" placeholder="Tên đăng nhập" maxlength="30" 
                       ng-class="{'input-error': loginForm.lg_username.$touched && loginForm.lg_username.$invalid }">
                     </div>
                     <div class="form-group">

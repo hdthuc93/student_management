@@ -7,7 +7,7 @@
       <div class="form-group">
         <label class="control-label col-xs-5 input-sm">Họ Tên (*):</label>
         <div class="col-xs-7">
-          <input required name="studentName" ng-disabled="studentData.action == 'view'" ng-model="data.name" type="text" class="form-control input-sm" 
+          <input required name="studentName" ng-disabled="studentData.action == 'view'" ng-model="data.name" type="text" class="form-control input-sm" maxlength="50" 
           ng-class="{'input-error': studentEditForm.studentName.$touched && studentEditForm.studentName.$invalid }">
         </div>
       </div>
@@ -32,7 +32,7 @@
       <div class="form-group">
         <label class="control-label col-xs-5 input-sm">Địa chỉ (*):</label>
         <div class="col-xs-7">
-          <textarea required name="studentAddress" rows="2" ng-disabled="studentData.action == 'view'" ng-model="data.address" type="text" class="form-control input-sm" 
+          <textarea required name="studentAddress" rows="2" ng-disabled="studentData.action == 'view'" ng-model="data.address" type="text" class="form-control input-sm"  maxlength="200"  
           ng-class="{'input-error': studentEditForm.studentAddress.$touched && studentEditForm.studentAddress.$invalid }"></textarea>
         </div>
       </div>
