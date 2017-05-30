@@ -42,7 +42,7 @@ function enterScoreCtrl($scope, helper, $http, $rootScope) {
     function init(newValue, oldValue) {
         if (newValue != oldValue) {
             //UPDATE
-            console.log("UPDATE, data truyen", newValue);
+            //console.log("UPDATE, data truyen", newValue);
             initModel();
             $scope.title = newValue.title;
             $scope.classID = newValue.classID;
@@ -52,7 +52,7 @@ function enterScoreCtrl($scope, helper, $http, $rootScope) {
                 url: '/api/subject',
             }).then(function successCallback(response) {
                 if (response.data.success) {
-                    console.log("danh sach mon hoc",response);
+                    //console.log("danh sach mon hoc",response);
                     $scope.subjectList = response.data.datas;
                 } else {
                     $scope.subjectList = null;

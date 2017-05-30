@@ -88,7 +88,6 @@ function RuleCtrl($scope,$http,helper) {
     }
 
     $scope.save = function(){
-        console.log(77778888,$scope.reg);
         var dataSave = {
             grade10: $scope.reg.grade10,
             grade11: $scope.reg.grade11,
@@ -101,7 +100,6 @@ function RuleCtrl($scope,$http,helper) {
             regulationID: $scope.reg.regulationID,
             regulationCode: $scope.reg.regulationCode
         }
-        console.log("save",dataSave);
 
         $http.post('/api/regulation/update', dataSave, {}).then(function successCallBack(res) {
             helper.popup.info({
