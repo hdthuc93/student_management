@@ -9,6 +9,11 @@ angular.module('RDash')
 function authenCtrl($scope, $cookieStore, $http, $rootScope,$timeout,$location,helper) {
     // Login
     var loggedIn = false;
+    function init(){
+        $scope.username = "";
+        $scope.password = "";
+    }
+    init();
 
     $scope.logout = function(){
         console.log(9999999)
@@ -17,6 +22,9 @@ function authenCtrl($scope, $cookieStore, $http, $rootScope,$timeout,$location,h
     }
 
     $scope.login = function(){
+        if ($scope.loginForm.$invalid) {
+            return;
+        }
         var param = {
             username: $scope.username||null,
             password: $scope.password||null
@@ -32,6 +40,7 @@ function authenCtrl($scope, $cookieStore, $http, $rootScope,$timeout,$location,h
                 $location.path('/');
             }else{                
                 helper.popup.info({title: "Đăng nhập thất bại",message: "Tên đăng nhập hoặc mật khẩu không đúng, vui lòng thử lại.",close: function () { return;}})
+                init();
             }
         }, function errorCallback(){
             helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { location.reload(); return;}})

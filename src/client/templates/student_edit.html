@@ -30,9 +30,10 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="control-label col-xs-5 input-sm">Địa chỉ:</label>
+        <label class="control-label col-xs-5 input-sm">Địa chỉ (*):</label>
         <div class="col-xs-7">
-          <textarea  rows="2" ng-disabled="studentData.action == 'view'" ng-model="data.address" type="text" class="form-control input-sm"></textarea>
+          <textarea required name="studentAddress" rows="2" ng-disabled="studentData.action == 'view'" ng-model="data.address" type="text" class="form-control input-sm" 
+          ng-class="{'input-error': studentEditForm.studentAddress.$touched && studentEditForm.studentAddress.$invalid }"></textarea>
         </div>
       </div>
     </div>

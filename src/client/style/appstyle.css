@@ -365,6 +365,10 @@ ul.sidebar li a {
   padding: 7px 0;
   font-weight: bold;
   height:auto;
+  border-radius: 8px;
+  text-align: center;
+  -webkit-transition: all .2s linear;
+  transition: all .2s linear;
 }
 .login-form-1 .form-control::-webkit-input-placeholder {
   color: #999999;
@@ -424,16 +428,16 @@ ul.sidebar li a {
 }
 .logo {
     padding: 15px 0;
-    font-size: 21px;
+    font-size: 23px;
     font-weight: bold;
     color: #e7f3d5;
     -webkit-transition: all .2s linear;
     transition: all .2s linear;
     text-shadow: 0px 1px 2px rgb(60, 30, 5);
 }
-.logo:hover {
-    font-size: 23px;
-}
+/*.logo:hover {
+    font-size: 25px;
+}*/
 .login-container{
     position: absolute;
     left: 0;
@@ -443,9 +447,12 @@ ul.sidebar li a {
     background-color: #4e2706;
     z-index: 999;
 }
+.login-form-1 #lg_username, .login-form-1 #lg_password{
+    margin: 10px 0;
+}
 /*Login form - END*/
 
 .input-error{
-    box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset, rgb(179, 0, 0) 0px 0px 8px;
-    border-color: rgb(177, 0, 0);
+    box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset, rgb(179, 0, 0) 0px 0px 8px !important;
+    border-color: rgb(177, 0, 0) !important;
 }

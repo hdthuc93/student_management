@@ -11,7 +11,7 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
     $scope.studentListStatus = "Không có dữ liệu"
     function initOptions() {
         $scope.options = {
-            studentCode: "1",
+            studentCode: "",
             gender: "",
             name: "",
             email: "",
@@ -94,7 +94,7 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
             helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",close: function () { return;}})
         });
     }
-    $scope.getStudentList();
+    //$scope.getStudentList();
 
     $scope.viewStudent = function () {
         console.log("view student");

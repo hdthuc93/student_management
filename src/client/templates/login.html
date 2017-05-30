@@ -3,17 +3,19 @@
             <div class="logo">ĐĂNG NHẬP</div>
             <!-- Main Form -->
             <div class="login-form-1">
-              <form id="login-form" class="text-left">
+              <form id="login-form" name="loginForm" class="text-left">
                 <div class="login-form-main-message"></div>
                 <div class="main-login-form">
                   <div class="login-group">
                     <div class="form-group">
                       <label for="lg_username" class="sr-only">Username</label>
-                      <input type="text" class="form-control" id="lg_username" name="lg_username" ng-model="username" placeholder="Tên đăng nhập" >
+                      <input required type="text" class="form-control" id="lg_username" name="lg_username" ng-model="username" placeholder="Tên đăng nhập" 
+                      ng-class="{'input-error': loginForm.lg_username.$touched && loginForm.lg_username.$invalid }">
                     </div>
                     <div class="form-group">
                       <label for="lg_password" class="sr-only">Password</label>
-                      <input type="password" class="form-control" id="lg_password" name="lg_password" ng-model="password" placeholder="Mật khẩu" >
+                      <input required type="password" class="form-control" id="lg_password" name="lg_password" ng-model="password" placeholder="Mật khẩu"  
+                      ng-class="{'input-error': loginForm.lg_password.$touched && loginForm.lg_password.$invalid }" >
                     </div>
                     <!--<div class="form-group login-group-checkbox">
                       <input type="checkbox" id="lg_remember" name="lg_remember">
