@@ -11,7 +11,7 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
     $scope.studentListStatus = "Không có dữ liệu"
     function initOptions() {
         $scope.options = {
-            studentCode: "",
+            studentCode: "1",
             gender: "",
             name: "",
             email: "",
@@ -125,7 +125,6 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
         helper.scrollTo("handle-student-area");
     }
     $scope.removeStudent = function () {
-        console.log("remove student", $scope.selectedRow);
         $scope.showHandleArea = false;
         $scope.action = "";
         helper.popup.confirm({

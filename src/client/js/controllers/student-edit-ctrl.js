@@ -6,6 +6,8 @@ angular.module('RDash')
     .controller('StudentEditCtrl', ['$scope', 'helper', '$http', '$rootScope', StudentEditCtrl]);
 
 function StudentEditCtrl($scope, helper, $http, $rootScope) {
+    $scope.emailPattern = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+    $scope.datePattern = /^(?:(?:31(-)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(-)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(-)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(-)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/
     if (angular.isFunction($scope.$watchCollection)) {
         $scope.$parent.$watchCollection(function () {
             return $scope.studentData;
@@ -58,9 +60,15 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
         } else {
             angular.extend($scope.data, $scope.studentData.data);
         }
+        $scope.studentEditForm.$setPristine();
+        $scope.studentEditForm.$setUntouched();
     }
 
     $scope.save = function () {
+        if ($scope.studentEditForm.$invalid) {
+            helper.popup.info({title: "Lỗi",message: "Vui lòng điền thông tin đầy đủ và chính xác.",close: function () { return;}})
+            return;
+        }
         if ($scope.studentData.action == "create") {
             var dataSave = {
                 address: $scope.data.address,
@@ -81,6 +89,8 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                             className: "Chưa có",
                             prevClassesString: "Chưa có"
                         };
+                        $scope.studentEditForm.$setPristine();
+                        $scope.studentEditForm.$setUntouched();
                         $rootScope.$broadcast('reset-student-list');
                         return;
                     }
