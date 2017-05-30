@@ -4,6 +4,10 @@ body {
     font-size: 12.5px;
     color: #333!important;
 }
+.input-error{
+    box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset, rgb(179, 0, 0) 0px 0px 8px !important;
+    border-color: rgb(177, 0, 0) !important;
+}
 .input-sm{
     font-size: 12.5px;
     height: 26px!important;
@@ -352,13 +356,14 @@ ul.sidebar li a {
   max-width: 300px;
   border-radius: 5px;
   display: inline-block;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075); 
 }
 .main-login-form {
   position: relative;
 }
 .login-form-1 .form-control {
-  border: 0;
-  box-shadow: 0 0 0;
+  border: 0; 
+  box-shadow: 0 0 0 ; 
   border-radius: 0;
   background: transparent;
   color: #555555;
@@ -428,12 +433,12 @@ ul.sidebar li a {
 }
 .logo {
     padding: 15px 0;
-    font-size: 23px;
+    font-size: 24px;
     font-weight: bold;
     color: #e7f3d5;
     -webkit-transition: all .2s linear;
     transition: all .2s linear;
-    text-shadow: 0px 1px 2px rgb(60, 30, 5);
+    text-shadow: 1px 1px 2px rgb(58, 24, 10);
 }
 /*.logo:hover {
     font-size: 25px;
@@ -446,13 +451,25 @@ ul.sidebar li a {
     right: 0;
     background-color: #4e2706;
     z-index: 999;
+    background-image: url('../../img/bg_login.jpg');
+    background-size: cover;
 }
-.login-form-1 #lg_username, .login-form-1 #lg_password{
+.login-form-1 .form-control{
     margin: 10px 0;
 }
-/*Login form - END*/
-
-.input-error{
-    box-shadow: rgba(0, 0, 0, 0.075) 0px 1px 1px inset, rgb(179, 0, 0) 0px 0px 8px !important;
-    border-color: rgb(177, 0, 0) !important;
+.etc-login-form p, .etc-login-form a{
+    margin: 15px 0 ;
+    font-size: 16px;
+    color: #e7f3d5;
+    -webkit-transition: all .2s linear;
+    transition: all .2s linear;
+    text-shadow: 1px 1px 2px rgb(58, 24, 10);
+    font-weight: bold;
 }
+.etc-login-form a{
+    text-decoration: underline;
+}
+.etc-login-form a:hover{
+    color: #fff;
+}
+/*Login form - END*/
