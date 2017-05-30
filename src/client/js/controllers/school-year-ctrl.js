@@ -32,7 +32,6 @@ function SchoolYearCtrl($scope,$rootScope,$http,helper,$timeout) {
                  if(data.length){
                     $scope.selectedFutureSchoolYear = data[0].schoolYearID;
                     $scope.selectedFutureSchoolYearName = data[0].schoolYearName;  
-                    console.log(12121212,$scope.selectedFutureSchoolYear) 
                 }else{
                     $scope.selectedFutureSchoolYearName = "Chưa tạo";   
                 }               

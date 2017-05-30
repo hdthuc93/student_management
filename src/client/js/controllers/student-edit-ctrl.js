@@ -17,7 +17,6 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
     function init(newValue, oldValue) {
         if (newValue !== oldValue && Object.keys(newValue.data).length > 0 && newValue.action == "edit") {
             //UPDATE
-            console.log("UPDATE");
             $scope.title = "Cập nhật học sinh";
             $scope.data = {};
             angular.extend($scope.data, $scope.studentData.data);
@@ -31,7 +30,6 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
         }
         if (newValue !== oldValue && Object.keys(newValue.data).length > 0 && newValue.action == "view") {
             //VIEW
-            console.log("VIEW");
             $scope.title = "Thông tin học sinh";
             $scope.data = {};
             angular.extend($scope.data, $scope.studentData.data);
@@ -44,7 +42,6 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
         }
         if (newValue.action == "create") {
             //CREATE NEW
-            console.log("CREATE");
             $scope.title = "Tiếp nhận học sinh";
             $scope.data = {
                 yearAdmissionName: $rootScope.masterRegulation.schoolYearName,
@@ -78,7 +75,6 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                 name: $scope.data.name,
                 schoolYearID: $rootScope.masterRegulation.schoolYearID
             }
-            console.log("save create", dataSave);
             $http.post('/api/student', dataSave, {}).then(function successCallBack(res) {
                 helper.popup.info({
                     title: "Thông báo",
@@ -109,7 +105,6 @@ function StudentEditCtrl($scope, helper, $http, $rootScope) {
                 studentCode: $scope.data.studentCode,
                 studentID: $scope.data.studentID
             }
-            console.log("save edit", dataSave);
             $http.put('/api/student', dataSave, {}).then(function successCallBack(res) {
                 helper.popup.info({
                     title: "Thông báo",

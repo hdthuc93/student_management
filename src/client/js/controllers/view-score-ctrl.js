@@ -26,7 +26,6 @@ function viewScoreCtrl($scope, helper, $http, $rootScope) {
     function init(newValue, oldValue) {
         if (newValue != oldValue) {
             //VIEW
-            console.log("UPDATE, data truyen", newValue);
             initModel();
             $scope.title = newValue.title;
             $scope.classID = newValue.classID;
@@ -83,7 +82,6 @@ function viewScoreCtrl($scope, helper, $http, $rootScope) {
         var dataSave = {
             
         }
-        console.log("save cap nhat diem", dataSave);
         $http.post('/api/score', dataSave, {}).then(function successCallBack(res) {
             helper.popup.info({
                 title: "Thông báo",
@@ -111,7 +109,6 @@ function viewScoreCtrl($scope, helper, $http, $rootScope) {
                 url: '/api/subject',
             }).then(function successCallback(response) {
                 if (response.data.success) {
-                    console.log("danh sach mon hoc",response);
                     $scope.subjectList = response.data.datas;
                 } else {
                     $scope.subjectList = null;
@@ -138,7 +135,6 @@ function viewScoreCtrl($scope, helper, $http, $rootScope) {
     }
 
     $scope.getScoreList =  function(){
-        console.log(9999988888,$scope.selectedSubject,$scope.selectedStudent)
         var param = {
             semesterID: parseInt($scope.semesterID),
             classID: $scope.classID,

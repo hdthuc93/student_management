@@ -59,12 +59,12 @@ function authenCtrl($scope, $cookieStore, $http, $rootScope,$timeout,$location,h
             password: $scope.password||null
         }
         $http.post('/api/user/login', param).then(function successCallBack(res){
-            console.log("ket qua dang nhap",res.data);
             if(res.data.success){
                 var data = res.data;
                 var expireDate = new Date();
                 expireDate.setDate(expireDate.getDate() + 7);
                 // Setting a cookie
+                $rootScope.masterToken = data.token;
                 $cookieStore.put('userdata', {loggedIn: true, name: data.name, token: data.token}, {'expires': expireDate});
                 $location.path('/');
             }else{                

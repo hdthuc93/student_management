@@ -53,7 +53,6 @@ function ReportCtrl($scope,$http,helper) {
             params:{semesterID: semesterID,subjectID: subjectID}
         }).then(function successCallback(response) {
             if (response.data.success) {
-                console.log("ket qua",response.data);
                 $scope.reportList.minRowsToShow = response.data.data.list.length;
                 $scope.reportList.data = response.data.data.list;
                 $scope.reportList.data.forEach(function (e, i) {

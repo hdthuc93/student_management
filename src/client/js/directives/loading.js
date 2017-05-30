@@ -21,10 +21,8 @@ function rdLoading($http) {
                 scope.$watch(scope.isLoading, function (bool)
                 {
                     if(bool){
-                        //console.log("Show loading")
                         elm.show();
                     }else{
-                        //console.log("HIDE loading")
                         elm.hide();
                     }
                 });

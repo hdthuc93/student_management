@@ -4,9 +4,9 @@
  */
 
 angular.module('RDash')
-    .controller('ClassCtrl', ['$scope','$uibModal','$http','helper', ClassCtrl]);
+    .controller('ClassCtrl', ['$scope','$uibModal','$http','helper','$rootScope', ClassCtrl]);
 
-function ClassCtrl($scope,$uibModal,$http,helper) {
+function ClassCtrl($scope,$uibModal,$http,helper,$rootScope) {
     $scope.grade = null;
     $scope.class = null;
     $scope.grades = [];
@@ -36,13 +36,11 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
                 var rowsSelected = gridApi.selection.getSelectedRows();
                 $scope.selectedStudents = rowsSelected.length?rowsSelected:null;
                 $scope.showHandleArea = false
-                console.log("====",$scope.selectedStudents);
             });
             gridApi.selection.on.rowSelectionChangedBatch($scope, function (gridData) {
                 var rowsSelected = gridApi.selection.getSelectedRows();
                 $scope.selectedStudents = rowsSelected.length?rowsSelected:null;
                 $scope.showHandleArea = false
-                console.log("====",$scope.selectedStudents);
             });
         }
     };
@@ -55,7 +53,6 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
         }).then(function successCallback(response) {
             if(response.data.success){
                 $scope.grades = response.data.data;
-                console.log("Khoi hoc",$scope.grades);
                 $scope.grade = null;
                 $scope.class = null;
                 $scope.studentList.data = [];
@@ -69,7 +66,7 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
     getGrades();
     
     $scope.getClasses = function(){
-        console.log("khoi hoc chon",$scope.grade)
+        //console.log("token=====",$rootScope.masterToken);
         $http({
             //headers: {'Content-Type': 'application/x-www-form-urlencoded'},
             method: 'GET',
@@ -119,7 +116,6 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
             classValue: clsValue,
             close: function (callBackStudent) {
                 if(callBackStudent&&callBackStudent.length){
-                    console.log("return student ID", callBackStudent);
                     var callBackData = callBackStudent;
                     if(angular.fromJson($scope.class).maxNum < ($scope.studentList.data.length + callBackStudent.length)){
                         helper.popup.info({title: "Lỗi",
@@ -141,12 +137,12 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
     }
 
     function addStudentToClass(studentIDList,classID){
-        console.log("action add student to class");
         $http.post('/api/student_class', {studentList : studentIDList, classID: classID}, {}).then(function successCallBack(res) {
-                helper.popup.info({
+            helper.popup.info({
                 title: "Thông báo",
                 message:res.data.success? "Thêm học sinh thành công.":"Xảy ra lỗi trong quá trình thực hiện, vui lòng thử lại.",
                 close: function () {
+                    $scope.getStudentInClass();
                     return;
                 }
             });
@@ -158,9 +154,7 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
 
     $scope.removeStudentFromClass = function(){
         var studentIDList = [];
-        console.log("select student to del",$scope.selectedStudents);
         for(var i in $scope.selectedStudents){
-            console.log(77777,$scope.selectedStudents[i].studentID)
             studentIDList.push($scope.selectedStudents[i].studentID);
         }
         var param = {
@@ -168,7 +162,6 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
             classID: angular.fromJson($scope.class).classID
         }
 
-        console.log("param    - - - - - -",param);
         helper.popup.confirm({
             title: "Xoá học sinh khỏi lớp",
             message: "Bạn có thưc sự muốn xoá (những) học sinh này?",
@@ -214,7 +207,6 @@ function ClassCtrl($scope,$uibModal,$http,helper) {
     }
 
     $scope.summarySemester = function(semesterID){
-        console.log("tong ket hoc ki",semesterID);
         $http.post('/api/subject/summary', {semesterID : parseInt(semesterID), classID: angular.fromJson($scope.class).classID}, {}).then(function successCallBack(res) {
                 helper.popup.info({
                 title: "Thông báo",

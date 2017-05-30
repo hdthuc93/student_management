@@ -11,15 +11,19 @@ var module = angular.module('RDash', [
 'ui.grid.rowEdit', 
 'ui.grid.cellNav']);
 
-module.factory('Auth',['$cookieStore',function($cookieStore){
+module.factory('Auth',['$cookieStore','$rootScope',function($cookieStore,$rootScope){
     var user;
     return{
         getUser : function(){
             return $cookieStore.get("userdata");
         },
-        isLoggedIn : function(){console.log('kiem tra logged',$cookieStore.get('userdata'))
+        isLoggedIn : function(){
             if($cookieStore.get('userdata')){
-                return $cookieStore.get('userdata').loggedIn ? true : false;
+                if($cookieStore.get('userdata')){
+                    $rootScope.masterToken = $cookieStore.get('userdata').token;
+                    return $cookieStore.get('userdata').loggedIn;
+                }
+                return false;
             }else{
                 return false;
             }
@@ -28,13 +32,10 @@ module.factory('Auth',['$cookieStore',function($cookieStore){
 }] )
 module.run(['$rootScope', '$location', 'Auth', function ($rootScope, $location, Auth) {
      $rootScope.$on('$locationChangeStart', function (event) {
-        console.log("locationChangeStart")
         if (!Auth.isLoggedIn()) {
-            console.log('DENY');
             $location.path('/login');
         }
         else {
-            console.log('ALLOW ten la',Auth.getUser().name);
             $rootScope.masterUserName = Auth.getUser().name;
             //$location.path('/');
         }

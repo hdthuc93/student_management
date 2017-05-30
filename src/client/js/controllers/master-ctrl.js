@@ -4,9 +4,9 @@
  */
 
 angular.module('RDash')
-    .controller('MasterCtrl', ['$scope', '$cookieStore','$http','$rootScope','$timeout', MasterCtrl]);
+    .controller('MasterCtrl', ['$scope', '$cookieStore','$http','$rootScope','$timeout','helper', MasterCtrl]);
 
-function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
+function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout,helper) {
     /**
      * Sidebar Toggle & Cookie Control
      */
@@ -42,10 +42,9 @@ function MasterCtrl($scope, $cookieStore, $http, $rootScope,$timeout) {
     function getRegulation(){
         $http({
             method: 'GET',
-            url: '/api/regulation',
+            url: '/api/regulation'
         }).then(function successCallback(response) {
             if(response.data.success){
-                console.log("master regulation",response.data.data)
                 $rootScope.masterRegulation = response.data.data;
             }else{
                 helper.popup.info({title: "Lỗi",message: "Xảy ra lỗi trong quá trình thực hiện, vui lòng tải lại trang.",close: function () {location.reload(); return;}})

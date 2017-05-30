@@ -100,7 +100,6 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
     //$scope.getStudentList();
 
     $scope.viewStudent = function () {
-        console.log("view student");
         $scope.showHandleArea = true;
         $scope.studentData = {
             data: $scope.selectedRow,
@@ -110,7 +109,6 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
     }
 
     $scope.addStudent = function () {
-        console.log("create student");
         $scope.showHandleArea = true;
         $scope.studentData = {
             data: {},
@@ -119,7 +117,6 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
         helper.scrollTo("handle-student-area");
     }
     $scope.editStudent = function () {
-        console.log("edit student", $scope.selectedRow);
         $scope.showHandleArea = true;
         $scope.studentData = {
             data: $scope.selectedRow,
@@ -187,7 +184,6 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
         try {
             date = $.datepicker.parseDate( dateFormat, element.value );
             //element.datepicker({ dateFormat: 'dd-mm-yy'}); 
-            console.log(121212,date)
         } catch( error ) {
             date = null;
         }

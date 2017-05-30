@@ -1,16 +1,13 @@
 var module = angular.module('mod.helper');
 module.controller('studentListNotInClassCtrl', ['$scope', '$uibModalInstance', '$http', 'helper', 'itemClassValue',function ($scope, $uibModalInstance, $http, helper, itemClassValue) {
     $scope.selectedRows = null;
-    console.log("item truyen", itemClassValue)
     $scope.loadStudentNotInClass = function(){
-        console.log("loading student not in class")
         $http({
             method: 'GET',
             url: '/api/student',
             params: {inClass: false, classLevel: itemClassValue}
         }).then(function successCallback(response) {
             if (response.data.success) {
-                console.log(111112222,response);
                 $scope.studentList.data = response.data.datas;
             } else {
                 $scope.studentList.data = [];

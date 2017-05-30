@@ -17,9 +17,12 @@ function enterScoreCtrl($scope, helper, $http, $rootScope) {
         columnDefs: [
             { field: 'no', displayName: 'STT', enableCellEdit : false, enableCellEdit : false,  minWidth: 50, maxWidth: 70 },
             { field: 'studentName', displayName: 'Tên Học Sinh', type: 'text', enableCellEdit : false, minWidth: 200, maxWidth: 250 },
-            { field: 'score1', displayName: '15P (Hệ số 1)', type: 'number', width: 100 },
-            { field: 'score2', displayName: '1T (Hệ số 2)', type: 'number', width: 100 },
-            { field: 'score3', displayName: 'Thi (Hệ số 3)', type: 'number', width: 100 }
+            { field: 'score1', displayName: '15P (Hệ số 1)', type: 'number', width: 100,
+            editableCellTemplate:'<input type="number" min="0" max="10" ui-grid-editor ng-model="MODEL_COL_FIELD">' },
+            { field: 'score2', displayName: '1T (Hệ số 2)', type: 'number', width: 100 ,
+            editableCellTemplate:'<input type="number" min="0" max="10" ui-grid-editor ng-model="MODEL_COL_FIELD">' },
+            { field: 'score3', displayName: 'Thi (Hệ số 3)', type: 'number', width: 100 ,
+            editableCellTemplate:'<input type="number" min="0" max="10" ui-grid-editor ng-model="MODEL_COL_FIELD">' }
         ],
         onRegisterApi: function (gridApi) {
             $scope.gridApi = gridApi;
@@ -42,7 +45,6 @@ function enterScoreCtrl($scope, helper, $http, $rootScope) {
     function init(newValue, oldValue) {
         if (newValue != oldValue) {
             //UPDATE
-            //console.log("UPDATE, data truyen", newValue);
             initModel();
             $scope.title = newValue.title;
             $scope.classID = newValue.classID;
@@ -52,7 +54,6 @@ function enterScoreCtrl($scope, helper, $http, $rootScope) {
                 url: '/api/subject',
             }).then(function successCallback(response) {
                 if (response.data.success) {
-                    //console.log("danh sach mon hoc",response);
                     $scope.subjectList = response.data.datas;
                 } else {
                     $scope.subjectList = null;
@@ -72,7 +73,6 @@ function enterScoreCtrl($scope, helper, $http, $rootScope) {
                 params:{semesterID: $scope.semesterID, classID: $scope.classID, subjectID: $scope.selectedSubject}
             }).then(function successCallback(response) {
                 if(response.data.success){
-                    console.log("diem cho mon hoc",response.data);
                     $scope.scoreList.minRowsToShow = response.data.datas.list[0].listScores.length;
                     $scope.scoreList.data = [];
                     if(response.data.datas && response.data.datas.list && 
@@ -103,7 +103,6 @@ function enterScoreCtrl($scope, helper, $http, $rootScope) {
             subjectID: $scope.selectedSubject,
             listScores: $scope.scoreList.data
         }
-        console.log("save cap nhat diem", dataSave);
         $http.post('/api/subject/score', dataSave, {}).then(function successCallBack(res) {
                 helper.popup.info({
                 title: "Thông báo",
