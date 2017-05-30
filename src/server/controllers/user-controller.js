@@ -8,7 +8,8 @@ function register(req, res) {
         if(user) {
             return res.status(200).json({
                 success: false,
-                message: "Username alread exists"
+                message: "Username alread exists",
+                exist_usr: true
             });
         }
 
