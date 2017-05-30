@@ -6,13 +6,15 @@
       </div>
       <div class="panel-body notification-area">
         <div class="container-fluid">
-          <form role="form" name="student_list_search" id="student_list_search">
+          <form role="form" name="studentFormSearch" id="studentFormSearch">
             <div class="row form-horizontal">
               <div class="col-md-3 col-sm-6">
                 <div class="form-group">
                   <label class="control-label col-xs-5 input-sm">Mã HS:</label>
                   <div class="col-xs-7">
-                    <input ng-model="options.studentCode" type="text" class="form-control input-sm">
+                    <input name="studentCode" ng-pattern="studentCodePattern" ng-model="options.studentCode" type="text" class="form-control input-sm"
+                      ng-class="{'input-error': studentFormSearch.studentCode.$touched && studentFormSearch.studentCode.$invalid }"
+                      title="Mã học sinh phải là tối đa 8 kí tự số nguyên">
                   </div>
                 </div>
                 <div class="form-group">
@@ -73,8 +75,8 @@
                 </div>
                 <div class="form-group">
                   <div class="col-xs-12 text-right">
-                    <button type="submit" class="btn btn-primary btn-xs" ng-click="getStudentList()"><i class="fa fa-search"></i> Tìm</button>
-                    <button type="button" class="btn btn-primary btn-xs" ng-click="reset()"><i class="fa fa-reply"></i> Reset</button>
+                    <button type="submit" ng-disabled="studentFormSearch.$invalid" class="btn btn-primary btn-xs" ng-click="getStudentList()"><i class="fa fa-search"></i> Tìm</button>
+                    <button type="button" class="btn btn-primary btn-xs" ng-click="reset()"><i class="fa fa-reply"></i> Làm lại</button>
                   </div>
                 </div>
               </div>

@@ -6,13 +6,14 @@
       </div>
       <div class="panel-body notification-area">
         <div class="container-fluid">
-          <form role="form" name="reg_form" id="reg">
+          <form role="form" name="regulationForm" id="regulation">
             <div class="row form-horizontal">
               <div class="col-md-4 col-sm-6">
                 <div class="form-group">
-                  <label class="control-label input-sm col-xs-3 text-left" style="min-width: 70px">Năm học:</label>
+                  <label class="control-label input-sm col-xs-3 text-left" style="min-width: 70px">Năm học (*):</label>
                   <div class=" col-xs-6">
-                    <select ng-model="futureSchoolyearID" ng-change="getRegulation()" class="form-control input-sm">
+                    <select required name="schoolYear" ng-model="futureSchoolyearID" ng-change="getRegulation()" class="form-control input-sm"
+                     ng-class="{'input-error': regulationForm.schoolYear.$touched && regulationForm.schoolYear.$invalid }">
                           <option value="" ng-selected="1">Chọn năm học</option> 
                           <option ng-repeat="future in futureSchoolYear" value="{{future.schoolYearID}}">{{future.schoolYearName}}</option>                             
                     </select>
@@ -77,9 +78,10 @@
                     <button ng-disabled="!reg.regulationID" type="button" class="btn btn-primary btn-xs" ng-click="addRowCourse()"><i class="fa fa-plus-circle"></i> Thêm môn học</button>
                     <button type="button" class="btn btn-primary btn-xs" ng-click="deleteRowCourse()" ng-disabled="!selectedRowCourse"><i class="fa fa-times"></i> Xoá</button>
                   </div>
-                  <label class="control-label input-sm col-xs-4">Điểm chuẩn:</label>
+                  <label class="control-label input-sm col-xs-4">Điểm chuẩn (*):</label>
                   <div class="col-xs-2 col-sm-2 no-padding" style="min-width: 30px">
-                    <input ng-model="reg.minScore" type="number" class="form-control input-sm">
+                    <input required name="minScore" ng-model="reg.minScore" type="number" min="0" max="10" class="form-control input-sm"
+                     ng-class="{'input-error': regulationForm.minScore.$touched && regulationForm.minScore.$invalid }">
                   </div>
                 </div>
                 <div class="col-xs-12" style="margin-top: 10px">

@@ -86,13 +86,44 @@ function RuleCtrl($scope,$http,helper) {
             }
         });
     }
+    function getGradeData(d) {
+        var data = [];
+        if(d.length){
+            for(var i in d){
+                if(d[i].className&&d[i].maxQty){
+                    data.push(d[i])
+                }
+            }
+        }
+        return data;
+    }
+
+    function getCourseData(d) {
+        var data = [];
+        if(d.length){
+            for(var i in d){
+                if(d[i].courseName){
+                    data.push(d[i])
+                }
+            }
+        }
+        return data;
+    }
 
     $scope.save = function(){
+        if ($scope.regulationForm.$invalid) {
+            helper.popup.info({title: "Lỗi",message: "Vui lòng điền thông tin đầy đủ và chính xác.",close: function () { return;}})
+            return;
+        }
+        var grade10Data = getGradeData($scope.reg.grade10);
+        var grade11Data = getGradeData($scope.reg.grade11);
+        var grade12Data = getGradeData($scope.reg.grade12);
+        var courseData = getCourseData($scope.reg.course);
         var dataSave = {
-            grade10: $scope.reg.grade10,
-            grade11: $scope.reg.grade11,
-            grade12: $scope.reg.grade12,
-            course: $scope.reg.course,
+            grade10: grade10Data,
+            grade11: grade11Data,
+            grade12: grade12Data,
+            course: courseData,
             minAge: $scope.reg.minAge,
             maxAge: $scope.reg.maxAge,
             minScore: $scope.reg.minScore,
@@ -125,7 +156,8 @@ function RuleCtrl($scope,$http,helper) {
         selectionRowHeaderWidth: 35,
         columnDefs: [
             { field: 'className', displayName: 'Tên Lớp', type: 'text', minWidth: 100 },
-            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', type: 'number', minWidth: 70 }
+            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', type: 'number', minWidth: 70, 
+            editableCellTemplate:'<input type="number" min="0" max="500" ui-grid-editor ng-model="MODEL_COL_FIELD">'}
         ],
         onRegisterApi: function (gridApi) {
              gridApi.selection.on.rowSelectionChanged($scope, function (row) {
@@ -173,7 +205,8 @@ function RuleCtrl($scope,$http,helper) {
         selectionRowHeaderWidth: 35,
         columnDefs: [
             { field: 'className', displayName: 'Tên Lớp', type: 'text', minWidth: 100  },
-            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', type: 'number', minWidth: 70  }
+            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', type: 'number', minWidth: 70,
+        editableCellTemplate:'<input type="number" min="0" max="500" ui-grid-editor ng-model="MODEL_COL_FIELD">'  }
         ],
         onRegisterApi: function (gridApi) {
              gridApi.selection.on.rowSelectionChanged($scope, function (row) {
@@ -221,7 +254,8 @@ function RuleCtrl($scope,$http,helper) {
         selectionRowHeaderWidth: 35,
         columnDefs: [
             { field: 'className', displayName: 'Tên Lớp', type: 'text', minWidth: 100  },
-            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', type: 'number', minWidth: 70  }
+            { field: 'maxQty', displayName: 'Sĩ Số Tối Đa', type: 'number', minWidth: 70,
+            editableCellTemplate:'<input type="number" min="0" max="500" ui-grid-editor ng-model="MODEL_COL_FIELD">'  }
         ],
         onRegisterApi: function (gridApi) {
              gridApi.selection.on.rowSelectionChanged($scope, function (row) {

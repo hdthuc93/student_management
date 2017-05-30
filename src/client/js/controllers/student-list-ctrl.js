@@ -9,6 +9,7 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
     $scope.studentData = {};
     $scope.action = "";
     $scope.studentListStatus = "Không có dữ liệu"
+    $scope.studentCodePattern = /^[0-9]{0,8}$/;
     function initOptions() {
         $scope.options = {
             studentCode: "",
@@ -38,6 +39,8 @@ function StudentListCtrl($scope, helper, $http, $rootScope) {
     $scope.reset = function () {
         initOptions();
         $scope.getStudentList();
+        $scope.studentFormSearch.$setPristine();
+        $scope.studentFormSearch.$setUntouched();
     }
 
     $scope.studentList = {
